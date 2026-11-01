@@ -78,7 +78,8 @@
             height: 100%;
             border-radius: 50%;
             border: 2px solid #ffffff;
-            object-fit: cover;
+            /* Usamos contain para que la imagen se vea completa sin recortarse */
+            object-fit: contain;
             object-position: center;
             background-color: var(--bot-bubble);
         }
@@ -136,6 +137,41 @@
             align-self: flex-start;
         }
 
+        .msg-user {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            padding: 12px 16px;
+            border-radius: 18px 18px 4px 18px;
+            max-width: 85%;
+            font-size: 0.92rem;
+            line-height: 1.45;
+            align-self: flex-end;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 5px;
+        }
+
+        .btn-option {
+            background-color: #ffffff;
+            border: 1.5px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-option:hover {
+            background-color: #f4f0f8;
+        }
+
         .chat-footer {
             padding: 12px 16px;
             background-color: #ffffff;
@@ -162,6 +198,90 @@
             font-weight: 600;
             font-size: 0.9rem;
             cursor: pointer;
+        }
+
+        /* MODAL DE SEGURIDAD PARA DOCENTES */
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(36, 0, 84, 0.6);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            z-index: 100;
+        }
+
+        .modal-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 24px 20px;
+            width: 100%;
+            max-width: 360px;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+
+        .modal-card h2 {
+            font-size: 1.2rem;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .modal-card p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid var(--input-border);
+            border-radius: 12px;
+            font-size: 1rem;
+            text-align: center;
+            letter-spacing: 2px;
+            margin-bottom: 14px;
+            outline: none;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-modal-submit {
+            flex: 1;
+            background-color: var(--primary-color);
+            color: #ffffff;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-modal-close {
+            flex: 1;
+            background-color: var(--bot-bubble);
+            color: var(--text-main);
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .error-message {
+            color: #e11d48;
+            font-size: 0.8rem;
+            margin-top: 8px;
+            display: none;
         }
 
         @media (max-width: 480px) {
@@ -192,18 +312,209 @@
                 <p>Acompañamiento Escolar</p>
             </div>
         </div>
-        <button class="btn-teacher-access" onclick="alert('Área Docente')">🔒 ÁREA DOCENTE</button>
+        <button class="btn-teacher-access" onclick="abrirModalDocente()">🔒 ÁREA DOCENTE</button>
     </div>
 
-    <div class="chat-body">
+    <!-- CUERPO DINÁMICO DEL CHAT -->
+    <div class="chat-body" id="chatBody">
         <div class="msg-bot">¡Hola! 👋 Te damos la bienvenida a nuestro espacio de acompañamiento escolar.</div>
+        <div class="msg-bot">Para empezar a conversar de forma personalizada, <strong>¿cuál es tu nombre completo?</strong></div>
     </div>
 
-    <div class="chat-footer">
-        <input type="text" class="chat-input" placeholder="Escribe un mensaje..." disabled>
-        <button class="btn-send">Enviar</button>
+    <!-- ENTRADA DE TEXTO -->
+    <div class="chat-footer" id="chatFooter">
+        <input type="text" class="chat-input" placeholder="Escribe aquí..." id="userInput" autocomplete="off">
+        <button class="btn-send" id="btnSend">Enviar</button>
+    </div>
+
+    <!-- MODAL DE ACCESO RESTRINGIDO PARA DOCENTES -->
+    <div class="modal-overlay" id="teacherModal">
+        <div class="modal-card">
+            <h2>Acceso Restringido 🏫</h2>
+            <p>Ingresa la contraseña institucional para ver el panel de informes:</p>
+            
+            <input type="password" id="teacherPassword" class="password-input" placeholder="••••••••">
+            <div class="error-message" id="authError">Contraseña incorrecta.</div>
+            
+            <div class="modal-actions">
+                <button class="btn-modal-close" onclick="cerrarModalDocente()">Cancelar</button>
+                <button class="btn-modal-submit" onclick="verificarAccesoDocente()">Ingresar</button>
+            </div>
+        </div>
     </div>
 </div>
+
+<script>
+    const CLAVE_ORIENTACION = "docente2026";
+    let pasoActual = 0;
+    let datosEstudiante = { nombre: "", grado: "", rendimiento: "", emocional: "" };
+
+    const preguntas = [
+        {
+            tipo: "texto",
+            pregunta: "Perfecto. Ahora, <strong>¿a qué grado perteneces?</strong> (Ej: 9°A, 11°B)"
+        },
+        {
+            tipo: "opciones",
+            pregunta: "¿Cómo calificarías tu rendimiento o adaptación académica en lo que va del periodo?",
+            opciones: [
+                "Excelente / Sin dificultades",
+                "Regular / Me cuesta algunas materias",
+                "Bajo / Necesito apoyo urgente"
+            ]
+        },
+        {
+            tipo: "opciones",
+            pregunta: "Pensando en tu bienestar emocional tras los cambios recientes, ¿cómo te has sentido últimamente?",
+            opciones: [
+                "Motivado(a) y tranquilo(a)",
+                "Estresado(a) o con ansiedad frecuente",
+                "Triste, desmotivado(a) o aislado(a)"
+            ]
+        }
+    ];
+
+    function agregarMensaje(texto, tipo = "bot") {
+        const chatBody = document.getElementById('chatBody');
+        const div = document.createElement('div');
+        div.className = tipo === "bot" ? "msg-bot" : "msg-user";
+        div.innerHTML = texto;
+        chatBody.appendChild(div);
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    function mostrarOpciones(opciones) {
+        const chatBody = document.getElementById('chatBody');
+        const container = document.createElement('div');
+        container.className = "options-container";
+        
+        opciones.forEach(op => {
+            const btn = document.createElement('button');
+            btn.className = "btn-option";
+            btn.innerText = op;
+            btn.onclick = function() {
+                seleccionarOpcion(op);
+            };
+            container.appendChild(btn);
+        });
+        
+        chatBody.appendChild(container);
+        chatBody.scrollTop = chatBody.scrollHeight;
+        document.getElementById('chatFooter').style.display = 'none';
+    }
+
+    function procesarEntrada() {
+        const input = document.getElementById('userInput');
+        const valor = input.value.trim();
+        if (valor === "") return;
+
+        input.value = "";
+        agregarMensaje(valor, "user");
+        manejarFlujo(valor);
+    }
+
+    function seleccionarOpcion(valor) {
+        const containers = document.querySelectorAll('.options-container');
+        containers.forEach(c => c.remove());
+        
+        agregarMensaje(valor, "user");
+        document.getElementById('chatFooter').style.display = 'flex';
+        
+        manejarFlujo(valor);
+    }
+
+    function manejarFlujo(respuesta) {
+        if (pasoActual === 0) {
+            datosEstudiante.nombre = respuesta;
+            pasoActual++;
+            siguientePregunta();
+        } else if (pasoActual === 1) {
+            datosEstudiante.grado = respuesta;
+            pasoActual++;
+            siguientePregunta();
+        } else if (pasoActual === 2) {
+            datosEstudiante.rendimiento = respuesta;
+            pasoActual++;
+            siguientePregunta();
+        } else if (pasoActual === 3) {
+            datosEstudiante.emocional = respuesta;
+            finalizarCuestionario();
+        }
+    }
+
+    function siguientePregunta() {
+        const actual = preguntas[pasoActual - 1];
+        setTimeout(() => {
+            agregarMensaje(actual.pregunta, "bot");
+            if (actual.tipo === "opciones") {
+                mostrarOpciones(actual.opciones);
+            }
+        }, 400);
+    }
+
+    function finalizarCuestionario() {
+        setTimeout(() => {
+            agregarMensaje("¡Muchas gracias por compartir esto conmigo! 💙 Tus respuestas han sido registradas de forma confidencial para que el equipo de Orientación pueda brindarte apoyo personalizado.", "bot");
+            
+            let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
+            registros.push({ ...datosEstudiante, fecha: new Date().toLocaleString() });
+            localStorage.setItem('registros_estudiantes', JSON.stringify(registros));
+            
+            document.getElementById('chatFooter').style.display = 'none';
+        }, 400);
+    }
+
+    document.getElementById('btnSend').onclick = procesarEntrada;
+    document.getElementById('userInput').onkeypress = function(e) {
+        if (e.key === 'Enter') {
+            procesarEntrada();
+        }
+    };
+
+    function abrirModalDocente() {
+        document.getElementById('teacherModal').style.display = 'flex';
+        document.getElementById('teacherPassword').value = '';
+        document.getElementById('authError').style.display = 'none';
+    }
+
+    function cerrarModalDocente() {
+        document.getElementById('teacherModal').style.display = 'none';
+    }
+
+    function verificarAccesoDocente() {
+        const inputPass = document.getElementById('teacherPassword').value;
+        const errorDiv = document.getElementById('authError');
+
+        if (inputPass === CLAVE_ORIENTACION) {
+            cerrarModalDocente();
+            mostrarPanelDocente();
+        } else {
+            errorDiv.style.display = 'block';
+        }
+    }
+
+    function mostrarPanelDocente() {
+        let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
+        let htmlReporte = "<h3>📊 Informes de Estudiantes</h3><br>";
+        
+        if (registros.length === 0) {
+            htmlReporte += "<p>Aún no hay respuestas registradas.</p>";
+        } else {
+            registros.forEach((r, index) => {
+                htmlReporte += `<div style="background:#f4f0f8; padding:10px; margin-bottom:8px; border-radius:8px; font-size:0.85rem; border:1px solid #b2a4c9;">
+                    <strong>#${index+1} - ${r.nombre}</strong> (${r.grado})<br>
+                    📚 Académico: ${r.rendimiento}<br>
+                    💬 Emocional: ${r.emocional}<br>
+                    <small style="color:var(--text-muted);">📅 ${r.fecha}</small>
+                </div>`;
+            });
+        }
+
+        const chatBody = document.getElementById('chatBody');
+        chatBody.innerHTML = `<div class="msg-bot" style="max-width:100%;">${htmlReporte}</div>`;
+        document.getElementById('chatFooter').style.display = 'none';
+    }
+</script>
 
 </body>
 </html>
