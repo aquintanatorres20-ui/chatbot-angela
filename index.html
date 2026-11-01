@@ -443,7 +443,7 @@
             display: flex;
         }
 
-        /* TARJETAS DE MÉTRICAS EXACTAS A LA IMAGEN */
+        /* TARJETAS DE MÉTRICAS */
         .metric-card {
             background: white;
             border-radius: 16px;
@@ -519,7 +519,7 @@
             margin-top: 6px;
         }
 
-        /* CONFIGURACIÓN */
+        /* CONFIGURACIÓN (Sin colores) */
         .config-group {
             background: white;
             border-radius: 14px;
@@ -790,7 +790,7 @@
             </div>
         </div>
 
-        <!-- PESTAÑA 3: CONFIGURACIÓN -->
+        <!-- PESTAÑA 3: CONFIGURACIÓN (Sin selector de colores) -->
         <div class="panel-tab-content" id="tabConfig">
             <div class="config-group">
                 <label>🔑 Cambiar Contraseña Docente</label>
@@ -808,12 +808,6 @@
                 <label>🖼️ Cambiar Foto de Perfil (URL de imagen)</label>
                 <input type="text" id="cfgUrlAvatar" class="config-input" placeholder="https://ejemplo.com/avatar.png">
                 <button class="btn-save-config" onclick="actualizarAvatar()">Guardar Imagen</button>
-            </div>
-
-            <div class="config-group">
-                <label>🎨 Color Principal del Chat (# Hexadecimal)</label>
-                <input type="color" id="cfgColorPrincipal" class="config-input" value="#0284c7" style="height: 38px; padding: 2px;">
-                <button class="btn-save-config" onclick="actualizarColorPrincipal()">Aplicar Color</button>
             </div>
 
             <div class="config-group" style="border-color: #fecaca; background: #fff5f5;">
@@ -850,7 +844,6 @@
 <script>
     let claveOrientacion = localStorage.getItem('cfg_clave') || "docente2026";
     let avatarUrlGlobal = localStorage.getItem('cfg_avatar') || "avatar.png";
-    let colorGlobal = localStorage.getItem('cfg_color') || "#0284c7";
     let docentesAutorizados = JSON.parse(localStorage.getItem('cfg_docentes') || '["Docente Principal"]');
 
     aplicarConfiguracionVisual();
@@ -919,7 +912,7 @@
             pregunta: "Queremos recordarte que cuentas con un equipo profesional respaldo de la institución. 🏫 Si en algún momento requieres un espacio seguro, <strong>¿qué tipo de apoyo te gustaría recibir por parte del programa?</strong>",
             opciones: [
                 "Tener un espacio de asesoría confidencial y directa con Orientación Escolar. 💬",
-                "Participar en talleres especializados de manejo de ansiedad y técnicas de estudio. 🧘‍♂️",
+                "Participar in talleres especializados de manejo de ansiedad y técnicas de estudio. 🧘‍♂️",
                 "Recibir tutorías de refuerzo académico en asignaturas específicas. 📚",
                 "Participar en talleres de desarrollo socioemocional y convivencia. 🤝",
                 "Por ahora estoy súper bien, ¡pero valoro mucho que este programa exista! 👍"
@@ -941,8 +934,6 @@
     };
 
     function aplicarConfiguracionVisual() {
-        document.documentElement.style.setProperty('--primary-color', colorGlobal);
-        document.documentElement.style.setProperty('--primary-dark', colorGlobal);
         const imgHeader = document.getElementById('headerAvatarImg');
         const imgWelcome = document.getElementById('welcomeAvatarImg');
         if(imgHeader) imgHeader.src = avatarUrlGlobal;
@@ -1259,14 +1250,6 @@
         aplicarConfiguracionVisual();
         document.getElementById('cfgUrlAvatar').value = "";
         alert("¡Foto de perfil actualizada con éxito!");
-    }
-
-    function actualizarColorPrincipal() {
-        let color = document.getElementById('cfgColorPrincipal').value;
-        colorGlobal = color;
-        localStorage.setItem('cfg_color', color);
-        aplicarConfiguracionVisual();
-        alert("¡Color principal del chat actualizado!");
     }
 
     function limpiarRegistros() {
