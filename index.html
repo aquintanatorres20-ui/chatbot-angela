@@ -224,7 +224,6 @@
             flex-direction: column;
             gap: 12px;
             background-color: #f8fafc;
-            scroll-behavior: smooth;
         }
 
         .message-row-bot {
@@ -233,12 +232,6 @@
             gap: 8px;
             align-self: flex-start;
             max-width: 88%;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .mini-avatar {
@@ -280,7 +273,6 @@
             line-height: 1.45;
             align-self: flex-end;
             box-shadow: 0 2px 5px rgba(2, 132, 199, 0.15);
-            animation: fadeIn 0.3s ease;
         }
 
         .options-container {
@@ -350,7 +342,7 @@
             cursor: pointer;
         }
 
-        /* PANEL DOCENTE */
+        /* VENTANA INDEPENDIENTE DEL PANEL DOCENTE */
         .teacher-panel-overlay {
             position: absolute;
             top: 0;
@@ -367,7 +359,7 @@
         .teacher-panel-header {
             background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
             color: white;
-            padding: 20px 16px;
+            padding: 18px 16px;
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
@@ -381,8 +373,8 @@
 
         .teacher-panel-icon {
             background: rgba(255, 255, 255, 0.2);
-            width: 44px;
-            height: 44px;
+            width: 42px;
+            height: 42px;
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -391,14 +383,16 @@
         }
 
         .teacher-panel-header h2 {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 700;
         }
 
         .teacher-panel-header p {
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             opacity: 0.9;
             margin-top: 2px;
+            max-width: 260px;
+            line-height: 1.3;
         }
 
         .teacher-panel-close {
@@ -421,13 +415,14 @@
             flex: 1;
             background: none;
             border: none;
-            padding: 10px;
-            font-size: 0.8rem;
+            padding: 8px 4px;
+            font-size: 0.75rem;
             font-weight: 700;
             color: var(--text-muted);
             cursor: pointer;
             border-radius: 8px;
             transition: all 0.2s;
+            text-align: center;
         }
 
         .panel-tab-btn.active {
@@ -448,10 +443,11 @@
             display: flex;
         }
 
+        /* TARJETAS DE MÉTRICAS EXACTAS A LA IMAGEN */
         .metric-card {
             background: white;
             border-radius: 16px;
-            padding: 14px;
+            padding: 14px 16px;
             box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
             border: 1px solid #e2e8f0;
             display: flex;
@@ -460,8 +456,8 @@
         }
 
         .metric-icon {
-            width: 42px;
-            height: 42px;
+            width: 44px;
+            height: 44px;
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -475,45 +471,46 @@
         .metric-icon.red { background-color: #fee2e2; color: #dc2626; }
 
         .metric-info h4 {
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             color: var(--text-muted);
             text-transform: uppercase;
+            letter-spacing: 0.5px;
             margin-bottom: 2px;
             font-weight: 700;
         }
 
         .metric-info .metric-value {
-            font-size: 1.3rem;
+            font-size: 1.35rem;
             font-weight: 800;
             color: var(--text-main);
         }
 
-        /* TARJETAS DE REGISTROS INDIVIDUALES */
+        /* TARJETAS DE ESTUDIANTES INDIVIDUALES */
         .student-card {
             background: white;
             border-radius: 14px;
             padding: 14px;
             border: 1px solid #e2e8f0;
             box-shadow: 0 2px 6px rgba(0,0,0,0.02);
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 5px;
         }
 
         .student-card h4 {
             color: var(--primary-dark);
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             border-bottom: 1px solid #f1f5f9;
             padding-bottom: 6px;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .btn-export-single {
             background-color: #10b981;
             color: white;
             border: none;
-            padding: 6px 10px;
+            padding: 6px 12px;
             border-radius: 8px;
             font-size: 0.75rem;
             font-weight: 600;
@@ -522,29 +519,29 @@
             margin-top: 6px;
         }
 
-        /* FORMULARIO DE CONFIGURACIÓN */
+        /* CONFIGURACIÓN */
         .config-group {
             background: white;
             border-radius: 14px;
-            padding: 14px;
+            padding: 12px 14px;
             border: 1px solid #e2e8f0;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
 
         .config-group label {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 700;
             color: var(--text-main);
         }
 
         .config-input {
             width: 100%;
-            padding: 10px 12px;
+            padding: 8px 12px;
             border: 1.5px solid var(--input-border);
             border-radius: 10px;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             outline: none;
         }
 
@@ -552,12 +549,11 @@
             background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 10px;
+            padding: 9px;
             border-radius: 10px;
             font-weight: 600;
             cursor: pointer;
-            font-size: 0.85rem;
-            margin-top: 4px;
+            font-size: 0.82rem;
         }
 
         .panel-bottom-buttons {
@@ -694,7 +690,7 @@
 <body>
 
 <div class="app-container">
-    <div class="header" id="appHeader">
+    <div class="header">
         <div class="header-profile">
             <div class="avatar-container">
                 <div class="avatar-wrapper">
@@ -742,14 +738,14 @@
         💬
     </div>
 
-    <!-- VENTANA APARTE: PANEL DOCENTE CON PESTAÑAS -->
+    <!-- VENTANA INDEPENDIENTE: PANEL DE ORIENTACIÓN ESCOLAR -->
     <div class="teacher-panel-overlay" id="teacherPanelWindow">
         <div class="teacher-panel-header">
             <div class="teacher-panel-header-content">
                 <div class="teacher-panel-icon">📊</div>
                 <div>
                     <h2>Panel de Orientación Escolar</h2>
-                    <p>Gestión de encuestas y configuración institucional</p>
+                    <p>Resultados consolidados e identificación de necesidades</p>
                 </div>
             </div>
             <button class="teacher-panel-close" onclick="cerrarPanelDocente()">×</button>
@@ -784,17 +780,17 @@
                     <div class="metric-value" id="statAlertas">0</div>
                 </div>
             </div>
-            <button class="btn-save-config" style="background:#10b981; margin-top:10px;" onclick="exportarCSV()">📥 Descargar Consolidado General (CSV)</button>
+            <button class="btn-save-config" style="background:#10b981; padding: 12px; margin-top: 6px;" onclick="exportarCSV()">📥 Descargar Consolidado General (CSV)</button>
         </div>
 
         <!-- PESTAÑA 2: REGISTROS INDIVIDUALES -->
         <div class="panel-tab-content" id="tabIndividuales">
             <div id="listaRegistrosIndividuales" style="display: flex; flex-direction: column; gap: 10px;">
-                <!-- Carga dinámica -->
+                <!-- Dinámico -->
             </div>
         </div>
 
-        <!-- PESTAÑA 3: CONFIGURACIÓN EXCLUSIVA DOCENTE -->
+        <!-- PESTAÑA 3: CONFIGURACIÓN -->
         <div class="panel-tab-content" id="tabConfig">
             <div class="config-group">
                 <label>🔑 Cambiar Contraseña Docente</label>
@@ -816,7 +812,7 @@
 
             <div class="config-group">
                 <label>🎨 Color Principal del Chat (# Hexadecimal)</label>
-                <input type="color" id="cfgColorPrincipal" class="config-input" value="#0284c7" style="height: 40px; padding: 2px;">
+                <input type="color" id="cfgColorPrincipal" class="config-input" value="#0284c7" style="height: 38px; padding: 2px;">
                 <button class="btn-save-config" onclick="actualizarColorPrincipal()">Aplicar Color</button>
             </div>
 
@@ -826,7 +822,7 @@
             </div>
         </div>
 
-        <div style="padding: 16px;">
+        <div style="padding: 14px 16px;">
             <div class="panel-bottom-buttons">
                 <button class="btn-back-panel" onclick="cerrarPanelDocente()">← Volver</button>
                 <button class="btn-close-panel" onclick="cerrarPanelDocente()">Cerrar</button>
@@ -852,7 +848,6 @@
 </div>
 
 <script>
-    // Recuperar configuración guardada o usar valores por defecto
     let claveOrientacion = localStorage.getItem('cfg_clave') || "docente2026";
     let avatarUrlGlobal = localStorage.getItem('cfg_avatar') || "avatar.png";
     let colorGlobal = localStorage.getItem('cfg_color') || "#0284c7";
@@ -1198,7 +1193,7 @@
                 <span>⚠️ Reto: ${r.reto}</span>
                 <span>💬 Apoyo: ${r.apoyo}</span>
                 <small style="color:var(--text-muted);">📅 ${r.fecha}</small>
-                <button class="btn-export-single" onclick="exportarRegistroIndividual(${index})">📥 Descargar este Excel (CSV)</button>
+                <button class="btn-export-single" onclick="exportarRegistroIndividual(${index})">📥 Descargar Excel de este registro</button>
             `;
             contenedor.appendChild(card);
         });
@@ -1238,7 +1233,6 @@
         document.body.removeChild(link);
     }
 
-    // CONFIGURACIÓN AVANZADA DOCENTE
     function guardarNuevaClave() {
         let nueva = document.getElementById('cfgNuevaClave').value.trim();
         if(nueva.length < 4) return alert("La contraseña debe tener al menos 4 caracteres.");
@@ -1265,7 +1259,6 @@
         aplicarConfiguracionVisual();
         document.getElementById('cfgUrlAvatar').value = "";
         alert("¡Foto de perfil actualizada con éxito!");
-        mostrarPanelDocenteVentana();
     }
 
     function actualizarColorPrincipal() {
