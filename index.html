@@ -141,15 +141,40 @@
             background-size: 16px 16px;
         }
 
+        /* Estructura para los mensajes del bot con su mini avatar */
+        .message-row-bot {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            align-self: flex-start;
+            max-width: 88%;
+        }
+
+        .mini-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 1.5px solid #ffffff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            background-color: var(--bot-bubble);
+        }
+
+        .mini-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
         .msg-bot {
             background-color: #ffffff;
             color: var(--text-main);
             padding: 12px 16px;
             border-radius: 4px 18px 18px 18px;
-            max-width: 85%;
             font-size: 0.92rem;
             line-height: 1.45;
-            align-self: flex-start;
             box-shadow: 0 2px 5px rgba(36, 0, 84, 0.05);
             border: 1px solid #e2dbec;
         }
@@ -171,6 +196,7 @@
             flex-direction: column;
             gap: 8px;
             margin-top: 5px;
+            margin-left: 38px; /* Alinear con el texto del bot */
         }
 
         .btn-option {
@@ -347,9 +373,7 @@
         <button class="btn-teacher-access" onclick="abrirModalDocente()">🔒 ÁREA DOCENTE</button>
     </div>
 
-    <div class="chat-body" id="chatBody">
-        <!-- Contenido dinámico cargado por JavaScript -->
-    </div>
+    <div class="chat-body" id="chatBody"></div>
 
     <div class="chat-footer" id="chatFooter">
         <input type="text" class="chat-input" placeholder="Escribe aquí..." id="userInput" autocomplete="off">
@@ -384,7 +408,7 @@
         },
         {
             tipo: "opciones",
-            pregunta: "Ten in cuenta que tus datos y respuestas serán protegidos y utilizados exclusivamente por el equipo de Orientación y Docencia del colegio. ¿Autorizas el tratamiento de tus datos para este fin institucional?",
+            pregunta: "Ten en cuenta que tus datos y respuestas serán protegidos y utilizados exclusivamente por el equipo de Orientación y Docencia del colegio. ¿Autorizas el tratamiento de tus datos para este fin institucional?",
             opciones: [
                 "Sí, autorizo y quiero continuar. ✅",
                 "No autorizo. ❌"
@@ -416,7 +440,7 @@
             tipo: "opciones",
             pregunta: "Tu bienestar emocional es tan importante como tus notas. 🧠💚 <strong>¿Cómo te has sentido últimamente en el colegio o con tu grupo de amigos?</strong>",
             opciones: [
-                "Me siento bien, tranquilo/a y conectado/a con мои compañeros. 😊",
+                "Me siento bien, tranquilo/a y conectado/a con mis compañeros. 😊",
                 "A veces siento ansiedad, estrés o me cuesta concentrarme. 😰",
                 "Me cuesta relacionarme, me siento solo/a o prefiero aislarme. 😔",
                 "Siento frustración o desmotivación frecuente con mis estudios. 🔴"
@@ -454,7 +478,6 @@
         const chatBody = document.getElementById('chatBody');
         chatBody.innerHTML = "";
         
-        // Verifica si este navegador ya completó la encuesta
         if (localStorage.getItem('encuesta_completada') === 'true') {
             agregarMensaje("¡Hola! 👋 Ya has registrado tu respuesta anteriormente en este dispositivo. Tus datos han sido guardados con éxito.", "bot");
             document.getElementById('chatFooter').style.display = 'none';
@@ -469,8 +492,20 @@
     function agregarMensaje(texto, tipo = "bot") {
         const chatBody = document.getElementById('chatBody');
         const div = document.createElement('div');
-        div.className = tipo === "bot" ? "msg-bot" : "msg-user";
-        div.innerHTML = texto;
+
+        if (tipo === "bot") {
+            div.className = "message-row-bot";
+            div.innerHTML = `
+                <div class="mini-avatar">
+                    <img src="avatar.png" alt="Avatar" onerror="this.src='https://via.placeholder.com/100/45008b/ffffff?text=Bot'">
+                </div>
+                <div class="msg-bot">${texto}</div>
+            `;
+        } else {
+            div.className = "msg-user";
+            div.innerHTML = texto;
+        }
+
         chatBody.appendChild(div);
         chatBody.scrollTop = chatBody.scrollHeight;
     }
@@ -573,12 +608,10 @@
         setTimeout(() => {
             agregarMensaje("¡Muchas gracias por responder! 🌟 He guardado tus respuestas de forma confidencial para ayudarte a tener un gran año escolar. 🏫", "bot");
             
-            // Guardar en la lista general de registros para los docentes
             let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
             registros.push({ ...datosEstudiante, fecha: new Date().toLocaleString() });
             localStorage.setItem('registros_estudiantes', JSON.stringify(registros));
             
-            // Marcar este dispositivo como "ya respondido" para limitar a un solo envío por usuario/equipo
             localStorage.setItem('encuesta_completada', 'true');
             
             document.getElementById('chatFooter').style.display = 'none';
