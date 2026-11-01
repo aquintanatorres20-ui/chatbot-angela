@@ -129,7 +129,7 @@
             backdrop-filter: blur(4px);
         }
 
-        /* PORTADA DE BIENVENIDA */
+        /* PORTADA */
         .welcome-screen {
             flex: 1;
             display: flex;
@@ -350,7 +350,7 @@
             cursor: pointer;
         }
 
-        /* VENTANA MODAL DEL PANEL DOCENTE (ESTILO EXACTO DE LA FOTO) */
+        /* PANEL DOCENTE */
         .teacher-panel-overlay {
             position: absolute;
             top: 0;
@@ -365,13 +365,12 @@
         }
 
         .teacher-panel-header {
-            background: linear-gradient(135deg, #0369a1, #0284c7);
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
             color: white;
             padding: 20px 16px;
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
-            position: relative;
         }
 
         .teacher-panel-header-content {
@@ -400,8 +399,6 @@
             font-size: 0.72rem;
             opacity: 0.9;
             margin-top: 2px;
-            max-width: 280px;
-            line-height: 1.3;
         }
 
         .teacher-panel-close {
@@ -413,34 +410,63 @@
             padding: 4px;
         }
 
-        .teacher-panel-body {
-            padding: 16px;
+        .panel-tabs {
             display: flex;
+            background: #e2e8f0;
+            padding: 4px;
+            gap: 4px;
+        }
+
+        .panel-tab-btn {
+            flex: 1;
+            background: none;
+            border: none;
+            padding: 10px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .panel-tab-btn.active {
+            background: white;
+            color: var(--primary-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .panel-tab-content {
+            display: none;
+            padding: 16px;
             flex-direction: column;
             gap: 12px;
             flex: 1;
         }
 
-        /* TARJETAS DE MÉTRICAS */
+        .panel-tab-content.active {
+            display: flex;
+        }
+
         .metric-card {
             background: white;
             border-radius: 16px;
-            padding: 16px;
+            padding: 14px;
             box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
             border: 1px solid #e2e8f0;
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 14px;
         }
 
         .metric-icon {
-            width: 48px;
-            height: 48px;
+            width: 42px;
+            height: 42px;
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             flex-shrink: 0;
         }
 
@@ -452,80 +478,103 @@
             font-size: 0.7rem;
             color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
             font-weight: 700;
         }
 
         .metric-info .metric-value {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: 800;
             color: var(--text-main);
         }
 
-        .records-section-card {
+        /* TARJETAS DE REGISTROS INDIVIDUALES */
+        .student-card {
             background: white;
-            border-radius: 16px;
-            padding: 16px;
-            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+            border-radius: 14px;
+            padding: 14px;
             border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            font-size: 0.85rem;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
         }
 
-        .records-section-card h3 {
+        .student-card h4 {
+            color: var(--primary-dark);
             font-size: 0.95rem;
-            color: var(--text-main);
-            margin-bottom: 12px;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 6px;
+            margin-bottom: 4px;
+        }
+
+        .btn-export-single {
+            background-color: #10b981;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            align-self: flex-start;
+            margin-top: 6px;
+        }
+
+        /* FORMULARIO DE CONFIGURACIÓN */
+        .config-group {
+            background: white;
+            border-radius: 14px;
+            padding: 14px;
+            border: 1px solid #e2e8f0;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             gap: 8px;
         }
 
-        .records-actions-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
+        .config-group label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-main);
         }
 
-        .btn-action-panel {
-            padding: 12px;
-            border-radius: 12px;
-            font-size: 0.85rem;
+        .config-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1.5px solid var(--input-border);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .btn-save-config {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 10px;
             font-weight: 600;
             cursor: pointer;
-            border: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            text-align: center;
-        }
-
-        .btn-action-panel.export {
-            background-color: #f0fdf4;
-            color: #16a34a;
-            border: 1px solid #bbf7d0;
-        }
-
-        .btn-action-panel.clear {
-            background-color: #fef2f2;
-            color: #dc2626;
-            border: 1px solid #fecaca;
+            font-size: 0.85rem;
+            margin-top: 4px;
         }
 
         .panel-bottom-buttons {
             display: flex;
             gap: 10px;
             margin-top: auto;
+            padding-top: 10px;
         }
 
         .btn-back-panel {
             background-color: #e2e8f0;
             color: var(--text-main);
             border: none;
-            padding: 14px;
-            border-radius: 14px;
+            padding: 12px;
+            border-radius: 12px;
             font-weight: 600;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             cursor: pointer;
             flex: 1;
             text-align: center;
@@ -535,14 +584,13 @@
             background-color: #1e293b;
             color: white;
             border: none;
-            padding: 14px;
-            border-radius: 14px;
+            padding: 12px;
+            border-radius: 12px;
             font-weight: 600;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             cursor: pointer;
             flex: 1;
             text-align: center;
-            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
         }
 
         /* MODAL DE CONTRASEÑA */
@@ -646,11 +694,11 @@
 <body>
 
 <div class="app-container">
-    <div class="header">
+    <div class="header" id="appHeader">
         <div class="header-profile">
             <div class="avatar-container">
                 <div class="avatar-wrapper">
-                    <img src="avatar.png" alt="Avatar Colebot" class="avatar-img" onerror="this.src='https://via.placeholder.com/100/0284c7/ffffff?text=Bot'">
+                    <img id="headerAvatarImg" src="avatar.png" alt="Avatar Colebot" class="avatar-img" onerror="this.src='https://via.placeholder.com/100/0284c7/ffffff?text=Bot'">
                 </div>
                 <div class="status-dot"></div>
             </div>
@@ -665,7 +713,7 @@
     <!-- PANTALLA DE PORTADA -->
     <div class="welcome-screen" id="welcomeScreen">
         <div class="welcome-avatar">
-            <img src="avatar.png" alt="Avatar Colebot" onerror="this.src='https://via.placeholder.com/150/0284c7/ffffff?text=Bot'">
+            <img id="welcomeAvatarImg" src="avatar.png" alt="Avatar Colebot" onerror="this.src='https://via.placeholder.com/150/0284c7/ffffff?text=Bot'">
         </div>
         <h2>¡Te damos la bienvenida a Colebot! 🏫</h2>
         <p>Un espacio seguro y confidencial creado por Orientación Escolar para conocerte, apoyarte en tu bienestar emocional y potenciar tu rendimiento académico este año.</p>
@@ -694,21 +742,27 @@
         💬
     </div>
 
-    <!-- VENTANA APARTE: PANEL DE ORIENTACIÓN ESCOLAR -->
+    <!-- VENTANA APARTE: PANEL DOCENTE CON PESTAÑAS -->
     <div class="teacher-panel-overlay" id="teacherPanelWindow">
         <div class="teacher-panel-header">
             <div class="teacher-panel-header-content">
                 <div class="teacher-panel-icon">📊</div>
                 <div>
                     <h2>Panel de Orientación Escolar</h2>
-                    <p>Resultados consolidados e identificación de necesidades diferenciadas</p>
+                    <p>Gestión de encuestas y configuración institucional</p>
                 </div>
             </div>
             <button class="teacher-panel-close" onclick="cerrarPanelDocente()">×</button>
         </div>
 
-        <div class="teacher-panel-body">
-            <!-- TARJETA 1: TOTAL ENCUESTAS -->
+        <div class="panel-tabs">
+            <button class="panel-tab-btn active" onclick="cambiarTabDocente('resumen')">📊 Resumen</button>
+            <button class="panel-tab-btn" onclick="cambiarTabDocente('individuales')">📁 Individuales</button>
+            <button class="panel-tab-btn" onclick="cambiarTabDocente('config')">⚙️ Configuración</button>
+        </div>
+
+        <!-- PESTAÑA 1: RESUMEN Y ESTADÍSTICAS -->
+        <div class="panel-tab-content active" id="tabResumen">
             <div class="metric-card">
                 <div class="metric-icon blue">👥</div>
                 <div class="metric-info">
@@ -716,8 +770,6 @@
                     <div class="metric-value" id="statTotal">0</div>
                 </div>
             </div>
-
-            <!-- TARJETA 2: REQUIEREN REFUERZO -->
             <div class="metric-card">
                 <div class="metric-icon yellow">📚</div>
                 <div class="metric-info">
@@ -725,8 +777,6 @@
                     <div class="metric-value" id="statRefuerzo">0</div>
                 </div>
             </div>
-
-            <!-- TARJETA 3: ALERTAS EMOCIONALES -->
             <div class="metric-card">
                 <div class="metric-icon red">❤️</div>
                 <div class="metric-info">
@@ -734,23 +784,52 @@
                     <div class="metric-value" id="statAlertas">0</div>
                 </div>
             </div>
+            <button class="btn-save-config" style="background:#10b981; margin-top:10px;" onclick="exportarCSV()">📥 Descargar Consolidado General (CSV)</button>
+        </div>
 
-            <!-- SECCIÓN: REGISTROS INDIVIDUALES / GESTIÓN -->
-            <div class="records-section-card">
-                <h3>📁 Registros Individuales</h3>
-                <div class="records-actions-grid">
-                    <button class="btn-action-panel export" onclick="exportarCSV()">
-                        📥 <span>Exportar Datos (CSV)</span>
-                    </button>
-                    <button class="btn-action-panel clear" onclick="limpiarRegistros()">
-                        🗑️ <span>Limpiar Todo</span>
-                    </button>
-                </div>
+        <!-- PESTAÑA 2: REGISTROS INDIVIDUALES -->
+        <div class="panel-tab-content" id="tabIndividuales">
+            <div id="listaRegistrosIndividuales" style="display: flex; flex-direction: column; gap: 10px;">
+                <!-- Carga dinámica -->
+            </div>
+        </div>
+
+        <!-- PESTAÑA 3: CONFIGURACIÓN EXCLUSIVA DOCENTE -->
+        <div class="panel-tab-content" id="tabConfig">
+            <div class="config-group">
+                <label>🔑 Cambiar Contraseña Docente</label>
+                <input type="password" id="cfgNuevaClave" class="config-input" placeholder="Nueva contraseña">
+                <button class="btn-save-config" onclick="guardarNuevaClave()">Actualizar Contraseña</button>
             </div>
 
+            <div class="config-group">
+                <label>👤 Agregar Usuario Docente Autorizado</label>
+                <input type="text" id="cfgNuevoDocente" class="config-input" placeholder="Nombre o correo del docente">
+                <button class="btn-save-config" onclick="agregarDocenteAutorizado()">Registrar Docente</button>
+            </div>
+
+            <div class="config-group">
+                <label>🖼️ Cambiar Foto de Perfil (URL de imagen)</label>
+                <input type="text" id="cfgUrlAvatar" class="config-input" placeholder="https://ejemplo.com/avatar.png">
+                <button class="btn-save-config" onclick="actualizarAvatar()">Guardar Imagen</button>
+            </div>
+
+            <div class="config-group">
+                <label>🎨 Color Principal del Chat (# Hexadecimal)</label>
+                <input type="color" id="cfgColorPrincipal" class="config-input" value="#0284c7" style="height: 40px; padding: 2px;">
+                <button class="btn-save-config" onclick="actualizarColorPrincipal()">Aplicar Color</button>
+            </div>
+
+            <div class="config-group" style="border-color: #fecaca; background: #fff5f5;">
+                <label style="color: #dc2626;">🗑️ Zona de Peligro</label>
+                <button class="btn-save-config" style="background: #dc2626;" onclick="limpiarRegistros()">Eliminar Todos los Registros</button>
+            </div>
+        </div>
+
+        <div style="padding: 16px;">
             <div class="panel-bottom-buttons">
                 <button class="btn-back-panel" onclick="cerrarPanelDocente()">← Volver</button>
-                <button class="btn-close-panel" onclick="cerrarPanelDocente()">Cerrar Panel</button>
+                <button class="btn-close-panel" onclick="cerrarPanelDocente()">Cerrar</button>
             </div>
         </div>
     </div>
@@ -773,7 +852,14 @@
 </div>
 
 <script>
-    const CLAVE_ORIENTACION = "docente2026";
+    // Recuperar configuración guardada o usar valores por defecto
+    let claveOrientacion = localStorage.getItem('cfg_clave') || "docente2026";
+    let avatarUrlGlobal = localStorage.getItem('cfg_avatar') || "avatar.png";
+    let colorGlobal = localStorage.getItem('cfg_color') || "#0284c7";
+    let docentesAutorizados = JSON.parse(localStorage.getItem('cfg_docentes') || '["Docente Principal"]');
+
+    aplicarConfiguracionVisual();
+
     let pasoActual = 0;
     let datosEstudiante = { nombre: "Estudiante Anónimo", autorizacion: "No especificada", estilo: "No especificado", ritmo: "No especificado", refuerzo: "Ninguno", emocional: "No especificado", reto: "Ninguno", apoyo: "No especificado" };
 
@@ -850,7 +936,7 @@
         if (localStorage.getItem('encuesta_completada') === 'true') {
             document.getElementById('welcomeScreen').innerHTML = `
                 <div class="welcome-avatar">
-                    <img src="avatar.png" alt="Avatar Colebot" onerror="this.src='https://via.placeholder.com/150/0284c7/ffffff?text=Bot'">
+                    <img src="${avatarUrlGlobal}" alt="Avatar Colebot" onerror="this.src='https://via.placeholder.com/150/0284c7/ffffff?text=Bot'">
                 </div>
                 <h2>¡Gracias por participar! 🌟</h2>
                 <p>Tu participación oficial ya ha sido registrada exitosamente en este dispositivo. Agradecemos tu compromiso con la comunidad escolar.</p>
@@ -858,6 +944,15 @@
             document.getElementById('floatingBubble').style.display = 'none';
         }
     };
+
+    function aplicarConfiguracionVisual() {
+        document.documentElement.style.setProperty('--primary-color', colorGlobal);
+        document.documentElement.style.setProperty('--primary-dark', colorGlobal);
+        const imgHeader = document.getElementById('headerAvatarImg');
+        const imgWelcome = document.getElementById('welcomeAvatarImg');
+        if(imgHeader) imgHeader.src = avatarUrlGlobal;
+        if(imgWelcome) imgWelcome.src = avatarUrlGlobal;
+    }
 
     function sanitizarTexto(texto) {
         const div = document.createElement('div');
@@ -886,13 +981,13 @@
             div.className = "message-row-bot";
             div.innerHTML = `
                 <div class="mini-avatar">
-                    <img src="avatar.png" alt="Avatar" onerror="this.src='https://via.placeholder.com/100/0284c7/ffffff?text=Bot'">
+                    <img src="${avatarUrlGlobal}" alt="Avatar" onerror="this.src='https://via.placeholder.com/100/0284c7/ffffff?text=Bot'">
                 </div>
                 <div class="msg-bot">${texto}</div>
             `;
         } else {
             div.className = "msg-user";
-            div.textContent = texto; // Uso seguro de textContent para prevenir XSS
+            div.textContent = texto;
         }
 
         chatBody.appendChild(div);
@@ -909,7 +1004,6 @@
             btn.className = "btn-option";
             btn.innerText = op;
             btn.onclick = function() {
-                // Mejora de procesamiento: deshabilitar botones tras clic para evitar doble envío
                 container.querySelectorAll('button').forEach(b => b.disabled = true);
                 seleccionarOpcion(op);
             };
@@ -1034,11 +1128,28 @@
         const inputPass = document.getElementById('teacherPassword').value;
         const errorDiv = document.getElementById('authError');
 
-        if (inputPass === CLAVE_ORIENTACION) {
+        if (inputPass === claveOrientacion) {
             cerrarModalDocente();
             mostrarPanelDocenteVentana();
         } else {
             errorDiv.style.display = 'block';
+        }
+    }
+
+    function cambiarTabDocente(tabId) {
+        document.querySelectorAll('.panel-tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.panel-tab-content').forEach(content => content.classList.remove('active'));
+
+        if(tabId === 'resumen') {
+            document.querySelectorAll('.panel-tab-btn')[0].classList.add('active');
+            document.getElementById('tabResumen').classList.add('active');
+        } else if(tabId === 'individuales') {
+            document.querySelectorAll('.panel-tab-btn')[1].classList.add('active');
+            document.getElementById('tabIndividuales').classList.add('active');
+            cargarRegistrosIndividuales();
+        } else if(tabId === 'config') {
+            document.querySelectorAll('.panel-tab-btn')[2].classList.add('active');
+            document.getElementById('tabConfig').classList.add('active');
         }
     }
 
@@ -1056,11 +1167,52 @@
         document.getElementById('statRefuerzo').innerText = requierenRefuerzo;
         document.getElementById('statAlertas').innerText = alertasEmocionales;
 
+        cambiarTabDocente('resumen');
         document.getElementById('teacherPanelWindow').style.display = 'flex';
     }
 
     function cerrarPanelDocente() {
         document.getElementById('teacherPanelWindow').style.display = 'none';
+    }
+
+    function cargarRegistrosIndividuales() {
+        let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
+        let contenedor = document.getElementById('listaRegistrosIndividuales');
+        contenedor.innerHTML = "";
+
+        if(registros.length === 0) {
+            contenedor.innerHTML = `<p style="font-size:0.85rem; color:var(--text-muted); text-align:center;">No hay registros individuales todavía.</p>`;
+            return;
+        }
+
+        registros.forEach((r, index) => {
+            let card = document.createElement('div');
+            card.className = "student-card";
+            card.innerHTML = `
+                <h4>#${index+1} - ${r.nombre}</h4>
+                <span>🛡️ Autorización: ${r.autorizacion}</span>
+                <span>👁️ Estilo: ${r.estilo}</span>
+                <span>⏱️ Ritmo: ${r.ritmo}</span>
+                <span>📚 Refuerzo: ${r.refuerzo}</span>
+                <span>🧠 Emocional: ${r.emocional}</span>
+                <span>⚠️ Reto: ${r.reto}</span>
+                <span>💬 Apoyo: ${r.apoyo}</span>
+                <small style="color:var(--text-muted);">📅 ${r.fecha}</small>
+                <button class="btn-export-single" onclick="exportarRegistroIndividual(${index})">📥 Descargar este Excel (CSV)</button>
+            `;
+            contenedor.appendChild(card);
+        });
+    }
+
+    function exportarRegistroIndividual(index) {
+        let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
+        let r = registros[index];
+        if (!r) return;
+
+        let csv = "Estudiante,Autorizacion,Estilo Aprendizaje,Ritmo,Refuerzo,Bienestar Emocional,Reto Postpandemia,Apoyo Deseado,Fecha\n";
+        csv += `"${r.nombre}","${r.autorizacion}","${r.estilo}","${r.ritmo}","${r.refuerzo}","${r.emocional}","${r.reto}","${r.apoyo}","${r.fecha}"\n`;
+
+        descargarArchivoCSV(csv, `Registro_${r.nombre.replace(/[^a-zA-Z0-9]/g, "_")}.csv`);
     }
 
     function exportarCSV() {
@@ -1072,14 +1224,56 @@
             csv += `"${r.nombre}","${r.autorizacion}","${r.estilo}","${r.ritmo}","${r.refuerzo}","${r.emocional}","${r.reto}","${r.apoyo}","${r.fecha}"\n`;
         });
 
-        let blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        descargarArchivoCSV(csv, `Reporte_Consolidado_${new Date().toISOString().slice(0,10)}.csv`);
+    }
+
+    function descargarArchivoCSV(contenidoCSV, nombreArchivo) {
+        let blob = new Blob([contenidoCSV], { type: 'text/csv;charset=utf-8;' });
         let url = URL.createObjectURL(blob);
         let link = document.createElement("a");
         link.setAttribute("href", url);
-        link.setAttribute("download", `Reporte_Orientacion_${new Date().toISOString().slice(0,10)}.csv`);
+        link.setAttribute("download", nombreArchivo);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+    }
+
+    // CONFIGURACIÓN AVANZADA DOCENTE
+    function guardarNuevaClave() {
+        let nueva = document.getElementById('cfgNuevaClave').value.trim();
+        if(nueva.length < 4) return alert("La contraseña debe tener al menos 4 caracteres.");
+        claveOrientacion = nueva;
+        localStorage.setItem('cfg_clave', nueva);
+        document.getElementById('cfgNuevaClave').value = "";
+        alert("¡Contraseña actualizada con éxito!");
+    }
+
+    function agregarDocenteAutorizado() {
+        let nuevoDoc = document.getElementById('cfgNuevoDocente').value.trim();
+        if(!nuevoDoc) return alert("Ingresa un nombre o correo válido.");
+        docentesAutorizados.push(nuevoDoc);
+        localStorage.setItem('cfg_docentes', JSON.stringify(docentesAutorizados));
+        document.getElementById('cfgNuevoDocente').value = "";
+        alert("¡Docente agregado a la lista oficial!");
+    }
+
+    function actualizarAvatar() {
+        let url = document.getElementById('cfgUrlAvatar').value.trim();
+        if(!url) return alert("Ingresa un enlace válido.");
+        avatarUrlGlobal = url;
+        localStorage.setItem('cfg_avatar', url);
+        aplicarConfiguracionVisual();
+        document.getElementById('cfgUrlAvatar').value = "";
+        alert("¡Foto de perfil actualizada con éxito!");
+        mostrarPanelDocenteVentana();
+    }
+
+    function actualizarColorPrincipal() {
+        let color = document.getElementById('cfgColorPrincipal').value;
+        colorGlobal = color;
+        localStorage.setItem('cfg_color', color);
+        aplicarConfiguracionVisual();
+        alert("¡Color principal del chat actualizado!");
     }
 
     function limpiarRegistros() {
