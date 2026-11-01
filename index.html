@@ -6,13 +6,13 @@
     <title>Colebot - Acompañamiento Escolar</title>
     <style>
         :root {
-            --primary-color: #631c99;
-            --primary-dark: #540089;
-            --accent-color: #8348a7;
-            --bg-body: #dccce4;
+            --primary-color: #0284c7;
+            --primary-dark: #0369a1;
+            --accent-color: #10b981;
+            --bg-body: #f0f9ff;
             --chat-bg: #ffffff;
             --text-main: #0f172a;
-            --text-muted: #e0e1ed;
+            --text-muted: #64748b;
             --bot-bubble: #f1f5f9;
         }
 
@@ -112,11 +112,6 @@
             font-weight: 600;
             cursor: pointer;
             backdrop-filter: blur(4px);
-            transition: background 0.2s;
-        }
-
-        .btn-teacher-access:active {
-            background-color: rgba(255, 255, 255, 0.35);
         }
 
         .chat-body {
@@ -136,6 +131,42 @@
             max-width: 85%;
             font-size: 0.92rem;
             line-height: 1.45;
+            align-self: flex-start;
+        }
+
+        .msg-user {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            padding: 12px 16px;
+            border-radius: 18px 18px 4px 18px;
+            max-width: 85%;
+            font-size: 0.92rem;
+            line-height: 1.45;
+            align-self: flex-end;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 5px;
+        }
+
+        .btn-option {
+            background-color: #ffffff;
+            border: 1.5px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-option:hover {
+            background-color: #f0f9ff;
         }
 
         .chat-footer {
@@ -281,28 +312,26 @@
         <button class="btn-teacher-access" onclick="abrirModalDocente()">🔒 ÁREA DOCENTE</button>
     </div>
 
+    <!-- CUERPO DINÁMICO DEL CHAT -->
     <div class="chat-body" id="chatBody">
-        <div class="msg-bot">
-            ¡Hola! 👋 Te damos la bienvenida a nuestro espacio de acompañamiento escolar.
-        </div>
-        <div class="msg-bot">
-            Para empezar a conversar de forma personalizada, <strong>¿cuál es tu nombre o cómo te gusta que te llamen?</strong>
-        </div>
+        <div class="msg-bot">¡Hola! 👋 Te damos la bienvenida a nuestro espacio de acompañamiento escolar.</div>
+        <div class="msg-bot">Para empezar a conversar de forma personalizada, <strong>¿cuál es tu nombre completo?</strong></div>
     </div>
 
-    <div class="chat-footer">
-        <input type="text" class="chat-input" placeholder="Escribe tu nombre aquí..." id="userNameInput">
-        <button class="btn-send" onclick="enviarNombre()">Enviar</button>
+    <!-- ENTRADA DE TEXTO -->
+    <div class="chat-footer" id="chatFooter">
+        <input type="text" class="chat-input" placeholder="Escribe aquí..." id="userInput" onkeypress="handleKeyPress(event)">
+        <button class="btn-send" onclick="procesarEntrada()">Enviar</button>
     </div>
 
     <!-- MODAL DE ACCESO RESTRINGIDO PARA DOCENTES -->
     <div class="modal-overlay" id="teacherModal">
         <div class="modal-card">
             <h2>Acceso Restringido 🏫</h2>
-            <p>Ingresa la contraseña institucional de Orientación Escolar para consultar los informes:</p>
+            <p>Ingresa la contraseña institucional para ver el panel de informes:</p>
             
             <input type="password" id="teacherPassword" class="password-input" placeholder="••••••••">
-            <div class="error-message" id="authError">Contraseña incorrecta. Inténtalo de nuevo.</div>
+            <div class="error-message" id="authError">Contraseña incorrecta.</div>
             
             <div class="modal-actions">
                 <button class="btn-modal-close" onclick="cerrarModalDocente()">Cancelar</button>
@@ -313,9 +342,129 @@
 </div>
 
 <script>
-    // CONTRASEÑA POR DEFECTO PARA EL EQUIPO DOCENTE
     const CLAVE_ORIENTACION = "docente2026";
+    let pasoActual = 0;
+    let datosEstudiante = { nombre: "", grado: "", rendimiento: "", emocional: "" };
 
+    const preguntas = [
+        {
+            tipo: "texto",
+            pregunta: "Perfecto. Ahora, <strong>¿a qué grado perteneces?</strong> (Ej: 9°A, 11°B)"
+        },
+        {
+            tipo: "opciones",
+            pregunta: "¿Cómo calificarías tu rendimiento o adaptación académica en lo que va del periodo?",
+            opciones: [
+                "Excelente / Sin dificultades",
+                "Regular / Me cuesta algunas materias",
+                "Bajo / Necesito apoyo urgente"
+            ]
+        },
+        {
+            tipo: "opciones",
+            pregunta: "Pensando en tu bienestar emocional tras los cambios recientes, ¿cómo te has sentido últimamente?",
+            opciones: [
+                "Motivado(a) y tranquilo(a)",
+                "Estresado(a) o con ansiedad frecuente",
+                "Triste, desmotivado(a) o aislado(a)"
+            ]
+        }
+    ];
+
+    function agregarMensaje(texto, tipo = "bot") {
+        const chatBody = document.getElementById('chatBody');
+        const div = document.createElement('div');
+        div.className = tipo === "bot" ? "msg-bot" : "msg-user";
+        div.innerHTML = texto;
+        chatBody.appendChild(div);
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    function mostrarOpciones(opciones) {
+        const chatBody = document.getElementById('chatBody');
+        const container = document.createElement('div');
+        container.className = "options-container";
+        
+        opciones.forEach(op => {
+            const btn = document.createElement('button');
+            btn.className = "btn-option";
+            btn.innerText = op;
+            btn.onclick = () => seleccionarOpcion(op);
+            container.appendChild(btn);
+        });
+        
+        chatBody.appendChild(container);
+        chatBody.scrollTop = chatBody.scrollHeight;
+        document.getElementById('chatFooter').style.display = 'none'; // Ocultar input manual si hay botones
+    }
+
+    function procesarEntrada() {
+        const input = document.getElementById('userInput');
+        const valor = input.value.trim();
+        if (valor === "") return;
+
+        agregarMensaje(valor, "user");
+        input.value = "";
+
+        manejarFlujo(valor);
+    }
+
+    function seleccionarOpcion(valor) {
+        // Remover botones previos
+        const containers = document.querySelectorAll('.options-container');
+        containers.forEach(c => c.remove());
+        
+        agregarMensaje(valor, "user");
+        document.getElementById('chatFooter').style.display = 'flex';
+        
+        manejarFlujo(valor);
+    }
+
+    function manejarFlujo(respuesta) {
+        if (pasoActual === 0) {
+            datosEstudiante.nombre = respuesta;
+            pasoActual++;
+            siguientePregunta();
+        } else if (pasoActual === 1) {
+            datosEstudiante.grado = respuesta;
+            pasoActual++;
+            siguientePregunta();
+        } else if (pasoActual === 2) {
+            datosEstudiante.rendimiento = respuesta;
+            pasoActual++;
+            siguientePregunta();
+        } else if (pasoActual === 3) {
+            datosEstudiante.emocional = respuesta;
+            finalizarCuestionario();
+        }
+    }
+
+    function siguientePregunta() {
+        const actual = preguntas[pasoActual - 1];
+        setTimeout(() => {
+            agregarMensaje(actual.pregunta, "bot");
+            if (actual.tipo === "opciones") {
+                mostrarOpciones(actual.opciones);
+            }
+        }, 500);
+    }
+
+    function finalizarCuestionario() {
+        setTimeout(() => {
+            agregarMensaje("¡Muchas gracias por compartir esto conmigo! 💙 Tus respuestas han sido registradas de forma confidencial para que el equipo de Orientación pueda brindarte apoyo personalizado.", "bot");
+            
+            // Guardar en la memoria local del navegador (simulación de base de datos para el docente)
+            let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
+            registros.push({ ...datosEstudiante, fecha: new Date().toLocaleString() });
+            localStorage.setItem('registros_estudiantes', JSON.stringify(registros));
+        }, 500);
+    }
+
+    function handleKeyPress(e) {
+        if (e.key === 'Enter') procesarEntrada();
+    }
+
+    // Funciones del Modal Docente
     function abrirModalDocente() {
         document.getElementById('teacherModal').style.display = 'flex';
         document.getElementById('teacherPassword').value = '';
@@ -332,30 +481,32 @@
 
         if (inputPass === CLAVE_ORIENTACION) {
             cerrarModalDocente();
-            alert("Acceso concedido al Panel de Orientación Escolar. Cargando informes...");
-            // Aquí se despliega la vista de diagnósticos
+            mostrarPanelDocente();
         } else {
             errorDiv.style.display = 'block';
         }
     }
 
-    function enviarNombre() {
-        const input = document.getElementById('userNameInput');
-        const chatBody = document.getElementById('chatBody');
+    function mostrarPanelDocente() {
+        let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
+        let htmlReporte = "<h3>📊 Informes de Estudiantes</h3><br>";
         
-        if (input.value.trim() !== "") {
-            const userMsg = document.createElement('div');
-            userMsg.className = 'msg-bot';
-            userMsg.style.alignSelf = 'flex-end';
-            userMsg.style.backgroundColor = 'var(--primary-color)';
-            userMsg.style.color = '#ffffff';
-            userMsg.style.borderRadius = '18px 18px 4px 18px';
-            userMsg.innerText = input.value;
-            
-            chatBody.appendChild(userMsg);
-            input.value = '';
-            chatBody.scrollTop = chatBody.scrollHeight;
+        if (registros.length === 0) {
+            htmlReporte += "<p>Aún no hay respuestas registradas.</p>";
+        } else {
+            registros.forEach((r, index) => {
+                htmlReporte += `<div style="background:#f8fafc; padding:10px; margin-bottom:8px; border-radius:8px; font-size:0.85rem;">
+                    <strong>#${index+1} - ${r.nombre}</strong> (${r.grado})<br>
+                    📚 Académico: ${r.rendimiento}<br>
+                    💬 Emocional: ${r.emocional}<br>
+                    <small style="color:gray;">📅 ${r.fecha}</small>
+                </div>`;
+            });
         }
+
+        const chatBody = document.getElementById('chatBody');
+        chatBody.innerHTML = `<div class="msg-bot" style="max-width:100%;">${htmlReporte}</div>`;
+        document.getElementById('chatFooter').style.display = 'none';
     }
 </script>
 
