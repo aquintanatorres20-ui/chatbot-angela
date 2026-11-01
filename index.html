@@ -153,7 +153,7 @@
             backdrop-filter: blur(4px);
         }
 
-        /* PORTADA */
+        /* PORTADA DE BIENVENIDA */
         .welcome-screen {
             flex: 1;
             display: flex;
@@ -372,34 +372,100 @@
             cursor: pointer;
         }
 
-        /* METRICAS Y TARJETAS EN PANEL DOCENTE */
+        /* ESTRUCTURA PESTAÑAS PANEL DOCENTE */
+        .admin-panel-container {
+            width: 100%;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .tabs-header {
+            display: flex;
+            gap: 6px;
+            border-bottom: 2px solid #e2dbec;
+            margin-bottom: 12px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 8px 4px;
+            background: none;
+            border: none;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* MÉTRICAS Y TARJETAS EN PANEL DOCENTE */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 8px;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
 
         .stat-card {
-            background: white;
+            background: #fdfbfd;
             border: 1px solid #dcd6e7;
             border-radius: 10px;
-            padding: 10px 6px;
+            padding: 8px 4px;
             text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
 
         .stat-card h4 {
-            font-size: 0.65rem;
+            font-size: 0.62rem;
             color: var(--text-muted);
             text-transform: uppercase;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .stat-card .stat-number {
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             font-weight: 700;
             color: var(--primary-dark);
+        }
+
+        .diagnosis-card {
+            background: #f8f5fc;
+            border: 1px solid #c2b6d8;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 12px;
+            font-size: 0.8rem;
+        }
+
+        .diagnosis-card h4 {
+            color: var(--primary-dark);
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+        }
+
+        .student-card {
+            background: #ffffff;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 12px;
+            font-size: 0.82rem;
+            border: 1px solid #b2a4c9;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
         }
 
         .btn-export {
@@ -412,6 +478,7 @@
             cursor: pointer;
             margin-bottom: 12px;
             font-size: 0.8rem;
+            width: 100%;
         }
 
         .btn-export-single {
@@ -886,6 +953,15 @@
         document.body.removeChild(link);
     }
 
+    function cambiarTab(tabIndex) {
+        document.querySelectorAll('.tab-btn').forEach((btn, idx) => {
+            btn.classList.toggle('active', idx === tabIndex);
+        });
+        document.querySelectorAll('.tab-content').forEach((content, idx) => {
+            content.classList.toggle('active', idx === tabIndex);
+        });
+    }
+
     function mostrarPanelDocente() {
         let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
         
@@ -896,52 +972,73 @@
             (r.reto && !r.reto.includes("Ninguno"))
         ).length;
 
-        let htmlReporte = `<h3>📊 Panel Docente - Informes y Seguimiento</h3><br>`;
-        
+        let htmlReporte = `
+            <div class="admin-panel-container">
+                <div class="tabs-header">
+                    <button class="tab-btn active" onclick="cambiarTab(0)">📊 Consolidado & Diagnóstico</button>
+                    <button class="tab-btn" onclick="cambiarTab(1)">📋 Respuestas Individuales (${totalEncuestas})</button>
+                </div>
+
+                <!-- VENTANA 1: CONSOLIDADO Y DIAGNÓSTICO -->
+                <div class="tab-content active" id="tabConsolidado">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h4>Total Encuestas</h4>
+                            <div class="stat-number">${totalEncuestas}</div>
+                        </div>
+                        <div class="stat-card">
+                            <h4>Refuerzo</h4>
+                            <div class="stat-number" style="color: #2563eb;">${requierenRefuerzo}</div>
+                        </div>
+                        <div class="stat-card">
+                            <h4>Alertas Emoc.</h4>
+                            <div class="stat-number" style="color: #e11d48;">${alertasEmocionales}</div>
+                        </div>
+                    </div>
+
+                    <div class="diagnosis-card">
+                        <h4>📌 Identificación de Necesidades Diferenciadas</h4>
+                        <p><strong>- Apoyo Académico:</strong> ${requierenRefuerzo} estudiante(s) manifestaron requerir refuerzo específico en asignaturas.</p>
+                        <p style="margin-top:4px;"><strong>- Prioridad Emocional:</strong> ${alertasEmocionales} estudiante(s) registraron retos de bienestar postpandemia o requerimientos de apoyo en orientación.</p>
+                    </div>
+
+                    ${totalEncuestas > 0 ? `<button class="btn-export" onclick="exportarCSV()">📥 Descargar Consolidado en Excel (CSV)</button>` : '<p style="font-size:0.8rem; color:var(--text-muted); text-align:center;">Aún no hay respuestas registradas.</p>'}
+                </div>
+
+                <!-- VENTANA 2: CASILLAS INDIVIDUALES -->
+                <div class="tab-content" id="tabIndividuales">
+        `;
+
+        if (registros.length === 0) {
+            htmlReporte += `<p style="font-size:0.8rem; color:var(--text-muted); text-align:center;">No hay casillas de respuestas disponibles por ahora.</p>`;
+        } else {
+            registros.forEach((r, index) => {
+                htmlReporte += `
+                    <div class="student-card">
+                        <strong>#${index+1} - ${r.nombre}</strong><br>
+                        🛡️ Autorización: ${r.autorizacion}<br>
+                        👁️ Estilo: ${r.estilo}<br>
+                        ⏱️ Ritmo: ${r.ritmo}<br>
+                        📚 Refuerzo: ${r.refuerzo}<br>
+                        🧠 Emocional: ${r.emocional}<br>
+                        ⚠️ Reto: ${r.reto}<br>
+                        💬 Apoyo: ${r.apoyo}<br>
+                        <small style="color:var(--text-muted);">📅 ${r.fecha}</small><br>
+                        <button class="btn-export-single" onclick="exportarRegistroIndividual(${index})">📥 Excel de este registro</button>
+                    </div>
+                `;
+            });
+        }
+
         htmlReporte += `
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h4>Total Encuestas</h4>
-                    <div class="stat-number">${totalEncuestas}</div>
-                </div>
-                <div class="stat-card">
-                    <h4>Refuerzo</h4>
-                    <div class="stat-number" style="color: #2563eb;">${requierenRefuerzo}</div>
-                </div>
-                <div class="stat-card">
-                    <h4>Alertas Emoc.</h4>
-                    <div class="stat-number" style="color: #e11d48;">${alertasEmocionales}</div>
                 </div>
             </div>
         `;
 
-        if (registros.length > 0) {
-            htmlReporte += `<button class="btn-export" onclick="exportarCSV()">📥 Descargar Todo en Excel (CSV)</button><br><br>`;
-        }
-
-        if (registros.length === 0) {
-            htmlReporte += "<p>Aún no hay respuestas de estudiantes registradas por aquí.</p>";
-        } else {
-            registros.forEach((r, index) => {
-                htmlReporte += `<div style="background:#f4f0f8; padding:10px; margin-bottom:8px; border-radius:8px; font-size:0.82rem; border:1px solid #b2a4c9;">
-                    <strong>#${index+1} - ${r.nombre}</strong><br>
-                    🛡️ Autorización: ${r.autorizacion}<br>
-                    👁️ Estilo: ${r.estilo}<br>
-                    ⏱️ Ritmo: ${r.ritmo}<br>
-                    📚 Refuerzo: ${r.refuerzo}<br>
-                    🧠 Emocional: ${r.emocional}<br>
-                    ⚠️ Reto: ${r.reto}<br>
-                    💬 Apoyo: ${r.apoyo}<br>
-                    <small style="color:var(--text-muted);">📅 ${r.fecha}</small><br>
-                    <button class="btn-export-single" onclick="exportarRegistroIndividual(${index})">📥 Excel de este registro</button>
-                </div>`;
-            });
-        }
-
         const chatBody = document.getElementById('chatBody');
         document.getElementById('welcomeScreen').style.display = 'none';
         chatBody.style.display = 'flex';
-        chatBody.innerHTML = `<div class="msg-bot" style="max-width:100%;">${htmlReporte}</div>`;
+        chatBody.innerHTML = `<div class="msg-bot" style="max-width:100%; width:100%; padding:0; background:none; border:none; box-shadow:none;">${htmlReporte}</div>`;
         document.getElementById('chatFooterContainer').style.display = 'none';
         document.getElementById('floatingBubble').style.display = 'none';
     }
