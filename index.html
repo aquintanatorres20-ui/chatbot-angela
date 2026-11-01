@@ -13,7 +13,7 @@
             --chat-bg: #ffffff;
             --text-main: #240054;
             --text-muted: #7555a3;
-            --bot-bubble: #cfc5dd;
+            --bot-bubble: #ede7f6;
             --input-border: #b2a4c9;
         }
 
@@ -58,6 +58,7 @@
             align-items: center;
             justify-content: space-between;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            z-index: 10;
         }
 
         .header-profile {
@@ -66,18 +67,27 @@
             gap: 12px;
         }
 
+        /* Contenedor del avatar con padding extra para que el punto verde no se corte */
         .avatar-container {
             position: relative;
-            width: 44px;
-            height: 44px;
+            width: 48px;
+            height: 48px;
             flex-shrink: 0;
-            border-radius: 50%;
-            overflow: hidden;
-            background-color: var(--bot-bubble);
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        .avatar-wrapper {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: var(--bot-bubble);
             border: 2px solid #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .avatar-img {
@@ -88,14 +98,14 @@
         }
 
         .status-dot {
-            width: 10px;
-            height: 10px;
+            width: 11px;
+            height: 11px;
             background-color: #10b981;
             border: 2px solid #ffffff;
             border-radius: 50%;
             position: absolute;
-            bottom: 0;
-            right: 0;
+            bottom: 2px;
+            right: 2px;
         }
 
         .header-info h1 {
@@ -120,6 +130,7 @@
             backdrop-filter: blur(4px);
         }
 
+        /* Fondo decorativo sutil para el área de chat */
         .chat-body {
             flex: 1;
             padding: 16px;
@@ -127,28 +138,35 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
+            background-color: #faf8fc;
+            background-image: radial-gradient(#dcd6e7 0.75px, transparent 0.75px);
+            background-size: 16px 16px;
         }
 
+        /* Estilo mejorado de burbujas */
         .msg-bot {
-            background-color: var(--bot-bubble);
+            background-color: #ffffff;
             color: var(--text-main);
             padding: 12px 16px;
-            border-radius: 18px 18px 18px 4px;
+            border-radius: 4px 18px 18px 18px;
             max-width: 85%;
             font-size: 0.92rem;
             line-height: 1.45;
             align-self: flex-start;
+            box-shadow: 0 2px 5px rgba(36, 0, 84, 0.05);
+            border: 1px solid #e2dbec;
         }
 
         .msg-user {
             background-color: var(--primary-color);
             color: #ffffff;
             padding: 12px 16px;
-            border-radius: 18px 18px 4px 18px;
+            border-radius: 18px 4px 18px 18px;
             max-width: 85%;
             font-size: 0.92rem;
             line-height: 1.45;
             align-self: flex-end;
+            box-shadow: 0 2px 5px rgba(69, 0, 139, 0.15);
         }
 
         .options-container {
@@ -169,6 +187,7 @@
             text-align: left;
             cursor: pointer;
             transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
 
         .btn-option:hover {
@@ -203,7 +222,6 @@
             cursor: pointer;
         }
 
-        /* MODAL DE SEGURIDAD PARA DOCENTES */
         .modal-overlay {
             position: absolute;
             top: 0;
@@ -287,6 +305,18 @@
             display: none;
         }
 
+        .btn-export {
+            background-color: #10b981;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 12px;
+            font-size: 0.8rem;
+        }
+
         @media (max-width: 480px) {
             body {
                 padding: 0;
@@ -307,7 +337,9 @@
     <div class="header">
         <div class="header-profile">
             <div class="avatar-container">
-                <img src="avatar.png" alt="Avatar Colebot" class="avatar-img" onerror="this.src='https://via.placeholder.com/100/45008b/ffffff?text=Bot'">
+                <div class="avatar-wrapper">
+                    <img src="avatar.png" alt="Avatar Colebot" class="avatar-img" onerror="this.src='https://via.placeholder.com/100/45008b/ffffff?text=Bot'">
+                </div>
                 <div class="status-dot"></div>
             </div>
             <div class="header-info">
@@ -318,19 +350,16 @@
         <button class="btn-teacher-access" onclick="abrirModalDocente()">🔒 ÁREA DOCENTE</button>
     </div>
 
-    <!-- CUERPO DINÁMICO DEL CHAT -->
     <div class="chat-body" id="chatBody">
         <div class="msg-bot">¡Hola! 👋 Te damos la bienvenida a nuestro espacio de acompañamiento escolar.</div>
         <div class="msg-bot">Antes de empezar, dime: <strong>¿Cuál es tu nombre completo y grado?</strong> (Ej: Juan Pérez - 9°A)</div>
     </div>
 
-    <!-- ENTRADA DE TEXTO -->
     <div class="chat-footer" id="chatFooter">
         <input type="text" class="chat-input" placeholder="Escribe aquí..." id="userInput" autocomplete="off">
         <button class="btn-send" id="btnSend">Enviar</button>
     </div>
 
-    <!-- MODAL DE ACCESO RESTRINGIDO PARA DOCENTES -->
     <div class="modal-overlay" id="teacherModal">
         <div class="modal-card">
             <h2>Acceso Restringido 🏫</h2>
@@ -350,12 +379,16 @@
 <script>
     const CLAVE_ORIENTACION = "docente2026";
     let pasoActual = 0;
-    let datosEstudiante = { estudiante: "", autorizacion: "", estilo: "", ritmo: "", refuerzo: "", emocional: "", reto: "", apoyo: "" };
+    let datosEstudiante = { nombre: "", autorizacion: "", estilo: "", ritmo: "", refuerzo: "", emocional: "", reto: "", apoyo: "" };
 
     const pasosCuestionario = [
         {
+            tipo: "texto",
+            pregunta: "Antes de empezar, dime: <strong>¿Cuál es tu nombre completo y grado?</strong> (Ej: Juan Pérez - 9°A)"
+        },
+        {
             tipo: "opciones",
-            pregunta: "Antes de empezar, ten en cuenta que tus datos y respuestas serán protegidos y utilizados exclusivamente por el equipo de Orientación y Docencia del colegio para brindarte apoyo académico y emocional, conforme a la normativa de protección de datos personales. ¿Autorizas el tratamiento de tus datos para este fin institucional?",
+            pregunta: "Ten en cuenta que tus datos y respuestas serán protegidos y utilizados exclusivamente por el equipo de Orientación y Docencia del colegio. ¿Autorizas el tratamiento de tus datos para este fin institucional?",
             opciones: [
                 "Sí, autorizo y quiero continuar. ✅",
                 "No autorizo. ❌"
@@ -468,7 +501,7 @@
 
     function manejarFlujo(respuesta) {
         if (pasoActual === 0) {
-            datosEstudiante.estudiante = respuesta;
+            datosEstudiante.nombre = respuesta;
             pasoActual++;
             siguientePaso();
         } else if (pasoActual === 1) {
@@ -509,18 +542,20 @@
     }
 
     function siguientePaso() {
-        const actual = pasosCuestionario[pasoActual - 1];
+        const actual = pasosCuestionario[pasoActual];
         setTimeout(() => {
             agregarMensaje(actual.pregunta, "bot");
             if (actual.tipo === "opciones") {
                 mostrarOpciones(actual.opciones);
+            } else {
+                document.getElementById('chatFooter').style.display = 'flex';
             }
         }, 400);
     }
 
     function finalizarCuestionario() {
         setTimeout(() => {
-            agregarMensaje("¡Muchas gracias por responder! 🌟 He guardado tus respuestas de forma confidencial para ayudarte a tener un gran año escolar. 🏫 Su información nos permite construir un entorno de aprendizaje seguro.", "bot");
+            agregarMensaje("¡Muchas gracias por responder! 🌟 He guardado tus respuestas de forma confidencial para ayudarte a tener un gran año escolar. 🏫 Su información nos permite construir un entorno de aprendizaje seguro y adaptado a tus necesidades.", "bot");
             
             let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
             registros.push({ ...datosEstudiante, fecha: new Date().toLocaleString() });
@@ -559,16 +594,40 @@
         }
     }
 
+    function exportarCSV() {
+        let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
+        if (registros.length === 0) return alert("No hay datos para exportar.");
+
+        let csv = "Estudiante,Autorizacion,Estilo Aprendizaje,Ritmo,Refuerzo,Bienestar Emocional,Reto Postpandemia,Apoyo Deseado,Fecha\n";
+        registros.forEach(r => {
+            csv += `"${r.nombre}","${r.autorizacion}","${r.estilo}","${r.ritmo}","${r.refuerzo}","${r.emocional}","${r.reto}","${r.apoyo}","${r.fecha}"\n`;
+        });
+
+        let blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        let url = URL.createObjectURL(blob);
+        let link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", `Reporte_Orientacion_${new Date().toISOString().slice(0,10)}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
     function mostrarPanelDocente() {
         let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
         let htmlReporte = "<h3>📊 Panel Docente - Informes</h3><br>";
         
+        if (registros.length > 0) {
+            htmlReporte += `<button class="btn-export" onclick="exportarCSV()">📥 Descargar Excel (CSV)</button><br><br>`;
+        }
+
         if (registros.length === 0) {
             htmlReporte += "<p>Aún no hay respuestas registradas.</p>";
         } else {
             registros.forEach((r, index) => {
                 htmlReporte += `<div style="background:#f4f0f8; padding:10px; margin-bottom:8px; border-radius:8px; font-size:0.82rem; border:1px solid #b2a4c9;">
-                    <strong>#${index+1} - ${r.estudiante}</strong><br>
+                    <strong>#${index+1} - ${r.nombre}</strong><br>
+                    🛡️ Autorización: ${r.autorizacion}<br>
                     👁️ Estilo: ${r.estilo}<br>
                     ⏱️ Ritmo: ${r.ritmo}<br>
                     📚 Refuerzo: ${r.refuerzo}<br>
