@@ -153,6 +153,94 @@
             backdrop-filter: blur(4px);
         }
 
+        /* ESTILOS DE LA PORTADA (LANDING PAGE) */
+        .welcome-screen {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            text-align: center;
+            background: linear-gradient(180deg, #f9f6fc 0%, #ede7f6 100%);
+            overflow-y: auto;
+        }
+
+        .welcome-avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid var(--primary-color);
+            box-shadow: 0 8px 20px rgba(69, 0, 139, 0.2);
+            margin-bottom: 16px;
+        }
+
+        .welcome-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .welcome-screen h2 {
+            font-size: 1.35rem;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+        }
+
+        .welcome-screen p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 24px;
+        }
+
+        .btn-start-chat {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+            color: #ffffff;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 6px 16px rgba(69, 0, 139, 0.25);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s;
+        }
+
+        .btn-start-chat:hover {
+            transform: scale(1.03);
+        }
+
+        /* BURBUJA FLOTANTE DE ACCESO RÁPIDO */
+        .floating-chat-bubble {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 6px 20px rgba(36, 0, 84, 0.3);
+            cursor: pointer;
+            z-index: 50;
+            transition: transform 0.2s;
+            border: 2px solid white;
+        }
+
+        .floating-chat-bubble:hover {
+            transform: scale(1.1);
+        }
+
+        /* ÁREA DE CHAT */
         .chat-body {
             flex: 1;
             padding: 16px;
@@ -416,9 +504,24 @@
         <button class="btn-teacher-access" onclick="abrirModalDocente()">🔒 ÁREA DOCENTE</button>
     </div>
 
-    <div class="chat-body" id="chatBody"></div>
+    <!-- PANTALLA DE PORTADA / BIENVENIDA -->
+    <div class="welcome-screen" id="welcomeScreen">
+        <div class="welcome-avatar">
+            <img src="avatar.png" alt="Avatar Colebot" onerror="this.src='https://via.placeholder.com/150/45008b/ffffff?text=Bot'">
+        </div>
+        <h2>¡Te damos la bienvenida a Colebot! 🏫</h2>
+        <p>Un espacio seguro y confidencial creado por Orientación Escolar para conocerte, apoyarte en tu bienestar emocional y potenciar tu rendimiento académico este año.</p>
+        
+        <button class="btn-start-chat" onclick="iniciarChat()">
+            💬 Iniciar Encuesta
+        </button>
+    </div>
 
-    <div class="chat-footer-container" id="chatFooterContainer">
+    <!-- CUERPO DE CHAT (Oculto inicialmente hasta dar clic en iniciar) -->
+    <div class="chat-body" id="chatBody" style="display: none;"></div>
+
+    <!-- PIE DE CHAT -->
+    <div class="chat-footer-container" id="chatFooterContainer" style="display: none;">
         <div class="chat-footer" id="chatFooter">
             <input type="text" class="chat-input" placeholder="Escribe tu respuesta aquí..." id="userInput" autocomplete="off">
             <button class="btn-send" id="btnSend">Enviar</button>
@@ -428,6 +531,12 @@
         </div>
     </div>
 
+    <!-- BURBUJA FLOTANTE EN PORTADA -->
+    <div class="floating-chat-bubble" id="floatingBubble" onclick="iniciarChat()" title="Iniciar chat con Colebot">
+        💬
+    </div>
+
+    <!-- MODAL DOCENTE -->
     <div class="modal-overlay" id="teacherModal">
         <div class="modal-card">
             <h2>Acceso Restringido 🏫</h2>
@@ -519,22 +628,29 @@
     ];
 
     window.onload = function() {
-        verificarEstadoEncuesta();
+        if (localStorage.getItem('encuesta_completada') === 'true') {
+            document.getElementById('welcomeScreen').innerHTML = `
+                <div class="welcome-avatar">
+                    <img src="avatar.png" alt="Avatar Colebot" onerror="this.src='https://via.placeholder.com/150/45008b/ffffff?text=Bot'">
+                </div>
+                <h2>¡Gracias por participar! 🌟</h2>
+                <p>Tu participación oficial ya ha sido registrada exitosamente en este dispositivo. Agradecemos tu compromiso con la comunidad escolar.</p>
+            `;
+            document.getElementById('floatingBubble').style.display = 'none';
+        }
     };
 
-    function verificarEstadoEncuesta() {
-        const chatBody = document.getElementById('chatBody');
-        chatBody.innerHTML = "";
-        
-        if (localStorage.getItem('encuesta_completada') === 'true') {
-            agregarMensaje("¡Hola de nuevo! 👋 Tu participación oficial ya ha sido registrada exitosamente en este dispositivo. Agradecemos tu compromiso con la excelencia y el bienestar de nuestra comunidad escolar. 💙", "bot");
-            document.getElementById('chatFooterContainer').style.display = 'none';
-            return;
-        }
-
-        agregarMensaje("¡Hola! 👋 Te damos una calurosa bienvenida al sistema oficial de acompañamiento y diagnóstico escolar.", "bot");
-        agregarMensaje(pasosCuestionario[0].pregunta, "bot");
+    function iniciarChat() {
+        document.getElementById('welcomeScreen').style.display = 'none';
+        document.getElementById('floatingBubble').style.display = 'none';
+        document.getElementById('chatBody').style.display = 'flex';
         document.getElementById('chatFooterContainer').style.display = 'flex';
+        
+        const chatBody = document.getElementById('chatBody');
+        if (chatBody.innerHTML.trim() === "") {
+            agregarMensaje("¡Hola! 👋 Te damos una calurosa bienvenida al sistema oficial de acompañamiento y diagnóstico escolar.", "bot");
+            agregarMensaje(pasosCuestionario[0].pregunta, "bot");
+        }
     }
 
     function agregarMensaje(texto, tipo = "bot") {
@@ -741,8 +857,11 @@
         }
 
         const chatBody = document.getElementById('chatBody');
+        document.getElementById('welcomeScreen').style.display = 'none';
+        chatBody.style.display = 'flex';
         chatBody.innerHTML = `<div class="msg-bot" style="max-width:100%;">${htmlReporte}</div>`;
         document.getElementById('chatFooterContainer').style.display = 'none';
+        document.getElementById('floatingBubble').style.display = 'none';
     }
 </script>
 
