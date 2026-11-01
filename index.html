@@ -6,15 +6,15 @@
     <title>Colebot - Acompañamiento Escolar</title>
     <style>
         :root {
-            --primary-color: #45008b;
-            --primary-dark: #240054;
-            --accent-color: #7555a3;
-            --bg-body: #f4f0f8;
+            --primary-color: #0284c7;
+            --primary-dark: #0369a1;
+            --accent-color: #38bdf8;
+            --bg-body: #f1f5f9;
             --chat-bg: #ffffff;
-            --text-main: #240054;
-            --text-muted: #7555a3;
-            --bot-bubble: #ede7f6;
-            --input-border: #b2a4c9;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --bot-bubble: #f1f5f9;
+            --input-border: #cbd5e1;
         }
 
         * {
@@ -42,7 +42,7 @@
             max-height: 800px;
             background: var(--chat-bg);
             border-radius: 24px;
-            box-shadow: 0 12px 32px rgba(36, 0, 84, 0.15);
+            box-shadow: 0 12px 32px rgba(15, 23, 42, 0.15);
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -82,7 +82,7 @@
             height: 42px;
             border-radius: 50%;
             overflow: hidden;
-            background-color: var(--bot-bubble);
+            background-color: #ffffff;
             border: 2px solid #ffffff;
             display: flex;
             align-items: center;
@@ -107,38 +107,14 @@
             right: 2px;
         }
 
-        .header-info {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .title-row {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
         .header-info h1 {
             font-size: 1rem;
             font-weight: 700;
         }
 
-        .verified-badge {
-            background-color: #10b981;
-            color: white;
-            font-size: 0.65rem;
-            padding: 1px 5px;
-            border-radius: 10px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 2px;
-        }
-
         .header-info p {
             font-size: 0.7rem;
-            opacity: 0.85;
+            opacity: 0.9;
         }
 
         .btn-teacher-access {
@@ -162,7 +138,7 @@
             justify-content: center;
             padding: 24px;
             text-align: center;
-            background: linear-gradient(180deg, #f9f6fc 0%, #ede7f6 100%);
+            background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
             overflow-y: auto;
         }
 
@@ -172,7 +148,7 @@
             border-radius: 50%;
             overflow: hidden;
             border: 4px solid var(--primary-color);
-            box-shadow: 0 8px 20px rgba(69, 0, 139, 0.2);
+            box-shadow: 0 8px 20px rgba(2, 132, 199, 0.2);
             margin-bottom: 16px;
         }
 
@@ -204,7 +180,7 @@
             font-size: 1rem;
             font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 6px 16px rgba(69, 0, 139, 0.25);
+            box-shadow: 0 6px 16px rgba(2, 132, 199, 0.25);
             display: inline-flex;
             align-items: center;
             gap: 8px;
@@ -228,7 +204,7 @@
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
-            box-shadow: 0 6px 20px rgba(36, 0, 84, 0.3);
+            box-shadow: 0 6px 20px rgba(2, 132, 199, 0.3);
             cursor: pointer;
             z-index: 50;
             transition: transform 0.2s;
@@ -247,9 +223,8 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            background-color: #faf8fc;
-            background-image: radial-gradient(#dcd6e7 0.75px, transparent 0.75px);
-            background-size: 16px 16px;
+            background-color: #f8fafc;
+            scroll-behavior: smooth;
         }
 
         .message-row-bot {
@@ -258,6 +233,12 @@
             gap: 8px;
             align-self: flex-start;
             max-width: 88%;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .mini-avatar {
@@ -268,7 +249,7 @@
             flex-shrink: 0;
             border: 1.5px solid #ffffff;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            background-color: var(--bot-bubble);
+            background-color: #e2e8f0;
         }
 
         .mini-avatar img {
@@ -285,8 +266,8 @@
             border-radius: 4px 18px 18px 18px;
             font-size: 0.92rem;
             line-height: 1.45;
-            box-shadow: 0 2px 5px rgba(36, 0, 84, 0.05);
-            border: 1px solid #e2dbec;
+            box-shadow: 0 2px 5px rgba(15, 23, 42, 0.05);
+            border: 1px solid #e2e8f0;
         }
 
         .msg-user {
@@ -298,7 +279,8 @@
             font-size: 0.92rem;
             line-height: 1.45;
             align-self: flex-end;
-            box-shadow: 0 2px 5px rgba(69, 0, 139, 0.15);
+            box-shadow: 0 2px 5px rgba(2, 132, 199, 0.15);
+            animation: fadeIn 0.3s ease;
         }
 
         .options-container {
@@ -324,12 +306,12 @@
         }
 
         .btn-option:hover {
-            background-color: #f4f0f8;
+            background-color: #f0f9ff;
         }
 
         .chat-footer-container {
             background-color: #ffffff;
-            border-top: 1px solid var(--bot-bubble);
+            border-top: 1px solid #e2e8f0;
             display: flex;
             flex-direction: column;
         }
@@ -346,10 +328,6 @@
             color: var(--text-muted);
             padding: 0 16px 10px 16px;
             opacity: 0.8;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
         }
 
         .chat-input {
@@ -372,140 +350,215 @@
             cursor: pointer;
         }
 
-        /* ESTRUCTURA PESTAÑAS PANEL DOCENTE */
-        .admin-panel-container {
+        /* VENTANA MODAL DEL PANEL DOCENTE (ESTILO EXACTO DE LA FOTO) */
+        .teacher-panel-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            background: #ffffff;
-            border-radius: 16px;
-            padding: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            height: 100%;
+            background-color: #f8fafc;
+            display: none;
+            flex-direction: column;
+            z-index: 120;
+            overflow-y: auto;
         }
 
-        .tabs-header {
+        .teacher-panel-header {
+            background: linear-gradient(135deg, #0369a1, #0284c7);
+            color: white;
+            padding: 20px 16px;
             display: flex;
-            gap: 6px;
-            border-bottom: 2px solid #e2dbec;
-            margin-bottom: 12px;
+            align-items: flex-start;
+            justify-content: space-between;
+            position: relative;
         }
 
-        .tab-btn {
-            flex: 1;
-            padding: 8px 4px;
+        .teacher-panel-header-content {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .teacher-panel-icon {
+            background: rgba(255, 255, 255, 0.2);
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .teacher-panel-header h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .teacher-panel-header p {
+            font-size: 0.72rem;
+            opacity: 0.9;
+            margin-top: 2px;
+            max-width: 280px;
+            line-height: 1.3;
+        }
+
+        .teacher-panel-close {
             background: none;
             border: none;
-            font-size: 0.78rem;
-            font-weight: 700;
-            color: var(--text-muted);
+            color: white;
+            font-size: 1.4rem;
             cursor: pointer;
-            border-bottom: 3px solid transparent;
-            transition: all 0.2s;
+            padding: 4px;
         }
 
-        .tab-btn.active {
-            color: var(--primary-color);
-            border-bottom-color: var(--primary-color);
+        .teacher-panel-body {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex: 1;
         }
 
-        .tab-content {
-            display: none;
+        /* TARJETAS DE MÉTRICAS */
+        .metric-card {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 16px;
         }
 
-        .tab-content.active {
-            display: block;
+        .metric-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
         }
 
-        /* MÉTRICAS Y TARJETAS EN PANEL DOCENTE */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
+        .metric-icon.blue { background-color: #e0f2fe; color: #0284c7; }
+        .metric-icon.yellow { background-color: #fef3c7; color: #d97706; }
+        .metric-icon.red { background-color: #fee2e2; color: #dc2626; }
+
+        .metric-info h4 {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+            font-weight: 700;
+        }
+
+        .metric-info .metric-value {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .records-section-card {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+            border: 1px solid #e2e8f0;
+        }
+
+        .records-section-card h3 {
+            font-size: 0.95rem;
+            color: var(--text-main);
             margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .stat-card {
-            background: #fdfbfd;
-            border: 1px solid #dcd6e7;
-            border-radius: 10px;
-            padding: 8px 4px;
+        .records-actions-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .btn-action-panel {
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
             text-align: center;
         }
 
-        .stat-card h4 {
-            font-size: 0.62rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            margin-bottom: 2px;
+        .btn-action-panel.export {
+            background-color: #f0fdf4;
+            color: #16a34a;
+            border: 1px solid #bbf7d0;
         }
 
-        .stat-card .stat-number {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--primary-dark);
+        .btn-action-panel.clear {
+            background-color: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
         }
 
-        .diagnosis-card {
-            background: #f8f5fc;
-            border: 1px solid #c2b6d8;
-            border-radius: 10px;
-            padding: 10px;
-            margin-bottom: 12px;
-            font-size: 0.8rem;
+        .panel-bottom-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: auto;
         }
 
-        .diagnosis-card h4 {
-            color: var(--primary-dark);
-            margin-bottom: 6px;
-            font-size: 0.85rem;
+        .btn-back-panel {
+            background-color: #e2e8f0;
+            color: var(--text-main);
+            border: none;
+            padding: 14px;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            flex: 1;
+            text-align: center;
         }
 
-        .student-card {
-            background: #ffffff;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 12px;
-            font-size: 0.82rem;
-            border: 1px solid #b2a4c9;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
-        }
-
-        .btn-export {
-            background-color: #10b981;
+        .btn-close-panel {
+            background-color: #1e293b;
             color: white;
             border: none;
-            padding: 8px 12px;
-            border-radius: 8px;
+            padding: 14px;
+            border-radius: 14px;
             font-weight: 600;
+            font-size: 0.95rem;
             cursor: pointer;
-            margin-bottom: 12px;
-            font-size: 0.8rem;
-            width: 100%;
+            flex: 1;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
         }
 
-        .btn-export-single {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 0.72rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 6px;
-        }
-
+        /* MODAL DE CONTRASEÑA */
         .modal-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(36, 0, 84, 0.6);
+            background-color: rgba(15, 23, 42, 0.6);
             backdrop-filter: blur(4px);
             display: none;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            z-index: 100;
+            z-index: 150;
         }
 
         .modal-card {
@@ -560,7 +613,7 @@
 
         .btn-modal-close {
             flex: 1;
-            background-color: var(--bot-bubble);
+            background-color: #e2e8f0;
             color: var(--text-main);
             border: none;
             padding: 12px;
@@ -597,16 +650,13 @@
         <div class="header-profile">
             <div class="avatar-container">
                 <div class="avatar-wrapper">
-                    <img src="avatar.png" alt="Avatar Colebot" class="avatar-img" onerror="this.src='https://via.placeholder.com/100/45008b/ffffff?text=Bot'">
+                    <img src="avatar.png" alt="Avatar Colebot" class="avatar-img" onerror="this.src='https://via.placeholder.com/100/0284c7/ffffff?text=Bot'">
                 </div>
                 <div class="status-dot"></div>
             </div>
             <div class="header-info">
-                <div class="title-row">
-                    <h1>Colebot</h1>
-                    <span class="verified-badge">✓ Oficial</span>
-                </div>
-                <p>Acompañamiento Escolar Certificado</p>
+                <h1>Colebot</h1>
+                <p>Acompañamiento Escolar</p>
             </div>
         </div>
         <button class="btn-teacher-access" onclick="abrirModalDocente()">🔒 ÁREA DOCENTE</button>
@@ -615,7 +665,7 @@
     <!-- PANTALLA DE PORTADA -->
     <div class="welcome-screen" id="welcomeScreen">
         <div class="welcome-avatar">
-            <img src="avatar.png" alt="Avatar Colebot" onerror="this.src='https://via.placeholder.com/150/45008b/ffffff?text=Bot'">
+            <img src="avatar.png" alt="Avatar Colebot" onerror="this.src='https://via.placeholder.com/150/0284c7/ffffff?text=Bot'">
         </div>
         <h2>¡Te damos la bienvenida a Colebot! 🏫</h2>
         <p>Un espacio seguro y confidencial creado por Orientación Escolar para conocerte, apoyarte en tu bienestar emocional y potenciar tu rendimiento académico este año.</p>
@@ -635,7 +685,7 @@
             <button class="btn-send" id="btnSend">Enviar</button>
         </div>
         <div class="chat-program-footer">
-            🔒 Programa Oficial de Orientación y Apoyo Estudiantil • Calidad Garantizada
+            🔒 Programa Oficial de Orientación y Apoyo Estudiantil
         </div>
     </div>
 
@@ -644,7 +694,68 @@
         💬
     </div>
 
-    <!-- MODAL DOCENTE -->
+    <!-- VENTANA APARTE: PANEL DE ORIENTACIÓN ESCOLAR -->
+    <div class="teacher-panel-overlay" id="teacherPanelWindow">
+        <div class="teacher-panel-header">
+            <div class="teacher-panel-header-content">
+                <div class="teacher-panel-icon">📊</div>
+                <div>
+                    <h2>Panel de Orientación Escolar</h2>
+                    <p>Resultados consolidados e identificación de necesidades diferenciadas</p>
+                </div>
+            </div>
+            <button class="teacher-panel-close" onclick="cerrarPanelDocente()">×</button>
+        </div>
+
+        <div class="teacher-panel-body">
+            <!-- TARJETA 1: TOTAL ENCUESTAS -->
+            <div class="metric-card">
+                <div class="metric-icon blue">👥</div>
+                <div class="metric-info">
+                    <h4>Total Encuestas</h4>
+                    <div class="metric-value" id="statTotal">0</div>
+                </div>
+            </div>
+
+            <!-- TARJETA 2: REQUIEREN REFUERZO -->
+            <div class="metric-card">
+                <div class="metric-icon yellow">📚</div>
+                <div class="metric-info">
+                    <h4>Requieren Refuerzo</h4>
+                    <div class="metric-value" id="statRefuerzo">0</div>
+                </div>
+            </div>
+
+            <!-- TARJETA 3: ALERTAS EMOCIONALES -->
+            <div class="metric-card">
+                <div class="metric-icon red">❤️</div>
+                <div class="metric-info">
+                    <h4>Alertas Emocionales</h4>
+                    <div class="metric-value" id="statAlertas">0</div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN: REGISTROS INDIVIDUALES / GESTIÓN -->
+            <div class="records-section-card">
+                <h3>📁 Registros Individuales</h3>
+                <div class="records-actions-grid">
+                    <button class="btn-action-panel export" onclick="exportarCSV()">
+                        📥 <span>Exportar Datos (CSV)</span>
+                    </button>
+                    <button class="btn-action-panel clear" onclick="limpiarRegistros()">
+                        🗑️ <span>Limpiar Todo</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="panel-bottom-buttons">
+                <button class="btn-back-panel" onclick="cerrarPanelDocente()">← Volver</button>
+                <button class="btn-close-panel" onclick="cerrarPanelDocente()">Cerrar Panel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE CONTRASEÑA -->
     <div class="modal-overlay" id="teacherModal">
         <div class="modal-card">
             <h2>Acceso Restringido 🏫</h2>
@@ -739,7 +850,7 @@
         if (localStorage.getItem('encuesta_completada') === 'true') {
             document.getElementById('welcomeScreen').innerHTML = `
                 <div class="welcome-avatar">
-                    <img src="avatar.png" alt="Avatar Colebot" onerror="this.src='https://via.placeholder.com/150/45008b/ffffff?text=Bot'">
+                    <img src="avatar.png" alt="Avatar Colebot" onerror="this.src='https://via.placeholder.com/150/0284c7/ffffff?text=Bot'">
                 </div>
                 <h2>¡Gracias por participar! 🌟</h2>
                 <p>Tu participación oficial ya ha sido registrada exitosamente en este dispositivo. Agradecemos tu compromiso con la comunidad escolar.</p>
@@ -747,6 +858,12 @@
             document.getElementById('floatingBubble').style.display = 'none';
         }
     };
+
+    function sanitizarTexto(texto) {
+        const div = document.createElement('div');
+        div.textContent = texto;
+        return div.innerHTML;
+    }
 
     function iniciarChat() {
         document.getElementById('welcomeScreen').style.display = 'none';
@@ -769,13 +886,13 @@
             div.className = "message-row-bot";
             div.innerHTML = `
                 <div class="mini-avatar">
-                    <img src="avatar.png" alt="Avatar" onerror="this.src='https://via.placeholder.com/100/45008b/ffffff?text=Bot'">
+                    <img src="avatar.png" alt="Avatar" onerror="this.src='https://via.placeholder.com/100/0284c7/ffffff?text=Bot'">
                 </div>
                 <div class="msg-bot">${texto}</div>
             `;
         } else {
             div.className = "msg-user";
-            div.innerHTML = texto;
+            div.textContent = texto; // Uso seguro de textContent para prevenir XSS
         }
 
         chatBody.appendChild(div);
@@ -792,6 +909,8 @@
             btn.className = "btn-option";
             btn.innerText = op;
             btn.onclick = function() {
+                // Mejora de procesamiento: deshabilitar botones tras clic para evitar doble envío
+                container.querySelectorAll('button').forEach(b => b.disabled = true);
                 seleccionarOpcion(op);
             };
             container.appendChild(btn);
@@ -799,12 +918,12 @@
         
         chatBody.appendChild(container);
         chatBody.scrollTop = chatBody.scrollHeight;
-        document.getElementById('chatFooterContainer').style.display = 'none';
+        document.getElementById('chatFooter').style.display = 'none';
     }
 
     function procesarEntrada() {
         const input = document.getElementById('userInput');
-        const valor = input.value.trim();
+        const valor = sanitizarTexto(input.value.trim());
         if (valor === "") return;
 
         input.value = "";
@@ -817,50 +936,54 @@
         containers.forEach(c => c.remove());
         
         agregarMensaje(valor, "user");
-        document.getElementById('chatFooterContainer').style.display = 'flex';
+        document.getElementById('chatFooter').style.display = 'flex';
         
         manejarFlujo(valor);
     }
 
     function manejarFlujo(respuesta) {
-        if (pasoActual === 0) {
-            datosEstudiante.nombre = respuesta;
-            pasoActual++;
-            siguientePaso();
-        } else if (pasoActual === 1) {
-            datosEstudiante.autorizacion = respuesta;
-            if (respuesta.includes("Prefiero no autorizar")) {
-                setTimeout(() => {
-                    agregarMensaje("Comprendemos y respetamos totalmente tu decisión institucional. El cuestionario se ha detenido. ¡Te deseamos un excelente año escolar lleno de éxitos! ✨", "bot");
-                    document.getElementById('chatFooterContainer').style.display = 'none';
-                }, 400);
-                return;
+        try {
+            if (pasoActual === 0) {
+                datosEstudiante.nombre = respuesta;
+                pasoActual++;
+                siguientePaso();
+            } else if (pasoActual === 1) {
+                datosEstudiante.autorizacion = respuesta;
+                if (respuesta.includes("Prefiero no autorizar")) {
+                    setTimeout(() => {
+                        agregarMensaje("Comprendemos y respetamos totalmente tu decisión institucional. El cuestionario se ha detenido. ¡Te deseamos un excelente año escolar lleno de éxitos! ✨", "bot");
+                        document.getElementById('chatFooterContainer').style.display = 'none';
+                    }, 400);
+                    return;
+                }
+                pasoActual++;
+                siguientePaso();
+            } else if (pasoActual === 2) {
+                datosEstudiante.estilo = respuesta;
+                pasoActual++;
+                siguientePaso();
+            } else if (pasoActual === 3) {
+                datosEstudiante.ritmo = respuesta;
+                pasoActual++;
+                siguientePaso();
+            } else if (pasoActual === 4) {
+                datosEstudiante.refuerzo = respuesta;
+                pasoActual++;
+                siguientePaso();
+            } else if (pasoActual === 5) {
+                datosEstudiante.emocional = respuesta;
+                pasoActual++;
+                siguientePaso();
+            } else if (pasoActual === 6) {
+                datosEstudiante.reto = respuesta;
+                pasoActual++;
+                siguientePaso();
+            } else if (pasoActual === 7) {
+                datosEstudiante.apoyo = respuesta;
+                finalizarCuestionario();
             }
-            pasoActual++;
-            siguientePaso();
-        } else if (pasoActual === 2) {
-            datosEstudiante.estilo = respuesta;
-            pasoActual++;
-            siguientePaso();
-        } else if (pasoActual === 3) {
-            datosEstudiante.ritmo = respuesta;
-            pasoActual++;
-            siguientePaso();
-        } else if (pasoActual === 4) {
-            datosEstudiante.refuerzo = respuesta;
-            pasoActual++;
-            siguientePaso();
-        } else if (pasoActual === 5) {
-            datosEstudiante.emocional = respuesta;
-            pasoActual++;
-            siguientePaso();
-        } else if (pasoActual === 6) {
-            datosEstudiante.reto = respuesta;
-            pasoActual++;
-            siguientePaso();
-        } else if (pasoActual === 7) {
-            datosEstudiante.apoyo = respuesta;
-            finalizarCuestionario();
+        } catch (e) {
+            console.error("Error en el flujo del chat:", e);
         }
     }
 
@@ -871,7 +994,7 @@
             if (actual.tipo === "opciones") {
                 mostrarOpciones(actual.opciones);
             } else {
-                document.getElementById('chatFooterContainer').style.display = 'flex';
+                document.getElementById('chatFooter').style.display = 'flex';
             }
         }, 400);
     }
@@ -913,10 +1036,31 @@
 
         if (inputPass === CLAVE_ORIENTACION) {
             cerrarModalDocente();
-            mostrarPanelDocente();
+            mostrarPanelDocenteVentana();
         } else {
             errorDiv.style.display = 'block';
         }
+    }
+
+    function mostrarPanelDocenteVentana() {
+        let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
+        
+        let totalEncuestas = registros.length;
+        let requierenRefuerzo = registros.filter(r => r.refuerzo && r.refuerzo.toLowerCase() !== "ninguna" && r.refuerzo.toLowerCase() !== "ninguno").length;
+        let alertasEmocionales = registros.filter(r => 
+            (r.emocional && !r.emocional.includes("tranquilo")) || 
+            (r.reto && !r.reto.includes("Ninguno"))
+        ).length;
+
+        document.getElementById('statTotal').innerText = totalEncuestas;
+        document.getElementById('statRefuerzo').innerText = requierenRefuerzo;
+        document.getElementById('statAlertas').innerText = alertasEmocionales;
+
+        document.getElementById('teacherPanelWindow').style.display = 'flex';
+    }
+
+    function cerrarPanelDocente() {
+        document.getElementById('teacherPanelWindow').style.display = 'none';
     }
 
     function exportarCSV() {
@@ -928,119 +1072,23 @@
             csv += `"${r.nombre}","${r.autorizacion}","${r.estilo}","${r.ritmo}","${r.refuerzo}","${r.emocional}","${r.reto}","${r.apoyo}","${r.fecha}"\n`;
         });
 
-        descargarArchivoCSV(csv, `Reporte_Orientacion_Consolidado_${new Date().toISOString().slice(0,10)}.csv`);
-    }
-
-    function exportarRegistroIndividual(index) {
-        let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
-        let r = registros[index];
-        if (!r) return;
-
-        let csv = "Estudiante,Autorizacion,Estilo Aprendizaje,Ritmo,Refuerzo,Bienestar Emocional,Reto Postpandemia,Apoyo Deseado,Fecha\n";
-        csv += `"${r.nombre}","${r.autorizacion}","${r.estilo}","${r.ritmo}","${r.refuerzo}","${r.emocional}","${r.reto}","${r.apoyo}","${r.fecha}"\n`;
-
-        descargarArchivoCSV(csv, `Registro_${r.nombre.replace(/[^a-zA-Z0-9]/g, "_")}.csv`);
-    }
-
-    function descargarArchivoCSV(contenidoCSV, nombreArchivo) {
-        let blob = new Blob([contenidoCSV], { type: 'text/csv;charset=utf-8;' });
+        let blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         let url = URL.createObjectURL(blob);
         let link = document.createElement("a");
         link.setAttribute("href", url);
-        link.setAttribute("download", nombreArchivo);
+        link.setAttribute("download", `Reporte_Orientacion_${new Date().toISOString().slice(0,10)}.csv`);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
     }
 
-    function cambiarTab(tabIndex) {
-        document.querySelectorAll('.tab-btn').forEach((btn, idx) => {
-            btn.classList.toggle('active', idx === tabIndex);
-        });
-        document.querySelectorAll('.tab-content').forEach((content, idx) => {
-            content.classList.toggle('active', idx === tabIndex);
-        });
-    }
-
-    function mostrarPanelDocente() {
-        let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
-        
-        let totalEncuestas = registros.length;
-        let requierenRefuerzo = registros.filter(r => r.refuerzo && r.refuerzo.toLowerCase() !== "ninguna" && r.refuerzo.toLowerCase() !== "ninguno").length;
-        let alertasEmocionales = registros.filter(r => 
-            (r.emocional && !r.emocional.includes("tranquilo")) || 
-            (r.reto && !r.reto.includes("Ninguno"))
-        ).length;
-
-        let htmlReporte = `
-            <div class="admin-panel-container">
-                <div class="tabs-header">
-                    <button class="tab-btn active" onclick="cambiarTab(0)">📊 Consolidado & Diagnóstico</button>
-                    <button class="tab-btn" onclick="cambiarTab(1)">📋 Respuestas Individuales (${totalEncuestas})</button>
-                </div>
-
-                <!-- VENTANA 1: CONSOLIDADO Y DIAGNÓSTICO -->
-                <div class="tab-content active" id="tabConsolidado">
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <h4>Total Encuestas</h4>
-                            <div class="stat-number">${totalEncuestas}</div>
-                        </div>
-                        <div class="stat-card">
-                            <h4>Refuerzo</h4>
-                            <div class="stat-number" style="color: #2563eb;">${requierenRefuerzo}</div>
-                        </div>
-                        <div class="stat-card">
-                            <h4>Alertas Emoc.</h4>
-                            <div class="stat-number" style="color: #e11d48;">${alertasEmocionales}</div>
-                        </div>
-                    </div>
-
-                    <div class="diagnosis-card">
-                        <h4>📌 Identificación de Necesidades Diferenciadas</h4>
-                        <p><strong>- Apoyo Académico:</strong> ${requierenRefuerzo} estudiante(s) manifestaron requerir refuerzo específico en asignaturas.</p>
-                        <p style="margin-top:4px;"><strong>- Prioridad Emocional:</strong> ${alertasEmocionales} estudiante(s) registraron retos de bienestar postpandemia o requerimientos de apoyo en orientación.</p>
-                    </div>
-
-                    ${totalEncuestas > 0 ? `<button class="btn-export" onclick="exportarCSV()">📥 Descargar Consolidado en Excel (CSV)</button>` : '<p style="font-size:0.8rem; color:var(--text-muted); text-align:center;">Aún no hay respuestas registradas.</p>'}
-                </div>
-
-                <!-- VENTANA 2: CASILLAS INDIVIDUALES -->
-                <div class="tab-content" id="tabIndividuales">
-        `;
-
-        if (registros.length === 0) {
-            htmlReporte += `<p style="font-size:0.8rem; color:var(--text-muted); text-align:center;">No hay casillas de respuestas disponibles por ahora.</p>`;
-        } else {
-            registros.forEach((r, index) => {
-                htmlReporte += `
-                    <div class="student-card">
-                        <strong>#${index+1} - ${r.nombre}</strong><br>
-                        🛡️ Autorización: ${r.autorizacion}<br>
-                        👁️ Estilo: ${r.estilo}<br>
-                        ⏱️ Ritmo: ${r.ritmo}<br>
-                        📚 Refuerzo: ${r.refuerzo}<br>
-                        🧠 Emocional: ${r.emocional}<br>
-                        ⚠️ Reto: ${r.reto}<br>
-                        💬 Apoyo: ${r.apoyo}<br>
-                        <small style="color:var(--text-muted);">📅 ${r.fecha}</small><br>
-                        <button class="btn-export-single" onclick="exportarRegistroIndividual(${index})">📥 Excel de este registro</button>
-                    </div>
-                `;
-            });
+    function limpiarRegistros() {
+        if (confirm("¿Estás seguro de que deseas eliminar todos los registros guardados?")) {
+            localStorage.removeItem('registros_estudiantes');
+            localStorage.removeItem('encuesta_completada');
+            mostrarPanelDocenteVentana();
+            alert("Registros eliminados correctamente.");
         }
-
-        htmlReporte += `
-                </div>
-            </div>
-        `;
-
-        const chatBody = document.getElementById('chatBody');
-        document.getElementById('welcomeScreen').style.display = 'none';
-        chatBody.style.display = 'flex';
-        chatBody.innerHTML = `<div class="msg-bot" style="max-width:100%; width:100%; padding:0; background:none; border:none; box-shadow:none;">${htmlReporte}</div>`;
-        document.getElementById('chatFooterContainer').style.display = 'none';
-        document.getElementById('floatingBubble').style.display = 'none';
     }
 </script>
 
