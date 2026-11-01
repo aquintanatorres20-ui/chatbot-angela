@@ -66,13 +66,13 @@
             gap: 12px;
         }
 
-       .avatar-container {
+        .avatar-container {
             position: relative;
-            width: 46px;
-            height: 46px;
+            width: 44px;
+            height: 44px;
             flex-shrink: 0;
             border-radius: 50%;
-            overflow: hidden; /* Asegura que cualquier exceso quede dentro del círculo */
+            overflow: hidden;
             background-color: var(--bot-bubble);
             display: flex;
             align-items: center;
@@ -83,9 +83,10 @@
         .avatar-img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Llena el espacio de forma uniforme */
-            object-position: center; /* Centra exactamente el punto focal de la imagen */
+            object-fit: cover;
+            object-position: center;
         }
+
         .status-dot {
             width: 10px;
             height: 10px;
@@ -161,9 +162,9 @@
             background-color: #ffffff;
             border: 1.5px solid var(--primary-color);
             color: var(--primary-color);
-            padding: 12px 16px;
+            padding: 10px 14px;
             border-radius: 12px;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             font-weight: 600;
             text-align: left;
             cursor: pointer;
@@ -320,7 +321,7 @@
     <!-- CUERPO DINÁMICO DEL CHAT -->
     <div class="chat-body" id="chatBody">
         <div class="msg-bot">¡Hola! 👋 Te damos la bienvenida a nuestro espacio de acompañamiento escolar.</div>
-        <div class="msg-bot">Para empezar a conversar de forma personalizada, <strong>¿cuál es tu nombre completo?</strong></div>
+        <div class="msg-bot">Antes de empezar, dime: <strong>¿Cuál es tu nombre completo y grado?</strong> (Ej: Juan Pérez - 9°A)</div>
     </div>
 
     <!-- ENTRADA DE TEXTO -->
@@ -349,29 +350,69 @@
 <script>
     const CLAVE_ORIENTACION = "docente2026";
     let pasoActual = 0;
-    let datosEstudiante = { nombre: "", grado: "", rendimiento: "", emocional: "" };
+    let datosEstudiante = { estudiante: "", autorizacion: "", estilo: "", ritmo: "", refuerzo: "", emocional: "", reto: "", apoyo: "" };
 
-    const preguntas = [
-        {
-            tipo: "texto",
-            pregunta: "Perfecto. Ahora, <strong>¿a qué grado perteneces?</strong> (Ej: 9°A, 11°B)"
-        },
+    const pasosCuestionario = [
         {
             tipo: "opciones",
-            pregunta: "¿Cómo calificarías tu rendimiento o adaptación académica en lo que va del periodo?",
+            pregunta: "Antes de empezar, ten en cuenta que tus datos y respuestas serán protegidos y utilizados exclusivamente por el equipo de Orientación y Docencia del colegio para brindarte apoyo académico y emocional, conforme a la normativa de protección de datos personales. ¿Autorizas el tratamiento de tus datos para este fin institucional?",
             opciones: [
-                "Excelente / Sin dificultades",
-                "Regular / Me cuesta algunas materias",
-                "Bajo / Necesito apoyo urgente"
+                "Sí, autorizo y quiero continuar. ✅",
+                "No autorizo. ❌"
             ]
         },
         {
             tipo: "opciones",
-            pregunta: "Pensando en tu bienestar emocional tras los cambios recientes, ¿cómo te has sentido últimamente?",
+            pregunta: "¡Excelente! Cuéntame, <strong>¿cómo aprendes mejor o cómo te identificas más?</strong>",
             opciones: [
-                "Motivado(a) y tranquilo(a)",
-                "Estresado(a) o con ansiedad frecuente",
-                "Triste, desmotivado(a) o aislado(a)"
+                "Leyendo, viendo videos y esquemas visuales 👁️",
+                "Escuchando explicaciones, debates y podcasts 🎧",
+                "Haciendo actividades prácticas, experimentos o proyectos 🛠️"
+            ]
+        },
+        {
+            tipo: "opciones",
+            pregunta: "¡Anotado! 📝 <strong>¿Cómo te sientes con el ritmo habitual de las materias?</strong>",
+            opciones: [
+                "A veces necesito un poco más de tiempo o apoyo explicativo. ⏳",
+                "Voy bien al ritmo general de la clase. 👍",
+                "Termino rápido y me gusta explorar temas más avanzados o retos adicionales. 🚀"
+            ]
+        },
+        {
+            tipo: "texto",
+            pregunta: "¿Hay alguna materia en la que sientas que necesitas un refuerzo especial o adaptación? (Ej: Matemáticas, Lenguaje, Inglés, Ninguna)"
+        },
+        {
+            tipo: "opciones",
+            pregunta: "Tu bienestar emocional es tan importante como tus notas. 🧠💚 <strong>¿Cómo te has sentido últimamente en el colegio o con tu grupo de amigos?</strong>",
+            opciones: [
+                "Me siento bien, tranquilo/a y conectado/a con mis compañeros. 😊",
+                "A veces siento ansiedad, estrés o me cuesta concentrarme. 😰",
+                "Me cuesta relacionarme, me siento solo/a o prefiero aislarme. 😔",
+                "Siento frustración o desmotivación frecuente con mis estudios. 🔴"
+            ]
+        },
+        {
+            tipo: "opciones",
+            pregunta: "Tras la época de pandemia y los cambios de los últimos años, <strong>¿has notado alguno de estos retos en tu día a día?</strong>",
+            opciones: [
+                "Dificultad para dormir o cansancio constante 😴",
+                "Ansiedad o nerviosismo al hablar en público / exponer 🎤",
+                "Sentimiento de sobrecarga o presión académica 📚",
+                "Sensación de aislamiento o dificultad para hacer amigos 🤝",
+                "Ninguno de los anteriores, me siento bien ✨"
+            ]
+        },
+        {
+            tipo: "opciones",
+            pregunta: "Si en algún momento necesitas un espacio seguro, <strong>¿qué tipo de apoyo te gustaría recibir?</strong>",
+            opciones: [
+                "Hablar de manera confidencial con Orientación Escolar. 💬",
+                "Participar en talleres de manejo de ansiedad o técnicas de estudio. 🧘‍♂️",
+                "Refuerzo académico o tutorías en asignaturas específicas. 📚",
+                "Talleres de gestión de emociones y habilidades sociales. 🤝",
+                "Por ahora estoy bien, pero es bueno saber que existe el apoyo. 👍"
             ]
         }
     ];
@@ -427,25 +468,48 @@
 
     function manejarFlujo(respuesta) {
         if (pasoActual === 0) {
-            datosEstudiante.nombre = respuesta;
+            datosEstudiante.estudiante = respuesta;
             pasoActual++;
-            siguientePregunta();
+            siguientePaso();
         } else if (pasoActual === 1) {
-            datosEstudiante.grado = respuesta;
+            datosEstudiante.autorizacion = respuesta;
+            if (respuesta.includes("No autorizo")) {
+                setTimeout(() => {
+                    agregarMensaje("Entendemos tu elección. El cuestionario se ha detenido. ¡Gracias!", "bot");
+                    document.getElementById('chatFooter').style.display = 'none';
+                }, 400);
+                return;
+            }
             pasoActual++;
-            siguientePregunta();
+            siguientePaso();
         } else if (pasoActual === 2) {
-            datosEstudiante.rendimiento = respuesta;
+            datosEstudiante.estilo = respuesta;
             pasoActual++;
-            siguientePregunta();
+            siguientePaso();
         } else if (pasoActual === 3) {
+            datosEstudiante.ritmo = respuesta;
+            pasoActual++;
+            siguientePaso();
+        } else if (pasoActual === 4) {
+            datosEstudiante.refuerzo = respuesta;
+            pasoActual++;
+            siguientePaso();
+        } else if (pasoActual === 5) {
             datosEstudiante.emocional = respuesta;
+            pasoActual++;
+            siguientePaso();
+        } else if (pasoActual === 6) {
+            datosEstudiante.reto = respuesta;
+            pasoActual++;
+            siguientePaso();
+        } else if (pasoActual === 7) {
+            datosEstudiante.apoyo = respuesta;
             finalizarCuestionario();
         }
     }
 
-    function siguientePregunta() {
-        const actual = preguntas[pasoActual - 1];
+    function siguientePaso() {
+        const actual = pasosCuestionario[pasoActual - 1];
         setTimeout(() => {
             agregarMensaje(actual.pregunta, "bot");
             if (actual.tipo === "opciones") {
@@ -456,7 +520,7 @@
 
     function finalizarCuestionario() {
         setTimeout(() => {
-            agregarMensaje("¡Muchas gracias por compartir esto conmigo! 💙 Tus respuestas han sido registradas de forma confidencial para que el equipo de Orientación pueda brindarte apoyo personalizado.", "bot");
+            agregarMensaje("¡Muchas gracias por responder! 🌟 He guardado tus respuestas de forma confidencial para ayudarte a tener un gran año escolar. 🏫 Su información nos permite construir un entorno de aprendizaje seguro.", "bot");
             
             let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
             registros.push({ ...datosEstudiante, fecha: new Date().toLocaleString() });
@@ -497,16 +561,20 @@
 
     function mostrarPanelDocente() {
         let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
-        let htmlReporte = "<h3>📊 Informes de Estudiantes</h3><br>";
+        let htmlReporte = "<h3>📊 Panel Docente - Informes</h3><br>";
         
         if (registros.length === 0) {
             htmlReporte += "<p>Aún no hay respuestas registradas.</p>";
         } else {
             registros.forEach((r, index) => {
-                htmlReporte += `<div style="background:#f4f0f8; padding:10px; margin-bottom:8px; border-radius:8px; font-size:0.85rem; border:1px solid #b2a4c9;">
-                    <strong>#${index+1} - ${r.nombre}</strong> (${r.grado})<br>
-                    📚 Académico: ${r.rendimiento}<br>
-                    💬 Emocional: ${r.emocional}<br>
+                htmlReporte += `<div style="background:#f4f0f8; padding:10px; margin-bottom:8px; border-radius:8px; font-size:0.82rem; border:1px solid #b2a4c9;">
+                    <strong>#${index+1} - ${r.estudiante}</strong><br>
+                    👁️ Estilo: ${r.estilo}<br>
+                    ⏱️ Ritmo: ${r.ritmo}<br>
+                    📚 Refuerzo: ${r.refuerzo}<br>
+                    🧠 Emocional: ${r.emocional}<br>
+                    ⚠️ Reto: ${r.reto}<br>
+                    💬 Apoyo: ${r.apoyo}<br>
                     <small style="color:var(--text-muted);">📅 ${r.fecha}</small>
                 </div>`;
             });
