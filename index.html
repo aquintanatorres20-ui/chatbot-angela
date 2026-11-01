@@ -156,7 +156,7 @@
             background-color: #ffffff;
             border: 1.5px solid var(--primary-color);
             color: var(--primary-color);
-            padding: 10px 14px;
+            padding: 12px 16px;
             border-radius: 12px;
             font-size: 0.9rem;
             font-weight: 600;
@@ -297,7 +297,7 @@
 </head>
 <body>
 
-<div class="app-container">
+<div class="app-container" id="appContainer">
     <div class="header">
         <div class="header-profile">
             <div class="avatar-container">
@@ -320,8 +320,8 @@
 
     <!-- ENTRADA DE TEXTO -->
     <div class="chat-footer" id="chatFooter">
-        <input type="text" class="chat-input" placeholder="Escribe aquí..." id="userInput" onkeypress="handleKeyPress(event)">
-        <button class="btn-send" onclick="procesarEntrada()">Enviar</button>
+        <input type="text" class="chat-input" placeholder="Escribe aquí..." id="userInput" autocomplete="off">
+        <button class="btn-send" id="btnSend">Enviar</button>
     </div>
 
     <!-- MODAL DE ACCESO RESTRINGIDO PARA DOCENTES -->
@@ -389,13 +389,15 @@
             const btn = document.createElement('button');
             btn.className = "btn-option";
             btn.innerText = op;
-            btn.onclick = () => seleccionarOpcion(op);
+            btn.onclick = function() {
+                seleccionarOpcion(op);
+            };
             container.appendChild(btn);
         });
         
         chatBody.appendChild(container);
         chatBody.scrollTop = chatBody.scrollHeight;
-        document.getElementById('chatFooter').style.display = 'none'; // Ocultar input manual si hay botones
+        document.getElementById('chatFooter').style.display = 'none';
     }
 
     function procesarEntrada() {
@@ -403,14 +405,12 @@
         const valor = input.value.trim();
         if (valor === "") return;
 
-        agregarMensaje(valor, "user");
         input.value = "";
-
+        agregarMensaje(valor, "user");
         manejarFlujo(valor);
     }
 
     function seleccionarOpcion(valor) {
-        // Remover botones previos
         const containers = document.querySelectorAll('.options-container');
         containers.forEach(c => c.remove());
         
@@ -446,23 +446,29 @@
             if (actual.tipo === "opciones") {
                 mostrarOpciones(actual.opciones);
             }
-        }, 500);
+        }, 400);
     }
 
     function finalizarCuestionario() {
         setTimeout(() => {
             agregarMensaje("¡Muchas gracias por compartir esto conmigo! 💙 Tus respuestas han sido registradas de forma confidencial para que el equipo de Orientación pueda brindarte apoyo personalizado.", "bot");
             
-            // Guardar en la memoria local del navegador (simulación de base de datos para el docente)
             let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
             registros.push({ ...datosEstudiante, fecha: new Date().toLocaleString() });
             localStorage.setItem('registros_estudiantes', JSON.stringify(registros));
-        }, 500);
+            
+            // Ocultar caja de texto permanentemente al finalizar
+            document.getElementById('chatFooter').style.display = 'none';
+        }, 400);
     }
 
-    function handleKeyPress(e) {
-        if (e.key === 'Enter') procesarEntrada();
-    }
+    // Configurar eventos de envío
+    document.getElementById('btnSend').onclick = procesarEntrada;
+    document.getElementById('userInput').onkeypress = function(e) {
+        if (e.key === 'Enter') {
+            procesarEntrada();
+        }
+    };
 
     // Funciones del Modal Docente
     function abrirModalDocente() {
@@ -492,10 +498,10 @@
         let htmlReporte = "<h3>📊 Informes de Estudiantes</h3><br>";
         
         if (registros.length === 0) {
-            htmlReporte += "<p>Aún no hay respuestas registradas.</p>";
+            htmlReporte += "<p>Aún no hay respuestas registradas. Realiza una prueba respondiendo el chat primero.</p>";
         } else {
             registros.forEach((r, index) => {
-                htmlReporte += `<div style="background:#f8fafc; padding:10px; margin-bottom:8px; border-radius:8px; font-size:0.85rem;">
+                htmlReporte += `<div style="background:#f8fafc; padding:10px; margin-bottom:8px; border-radius:8px; font-size:0.85rem; border:1px solid #e2e8f0;">
                     <strong>#${index+1} - ${r.nombre}</strong> (${r.grado})<br>
                     📚 Académico: ${r.rendimiento}<br>
                     💬 Emocional: ${r.emocional}<br>
