@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ChatBot Ángela - Acompañamiento Escolar</title>
+    <title>ChatBot Ángela</title>
     <style>
         :root {
             --primary-color: #45008b;
@@ -16,7 +16,7 @@
             --chat-bg: #ffffff;
             --text-main: #240054;
             --text-muted: #7555a3;
-            --bot-bubble: #631c99;
+            --bot-bubble: #f4f0f8;
         }
 
         * {
@@ -751,12 +751,12 @@
         <div class="header-profile">
             <div class="avatar-container">
                 <div class="avatar-wrapper">
-                    <img id="headerAvatarImg" src="avatar.png" alt="Avatar Colebot" class="avatar-img" onerror="this.src='https://via.placeholder.com/100/45008b/ffffff?text=Bot'">
+                    <img id="headerAvatarImg" src="avatar.png" alt="Avatar ChatBot Ángela" class="avatar-img" onerror="this.src='https://via.placeholder.com/100/45008b/ffffff?text=Bot'">
                 </div>
                 <div class="status-dot"></div>
             </div>
             <div class="header-info">
-                <h1>Colebot</h1>
+                <h1>ChatBot Ángela</h1>
                 <p>Acompañamiento Escolar</p>
             </div>
         </div>
@@ -766,9 +766,9 @@
     <!-- PANTALLA DE PORTADA -->
     <div class="welcome-screen" id="welcomeScreen">
         <div class="welcome-avatar">
-            <img id="welcomeAvatarImg" src="avatar.png" alt="Avatar Colebot" onerror="this.src='https://via.placeholder.com/150/45008b/ffffff?text=Bot'">
+            <img id="welcomeAvatarImg" src="avatar.png" alt="Avatar ChatBot Ángela" onerror="this.src='https://via.placeholder.com/150/45008b/ffffff?text=Bot'">
         </div>
-        <h2>¡Te damos la bienvenida a Colebot! 🏫</h2>
+        <h2>¡Te damos la bienvenida a ChatBot Ángela! 🏫</h2>
         <p>Un espacio seguro y confidencial creado por Orientación Escolar para conocerte, apoyarte en tu bienestar emocional y potenciar tu rendimiento académico este año.</p>
         
         <button class="btn-start-chat" onclick="iniciarChat()">
@@ -791,7 +791,7 @@
     </div>
 
     <!-- BURBUJA FLOTANTE -->
-    <div class="floating-chat-bubble" id="floatingBubble" onclick="iniciarChat()" title="Iniciar chat con Colebot">
+    <div class="floating-chat-bubble" id="floatingBubble" onclick="iniciarChat()" title="Iniciar chat con ChatBot Ángela">
         💬
     </div>
 
@@ -840,7 +840,7 @@
             <button class="btn-save-config" style="background: linear-gradient(135deg, #059669, #10b981); padding: 12px; margin-top: 6px;" onclick="exportarCSV()">📥 Descargar Consolidado General (CSV)</button>
         </div>
 
-        <!-- PESTAÑA 2: REGISTROS INDIVIDUALES CON RESEÑA DE ALERTA -->
+        <!-- PESTAÑA 2: REGISTROS INDIVIDUALES -->
         <div class="panel-tab-content" id="tabIndividuales">
             <div id="listaRegistrosIndividuales" style="display: flex; flex-direction: column; gap: 10px;">
                 <!-- Dinámico -->
@@ -869,7 +869,7 @@
 
             <div class="config-group" style="border-color: #fecaca; background: #fff5f5;">
                 <label style="color: #dc2626;">🗑️ Zona de Peligro</label>
-                <button class="btn-save-config" style="background: #dc2626;" onclick="limpiarRegistros()">Eliminar Todos los Registros</button>
+                <button class="btn-save-config" style="background: #dc2626;" onclick="limpiarRegistros()">Eliminar Todos los Registros de Prueba</button>
             </div>
         </div>
 
@@ -906,7 +906,7 @@
     aplicarConfiguracionVisual();
 
     let pasoActual = 0;
-    let datosEstudiante = { nombre: "Estudiante Anónimo", autorizacion: "No especificada", estilo: "No especificado", ritmo: "No especificado", refuerzo: "Ninguno", emocional: "No especificado", reto: "Ninguno", apoyo: "No especificado" };
+    let datosEstudiante = { nombre: "", autorizacion: "", estilo: "", ritmo: "", refuerzo: "", emocional: "", reto: "", apoyo: "" };
 
     const pasosCuestionario = [
         {
@@ -981,7 +981,7 @@
         if (localStorage.getItem('encuesta_completada') === 'true') {
             document.getElementById('welcomeScreen').innerHTML = `
                 <div class="welcome-avatar">
-                    <img src="${avatarUrlGlobal}" alt="Avatar Colebot" onerror="this.src='https://via.placeholder.com/150/45008b/ffffff?text=Bot'">
+                    <img src="${avatarUrlGlobal}" alt="Avatar ChatBot Ángela" onerror="this.src='https://via.placeholder.com/150/45008b/ffffff?text=Bot'">
                 </div>
                 <h2>¡Gracias por participar! 🌟</h2>
                 <p>Tu participación oficial ya ha sido registrada exitosamente en este dispositivo. Agradecemos tu compromiso con la comunidad escolar.</p>
@@ -1246,15 +1246,16 @@
             let card = document.createElement('div');
             card.className = "student-card";
             card.innerHTML = `
-                <h4>#${index+1} - ${r.nombre}</h4>
+                <h4>#${index+1} - ${r.nombre || "Estudiante"}</h4>
                 <div>${badgesHtml}</div>
-                <span style="margin-top:4px;">🛡️ Autorización: ${r.autorizacion}</span>
-                <span>👁️ Estilo: ${r.estilo}</span>
-                <span>⏱️ Ritmo: ${r.ritmo}</span>
-                <span>🧠 Emocional: ${r.emocional}</span>
-                <span>⚠️ Reto: ${r.reto}</span>
-                <span>💬 Apoyo: ${r.apoyo}</span>
-                <small style="color:var(--text-muted);">📅 ${r.fecha}</small>
+                <span style="margin-top:4px;">🛡️ Autorización: ${r.autorizacion || "No especificada"}</span>
+                <span>👁️ Estilo: ${r.estilo || "No especificado"}</span>
+                <span>⏱️ Ritmo: ${r.ritmo || "No especificado"}</span>
+                <span>📚 Refuerzo: ${r.refuerzo || "Ninguno"}</span>
+                <span>🧠 Emocional: ${r.emocional || "No especificado"}</span>
+                <span>⚠️ Reto: ${r.reto || "No especificado"}</span>
+                <span>💬 Apoyo: ${r.apoyo || "No especificado"}</span>
+                <small style="color:var(--text-muted);">📅 ${r.fecha || "Fecha no registrada"}</small>
                 <button class="btn-export-single" onclick="exportarRegistroIndividual(${index})">📥 Descargar Excel de este registro</button>
             `;
             contenedor.appendChild(card);
@@ -1267,9 +1268,9 @@
         if (!r) return;
 
         let csv = "Estudiante,Autorizacion,Estilo Aprendizaje,Ritmo,Refuerzo,Bienestar Emocional,Reto Postpandemia,Apoyo Deseado,Fecha\n";
-        csv += `"${r.nombre}","${r.autorizacion}","${r.estilo}","${r.ritmo}","${r.refuerzo}","${r.emocional}","${r.reto}","${r.apoyo}","${r.fecha}"\n`;
+        csv += `"${r.nombre || ""}","${r.autorizacion || ""}","${r.estilo || ""}","${r.ritmo || ""}","${r.refuerzo || ""}","${r.emocional || ""}","${r.reto || ""}","${r.apoyo || ""}","${r.fecha || ""}"\n`;
 
-        descargarArchivoCSV(csv, `Registro_${r.nombre.replace(/[^a-zA-Z0-9]/g, "_")}.csv`);
+        descargarArchivoCSV(csv, `Registro_${(r.nombre || "Estudiante").replace(/[^a-zA-Z0-9]/g, "_")}.csv`);
     }
 
     function exportarCSV() {
@@ -1278,7 +1279,7 @@
 
         let csv = "Estudiante,Autorizacion,Estilo Aprendizaje,Ritmo,Refuerzo,Bienestar Emocional,Reto Postpandemia,Apoyo Deseado,Fecha\n";
         registros.forEach(r => {
-            csv += `"${r.nombre}","${r.autorizacion}","${r.estilo}","${r.ritmo}","${r.refuerzo}","${r.emocional}","${r.reto}","${r.apoyo}","${r.fecha}"\n`;
+            csv += `"${r.nombre || ""}","${r.autorizacion || ""}","${r.estilo || ""}","${r.ritmo || ""}","${r.refuerzo || ""}","${r.emocional || ""}","${r.reto || ""}","${r.apoyo || ""}","${r.fecha || ""}"\n`;
         });
 
         descargarArchivoCSV(csv, `Reporte_Consolidado_${new Date().toISOString().slice(0,10)}.csv`);
@@ -1324,11 +1325,11 @@
     }
 
     function limpiarRegistros() {
-        if (confirm("¿Estás seguro de que deseas eliminar todos los registros guardados?")) {
+        if (confirm("¿Estás seguro de que deseas eliminar todos los registros de prueba guardados?")) {
             localStorage.removeItem('registros_estudiantes');
             localStorage.removeItem('encuesta_completada');
             mostrarPanelDocenteVentana();
-            alert("Registros eliminados correctamente.");
+            alert("Registros eliminados correctamente. Ya puedes hacer una nueva prueba limpia.");
         }
     }
 </script>
