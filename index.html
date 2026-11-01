@@ -153,7 +153,7 @@
             backdrop-filter: blur(4px);
         }
 
-        /* ESTILOS DE LA PORTADA (LANDING PAGE) */
+        /* PORTADA */
         .welcome-screen {
             flex: 1;
             display: flex;
@@ -215,7 +215,6 @@
             transform: scale(1.03);
         }
 
-        /* BURBUJA FLOTANTE DE ACCESO RÁPIDO */
         .floating-chat-bubble {
             position: absolute;
             bottom: 20px;
@@ -373,6 +372,60 @@
             cursor: pointer;
         }
 
+        /* METRICAS Y TARJETAS EN PANEL DOCENTE */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid #dcd6e7;
+            border-radius: 10px;
+            padding: 10px 6px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .stat-card h4 {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .stat-card .stat-number {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        .btn-export {
+            background-color: #10b981;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 12px;
+            font-size: 0.8rem;
+        }
+
+        .btn-export-single {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 6px;
+        }
+
         .modal-overlay {
             position: absolute;
             top: 0;
@@ -456,18 +509,6 @@
             display: none;
         }
 
-        .btn-export {
-            background-color: #10b981;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-bottom: 12px;
-            font-size: 0.8rem;
-        }
-
         @media (max-width: 480px) {
             body {
                 padding: 0;
@@ -504,7 +545,7 @@
         <button class="btn-teacher-access" onclick="abrirModalDocente()">🔒 ÁREA DOCENTE</button>
     </div>
 
-    <!-- PANTALLA DE PORTADA / BIENVENIDA -->
+    <!-- PANTALLA DE PORTADA -->
     <div class="welcome-screen" id="welcomeScreen">
         <div class="welcome-avatar">
             <img src="avatar.png" alt="Avatar Colebot" onerror="this.src='https://via.placeholder.com/150/45008b/ffffff?text=Bot'">
@@ -517,7 +558,7 @@
         </button>
     </div>
 
-    <!-- CUERPO DE CHAT (Oculto inicialmente hasta dar clic en iniciar) -->
+    <!-- CUERPO DE CHAT -->
     <div class="chat-body" id="chatBody" style="display: none;"></div>
 
     <!-- PIE DE CHAT -->
@@ -531,7 +572,7 @@
         </div>
     </div>
 
-    <!-- BURBUJA FLOTANTE EN PORTADA -->
+    <!-- BURBUJA FLOTANTE -->
     <div class="floating-chat-bubble" id="floatingBubble" onclick="iniciarChat()" title="Iniciar chat con Colebot">
         💬
     </div>
@@ -820,11 +861,26 @@
             csv += `"${r.nombre}","${r.autorizacion}","${r.estilo}","${r.ritmo}","${r.refuerzo}","${r.emocional}","${r.reto}","${r.apoyo}","${r.fecha}"\n`;
         });
 
-        let blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        descargarArchivoCSV(csv, `Reporte_Orientacion_Consolidado_${new Date().toISOString().slice(0,10)}.csv`);
+    }
+
+    function exportarRegistroIndividual(index) {
+        let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
+        let r = registros[index];
+        if (!r) return;
+
+        let csv = "Estudiante,Autorizacion,Estilo Aprendizaje,Ritmo,Refuerzo,Bienestar Emocional,Reto Postpandemia,Apoyo Deseado,Fecha\n";
+        csv += `"${r.nombre}","${r.autorizacion}","${r.estilo}","${r.ritmo}","${r.refuerzo}","${r.emocional}","${r.reto}","${r.apoyo}","${r.fecha}"\n`;
+
+        descargarArchivoCSV(csv, `Registro_${r.nombre.replace(/[^a-zA-Z0-9]/g, "_")}.csv`);
+    }
+
+    function descargarArchivoCSV(contenidoCSV, nombreArchivo) {
+        let blob = new Blob([contenidoCSV], { type: 'text/csv;charset=utf-8;' });
         let url = URL.createObjectURL(blob);
         let link = document.createElement("a");
         link.setAttribute("href", url);
-        link.setAttribute("download", `Reporte_Orientacion_${new Date().toISOString().slice(0,10)}.csv`);
+        link.setAttribute("download", nombreArchivo);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -832,10 +888,35 @@
 
     function mostrarPanelDocente() {
         let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
-        let htmlReporte = "<h3>📊 Panel Docente - Informes y Seguimiento</h3><br>";
         
+        let totalEncuestas = registros.length;
+        let requierenRefuerzo = registros.filter(r => r.refuerzo && r.refuerzo.toLowerCase() !== "ninguna" && r.refuerzo.toLowerCase() !== "ninguno").length;
+        let alertasEmocionales = registros.filter(r => 
+            (r.emocional && !r.emocional.includes("tranquilo")) || 
+            (r.reto && !r.reto.includes("Ninguno"))
+        ).length;
+
+        let htmlReporte = `<h3>📊 Panel Docente - Informes y Seguimiento</h3><br>`;
+        
+        htmlReporte += `
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>Total Encuestas</h4>
+                    <div class="stat-number">${totalEncuestas}</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Refuerzo</h4>
+                    <div class="stat-number" style="color: #2563eb;">${requierenRefuerzo}</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Alertas Emoc.</h4>
+                    <div class="stat-number" style="color: #e11d48;">${alertasEmocionales}</div>
+                </div>
+            </div>
+        `;
+
         if (registros.length > 0) {
-            htmlReporte += `<button class="btn-export" onclick="exportarCSV()">📥 Descargar Reporte en Excel (CSV)</button><br><br>`;
+            htmlReporte += `<button class="btn-export" onclick="exportarCSV()">📥 Descargar Todo en Excel (CSV)</button><br><br>`;
         }
 
         if (registros.length === 0) {
@@ -851,7 +932,8 @@
                     🧠 Emocional: ${r.emocional}<br>
                     ⚠️ Reto: ${r.reto}<br>
                     💬 Apoyo: ${r.apoyo}<br>
-                    <small style="color:var(--text-muted);">📅 ${r.fecha}</small>
+                    <small style="color:var(--text-muted);">📅 ${r.fecha}</small><br>
+                    <button class="btn-export-single" onclick="exportarRegistroIndividual(${index})">📥 Excel de este registro</button>
                 </div>`;
             });
         }
