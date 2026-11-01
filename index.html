@@ -67,7 +67,6 @@
             gap: 12px;
         }
 
-        /* Contenedor del avatar con padding extra para que el punto verde no se corte */
         .avatar-container {
             position: relative;
             width: 48px;
@@ -130,7 +129,6 @@
             backdrop-filter: blur(4px);
         }
 
-        /* Fondo decorativo sutil para el área de chat */
         .chat-body {
             flex: 1;
             padding: 16px;
@@ -143,7 +141,6 @@
             background-size: 16px 16px;
         }
 
-        /* Estilo mejorado de burbujas */
         .msg-bot {
             background-color: #ffffff;
             color: var(--text-main);
@@ -351,8 +348,7 @@
     </div>
 
     <div class="chat-body" id="chatBody">
-        <div class="msg-bot">¡Hola! 👋 Te damos la bienvenida a nuestro espacio de acompañamiento escolar.</div>
-        <div class="msg-bot">Antes de empezar, dime: <strong>¿Cuál es tu nombre completo y grado?</strong> (Ej: Juan Pérez - 9°A)</div>
+        <!-- Contenido dinámico cargado por JavaScript -->
     </div>
 
     <div class="chat-footer" id="chatFooter">
@@ -388,7 +384,7 @@
         },
         {
             tipo: "opciones",
-            pregunta: "Ten en cuenta que tus datos y respuestas serán protegidos y utilizados exclusivamente por el equipo de Orientación y Docencia del colegio. ¿Autorizas el tratamiento de tus datos para este fin institucional?",
+            pregunta: "Ten in cuenta que tus datos y respuestas serán protegidos y utilizados exclusivamente por el equipo de Orientación y Docencia del colegio. ¿Autorizas el tratamiento de tus datos para este fin institucional?",
             opciones: [
                 "Sí, autorizo y quiero continuar. ✅",
                 "No autorizo. ❌"
@@ -420,7 +416,7 @@
             tipo: "opciones",
             pregunta: "Tu bienestar emocional es tan importante como tus notas. 🧠💚 <strong>¿Cómo te has sentido últimamente en el colegio o con tu grupo de amigos?</strong>",
             opciones: [
-                "Me siento bien, tranquilo/a y conectado/a con mis compañeros. 😊",
+                "Me siento bien, tranquilo/a y conectado/a con мои compañeros. 😊",
                 "A veces siento ansiedad, estrés o me cuesta concentrarme. 😰",
                 "Me cuesta relacionarme, me siento solo/a o prefiero aislarme. 😔",
                 "Siento frustración o desmotivación frecuente con mis estudios. 🔴"
@@ -449,6 +445,26 @@
             ]
         }
     ];
+
+    window.onload = function() {
+        verificarEstadoEncuesta();
+    };
+
+    function verificarEstadoEncuesta() {
+        const chatBody = document.getElementById('chatBody');
+        chatBody.innerHTML = "";
+        
+        // Verifica si este navegador ya completó la encuesta
+        if (localStorage.getItem('encuesta_completada') === 'true') {
+            agregarMensaje("¡Hola! 👋 Ya has registrado tu respuesta anteriormente en este dispositivo. Tus datos han sido guardados con éxito.", "bot");
+            document.getElementById('chatFooter').style.display = 'none';
+            return;
+        }
+
+        agregarMensaje("¡Hola! 👋 Te damos la bienvenida a nuestro espacio de acompañamiento escolar.", "bot");
+        agregarMensaje(pasosCuestionario[0].pregunta, "bot");
+        document.getElementById('chatFooter').style.display = 'flex';
+    }
 
     function agregarMensaje(texto, tipo = "bot") {
         const chatBody = document.getElementById('chatBody');
@@ -555,11 +571,15 @@
 
     function finalizarCuestionario() {
         setTimeout(() => {
-            agregarMensaje("¡Muchas gracias por responder! 🌟 He guardado tus respuestas de forma confidencial para ayudarte a tener un gran año escolar. 🏫 Su información nos permite construir un entorno de aprendizaje seguro y adaptado a tus necesidades.", "bot");
+            agregarMensaje("¡Muchas gracias por responder! 🌟 He guardado tus respuestas de forma confidencial para ayudarte a tener un gran año escolar. 🏫", "bot");
             
+            // Guardar en la lista general de registros para los docentes
             let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
             registros.push({ ...datosEstudiante, fecha: new Date().toLocaleString() });
             localStorage.setItem('registros_estudiantes', JSON.stringify(registros));
+            
+            // Marcar este dispositivo como "ya respondido" para limitar a un solo envío por usuario/equipo
+            localStorage.setItem('encuesta_completada', 'true');
             
             document.getElementById('chatFooter').style.display = 'none';
         }, 400);
