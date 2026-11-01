@@ -2,882 +2,362 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acompañamiento Escolar - Chatbot Diagnóstico</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome para Iconos -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts: Poppins & Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        mint: {
-                            50: '#f0fdf4',
-                            100: '#dcfce7',
-                            200: '#bbf7d0',
-                            400: '#4ade80',
-                            500: '#22c55e',
-                            600: '#16a34a',
-                        },
-                        pastelSky: {
-                            50: '#f0f9ff',
-                            100: '#e0f2fe',
-                            200: '#bae6fd',
-                            400: '#38bdf8',
-                            500: '#0284c7',
-                            600: '#0369a1',
-                        },
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        display: ['Poppins', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Colebot - Acompañamiento Escolar</title>
     <style>
-        /* Animaciones personalizadas */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(12px);
+        :root {
+            --primary-color: #0284c7;
+            --primary-dark: #0369a1;
+            --accent-color: #10b981;
+            --bg-body: #f0f9ff;
+            --chat-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --bot-bubble: #f1f5f9;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            height: 92vh;
+            max-height: 800px;
+            background: var(--chat-bg);
+            border-radius: 24px;
+            box-shadow: 0 12px 32px rgba(2, 132, 199, 0.12);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid #e0f2fe;
+            position: relative;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: #ffffff;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .header-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar-container {
+            position: relative;
+            width: 44px;
+            height: 44px;
+            flex-shrink: 0;
+        }
+
+        .avatar-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid #ffffff;
+            object-fit: cover;
+            background-color: #e0f2fe;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background-color: var(--accent-color);
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+        }
+
+        .header-info h1 {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .header-info p {
+            font-size: 0.72rem;
+            opacity: 0.9;
+        }
+
+        .btn-teacher-access {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 6px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            transition: background 0.2s;
+        }
+
+        .btn-teacher-access:active {
+            background-color: rgba(255, 255, 255, 0.35);
+        }
+
+        .chat-body {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .msg-bot {
+            background-color: var(--bot-bubble);
+            color: var(--text-main);
+            padding: 12px 16px;
+            border-radius: 18px 18px 18px 4px;
+            max-width: 85%;
+            font-size: 0.92rem;
+            line-height: 1.45;
+        }
+
+        .chat-footer {
+            padding: 12px 16px;
+            background-color: #ffffff;
+            border-top: 1px solid #f1f5f9;
+            display: flex;
+            gap: 8px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .btn-send {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            border: none;
+            padding: 0 18px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        /* MODAL DE SEGURIDAD PARA DOCENTES */
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            z-index: 100;
+        }
+
+        .modal-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 24px 20px;
+            width: 100%;
+            max-width: 360px;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .modal-card h2 {
+            font-size: 1.2rem;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .modal-card p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 12px;
+            font-size: 1rem;
+            text-align: center;
+            letter-spacing: 2px;
+            margin-bottom: 14px;
+            outline: none;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-modal-submit {
+            flex: 1;
+            background-color: var(--primary-color);
+            color: #ffffff;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-modal-close {
+            flex: 1;
+            background-color: #f1f5f9;
+            color: var(--text-muted);
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 0.8rem;
+            margin-top: 8px;
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+                background-color: var(--chat-bg);
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            .app-container {
+                height: 100vh;
+                max-height: none;
+                border-radius: 0;
+                border: none;
             }
-        }
-
-        @keyframes pulseSoft {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        @keyframes typingDot {
-            0%, 80%, 100% { transform: scale(0); opacity: 0.3; }
-            40% { transform: scale(1); opacity: 1; }
-        }
-
-        .animate-fade-in-up {
-            animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        .animate-bounce-soft {
-            animation: pulseSoft 3s infinite ease-in-out;
-        }
-
-        .dot-1 { animation: typingDot 1.4s infinite 0s; }
-        .dot-2 { animation: typingDot 1.4s infinite 0.2s; }
-        .dot-3 { animation: typingDot 1.4s infinite 0.4s; }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-sky-50 via-teal-50 to-indigo-50 min-h-screen font-sans text-slate-800 flex flex-col justify-between selection:bg-teal-200">
+<body>
 
-    <!-- Encabezado Principal -->
-    <header class="bg-white/80 backdrop-blur-md border-b border-sky-100 sticky top-0 z-40 shadow-sm">
-        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="relative">
-                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-sky-400 to-mint-400 flex items-center justify-center text-white shadow-md shadow-sky-200 animate-bounce-soft">
-                        <i class="fa-solid font-bold text-xl fa-robot"></i>
-                    </div>
-                    <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full"></span>
-                </div>
-                <div>
-                    <h1 class="font-display font-bold text-lg text-slate-800 tracking-tight flex items-center gap-2">
-                        Colebot
-                        <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-sky-100 text-sky-700">Asistente Escolar</span>
-                    </h1>
-                    <p class="text-xs text-slate-500">Acompañamiento Académico y Emocional</p>
-                </div>
+<div class="app-container">
+    <div class="header">
+        <div class="header-profile">
+            <div class="avatar-container">
+                <img src="avatar.png" alt="Avatar Colebot" class="avatar-img" onerror="this.src='https://via.placeholder.com/100/0284c7/ffffff?text=Bot'">
+                <div class="status-dot"></div>
             </div>
-
-            <!-- Botón del Panel de Orientación -->
-            <button onclick="toggleTeacherDashboard()" class="flex items-center gap-2 text-xs md:text-sm font-semibold text-sky-700 bg-sky-50 hover:bg-sky-100 border border-sky-200 px-3 py-2 rounded-xl transition-all shadow-sm active:scale-95">
-                <i class="fa-solid fa-user-shield text-sky-600"></i>
-                <span class="hidden sm:inline">Panel Docente / Orientación</span>
-                <span class="sm:hidden">Panel</span>
-                <span id="badge-count" class="bg-sky-600 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold ml-1 hidden">0</span>
-            </button>
+            <div class="header-info">
+                <h1>Colebot</h1>
+                <p>Acompañamiento Escolar</p>
+            </div>
         </div>
-    </header>
+        <button class="btn-teacher-access" onclick="abrirModalDocente()">🔒 ÁREA DOCENTE</button>
+    </div>
 
-    <!-- Barra de Progreso del Cuestionario -->
-    <div id="progress-container" class="max-w-4xl w-full mx-auto px-4 pt-4 hidden">
-        <div class="bg-white/90 p-3 rounded-2xl border border-sky-100 shadow-sm flex flex-col gap-1.5">
-            <div class="flex justify-between items-center text-xs font-semibold text-slate-600">
-                <span id="progress-label" class="flex items-center gap-1.5">
-                    <i class="fa-solid fa-list-check text-sky-500"></i> Avance del diagnóstico
-                </span>
-                <span id="progress-text" class="text-sky-600 font-bold">0%</span>
-            </div>
-            <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
-                <div id="progress-bar" class="bg-gradient-to-r from-sky-400 to-mint-400 h-2.5 rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
-            </div>
+    <div class="chat-body" id="chatBody">
+        <div class="msg-bot">
+            ¡Hola! 👋 Te damos la bienvenida a nuestro espacio de acompañamiento escolar.
+        </div>
+        <div class="msg-bot">
+            Para empezar a conversar de forma personalizada, <strong>¿cuál es tu nombre o cómo te gusta que te llamen?</strong>
         </div>
     </div>
 
-    <!-- Contenedor del Chat Principal -->
-    <main class="max-w-4xl w-full mx-auto p-4 flex-1 flex flex-col justify-end">
-        <div id="chat-window" class="bg-white/70 backdrop-blur-xl border border-white/80 rounded-3xl p-4 md:p-6 shadow-xl shadow-slate-200/50 min-h-[500px] max-h-[72vh] overflow-y-auto flex flex-col space-y-4">
-            <!-- Los mensajes se insertarán dinámicamente aquí -->
-        </div>
+    <div class="chat-footer">
+        <input type="text" class="chat-input" placeholder="Escribe tu nombre aquí..." id="userNameInput">
+        <button class="btn-send" onclick="enviarNombre()">Enviar</button>
+    </div>
 
-        <!-- Indicador de "Escribiendo..." -->
-        <div id="typing-indicator" class="hidden items-center gap-2 mt-2 ml-4 text-slate-400 text-xs font-medium">
-            <div class="bg-white px-4 py-2.5 rounded-2xl rounded-bl-sm border border-slate-100 shadow-sm flex items-center gap-1.5">
-                <span class="w-2 h-2 bg-sky-400 rounded-full dot-1"></span>
-                <span class="w-2 h-2 bg-sky-400 rounded-full dot-2"></span>
-                <span class="w-2 h-2 bg-sky-400 rounded-full dot-3"></span>
-                <span class="ml-1 text-slate-400 italic">Colebot está escribiendo...</span>
-            </div>
-        </div>
-    </main>
-
-    <!-- Footer Informativo -->
-    <footer class="py-3 text-center text-xs text-slate-400">
-        <p>Espacio confidencial e institucional • Protección de datos personales garantizada</p>
-    </footer>
-
-    <!-- MODAL: PANEL DE ORIENTACIÓN / DOCENTES -->
-    <div id="teacher-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden animate-fade-in-up">
-        <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-slate-100 overflow-hidden">
-            <!-- Modal Header -->
-            <div class="p-5 bg-gradient-to-r from-sky-600 to-teal-600 text-white flex justify-between items-center">
-                <div class="flex items-center gap-3">
-                    <div class="p-2.5 bg-white/20 rounded-xl backdrop-blur-md">
-                        <i class="fa-solid fa-clipboard-user text-xl"></i>
-                    </div>
-                    <div>
-                        <h2 class="font-display font-bold text-lg">Panel de Orientación Escolar</h2>
-                        <p class="text-xs text-sky-100">Resultados consolidados e identificación de necesidades diferenciadas</p>
-                    </div>
-                </div>
-                <button onclick="toggleTeacherDashboard()" class="text-white/80 hover:text-white p-2 rounded-full hover:bg-white/10 transition">
-                    <i class="fa-solid fa-xmark text-xl"></i>
-                </button>
-            </div>
-
-            <!-- Modal Content Body -->
-            <div class="p-6 overflow-y-auto space-y-6 flex-1 bg-slate-50">
-
-                <!-- Resumen de Estadísticas Globales -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center text-xl font-bold">
-                            <i class="fa-solid fa-users"></i>
-                        </div>
-                        <div>
-                            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Encuestas</p>
-                            <h3 id="stat-total" class="text-2xl font-bold text-slate-800">0</h3>
-                        </div>
-                    </div>
-                    <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl font-bold">
-                            <i class="fa-solid fa-book-open-reader"></i>
-                        </div>
-                        <div>
-                            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Requieren Refuerzo</p>
-                            <h3 id="stat-academic" class="text-2xl font-bold text-slate-800">0</h3>
-                        </div>
-                    </div>
-                    <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center text-xl font-bold">
-                            <i class="fa-solid fa-heart-circle-exclamation"></i>
-                        </div>
-                        <div>
-                            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Alertas Emocionales</p>
-                            <h3 id="stat-emotional" class="text-2xl font-bold text-slate-800">0</h3>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Botones de Acción -->
-                <div class="flex flex-wrap justify-between items-center gap-3 bg-white p-3.5 rounded-2xl border border-slate-200/80">
-                    <span class="text-sm font-semibold text-slate-700 flex items-center gap-2">
-                        <i class="fa-solid fa-database text-sky-500"></i> Registros Individuales
-                    </span>
-                    <div class="flex gap-2">
-                        <button onclick="exportJSON()" class="px-3.5 py-2 text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-xl transition flex items-center gap-1.5">
-                            <i class="fa-solid fa-file-excel"></i> Exportar Datos (JSON)
-                        </button>
-                        <button onclick="clearData()" class="px-3.5 py-2 text-xs font-semibold text-rose-600 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-xl transition flex items-center gap-1.5">
-                            <i class="fa-solid fa-trash-can"></i> Limpiar Todo
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Tabla de Resultados -->
-                <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs text-slate-600">
-                            <thead class="bg-slate-100 text-slate-700 font-bold uppercase text-[10px] tracking-wider border-b border-slate-200">
-                                <tr>
-                                    <th class="p-3">ID / Fecha</th>
-                                    <th class="p-3">Nombre Estudiante</th>
-                                    <th class="p-3">Estilo Aprendizaje</th>
-                                    <th class="p-3">Ritmo Clase</th>
-                                    <th class="p-3">Materias Refuerzo</th>
-                                    <th class="p-3">Estado Emocional</th>
-                                    <th class="p-3">Retos Identificados</th>
-                                    <th class="p-3">Apoyo Solicitado</th>
-                                </tr>
-                            </thead>
-                            <tbody id="records-table-body" class="divide-y divide-slate-100">
-                                <!-- Filas agregadas dinámicamente -->
-                            </tbody>
-                        </table>
-                    </div>
-                    <div id="empty-state" class="p-8 text-center text-slate-400">
-                        <i class="fa-regular fa-folder-open text-4xl mb-2 text-slate-300"></i>
-                        <p class="text-sm">Aún no hay respuestas registradas en la memoria local.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Modal Footer -->
-            <div class="p-4 bg-white border-t border-slate-200 flex justify-end">
-                <button onclick="toggleTeacherDashboard()" class="px-5 py-2 bg-slate-800 text-white font-medium rounded-xl text-xs hover:bg-slate-700 transition">
-                    Cerrar Panel
-                </button>
+    <!-- MODAL DE ACCESO RESTRINGIDO PARA DOCENTES -->
+    <div class="modal-overlay" id="teacherModal">
+        <div class="modal-card">
+            <h2>Acceso Restringido 🏫</h2>
+            <p>Ingresa la contraseña institucional de Orientación Escolar para consultar los informes:</p>
+            
+            <input type="password" id="teacherPassword" class="password-input" placeholder="••••••••">
+            <div class="error-message" id="authError">Contraseña incorrecta. Inténtalo de nuevo.</div>
+            
+            <div class="modal-actions">
+                <button class="btn-modal-close" onclick="cerrarModalDocente()">Cancelar</button>
+                <button class="btn-modal-submit" onclick="verificarAccesoDocente()">Ingresar</button>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- SCRIPT LÓGICA DEL CHATBOT -->
-    <script>
-        // Estado del usuario y respuestas
-        let currentStep = 0;
-        let responses = {
-            studentName: '',
-            authorized: false,
-            learningStyle: '',
-            pace: '',
-            subjects: [],
-            emotionalState: '',
-            postPandemicChallenges: [],
-            supportPreference: ''
-        };
+<script>
+    // CONTRASEÑA POR DEFECTO PARA EL EQUIPO DOCENTE
+    const CLAVE_ORIENTACION = "docente2026";
 
-        // Memoria local de registros para el panel docente
-        let allRecords = JSON.parse(localStorage.getItem('colebot_records') || '[]');
+    function abrirModalDocente() {
+        document.getElementById('teacherModal').style.display = 'flex';
+        document.getElementById('teacherPassword').value = '';
+        document.getElementById('authError').style.display = 'none';
+    }
 
-        const chatWindow = document.getElementById('chat-window');
-        const typingIndicator = document.getElementById('typing-indicator');
+    function cerrarModalDocente() {
+        document.getElementById('teacherModal').style.display = 'none';
+    }
 
-        // Inicialización
-        window.onload = function() {
-            updateDashboardStats();
-            startChat();
-        };
+    function verificarAccesoDocente() {
+        const inputPass = document.getElementById('teacherPassword').value;
+        const errorDiv = document.getElementById('authError');
 
-        // Scroll automático suave hacia abajo
-        function scrollToBottom() {
-            setTimeout(() => {
-                chatWindow.scrollTo({
-                    top: chatWindow.scrollHeight,
-                    behavior: 'smooth'
-                });
-            }, 100);
+        if (inputPass === CLAVE_ORIENTACION) {
+            cerrarModalDocente();
+            alert("Acceso concedido al Panel de Orientación Escolar. Cargando informes...");
+            // Aquí se despliega la vista de diagnósticos
+        } else {
+            errorDiv.style.display = 'block';
         }
+    }
 
-        // Mostrar indicador de "escribiendo"
-        function showTyping() {
-            typingIndicator.classList.remove('hidden');
-            typingIndicator.classList.add('flex');
-            scrollToBottom();
-        }
-
-        // Ocultar indicador
-        function hideTyping() {
-            typingIndicator.classList.add('hidden');
-            typingIndicator.classList.remove('flex');
-        }
-
-        // Agregar mensaje del Bot
-        function addBotMessage(htmlContent, delay = 600) {
-            return new Promise((resolve) => {
-                showTyping();
-                setTimeout(() => {
-                    hideTyping();
-                    const msgDiv = document.createElement('div');
-                    msgDiv.className = 'flex items-start gap-3 animate-fade-in-up max-w-[88%] md:max-w-[80%]';
-                    msgDiv.innerHTML = `
-                        <div class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-sky-400 to-mint-400 text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-sm mt-1">
-                            <i class="fa-solid fa-robot"></i>
-                        </div>
-                        <div class="bg-white border border-slate-100 p-4 rounded-3xl rounded-tl-xs shadow-md shadow-slate-100 text-slate-700 text-sm md:text-base leading-relaxed">
-                            ${htmlContent}
-                        </div>
-                    `;
-                    chatWindow.appendChild(msgDiv);
-                    scrollToBottom();
-                    resolve();
-                }, delay);
-            });
-        }
-
-        // Agregar mensaje del Usuario
-        function addUserMessage(text) {
-            const msgDiv = document.createElement('div');
-            msgDiv.className = 'flex items-end justify-end gap-2 animate-fade-in-up self-end max-w-[85%]';
-            msgDiv.innerHTML = `
-                <div class="bg-gradient-to-r from-sky-500 to-indigo-500 text-white p-3.5 px-5 rounded-3xl rounded-br-xs shadow-md shadow-sky-200 text-sm md:text-base font-medium">
-                    ${text}
-                </div>
-            `;
-            chatWindow.appendChild(msgDiv);
-            scrollToBottom();
-        }
-
-        // Agregar contenedor de opciones de interacción
-        function addOptionsContainer(optionsHtml) {
-            const container = document.createElement('div');
-            container.id = `options-step-${currentStep}`;
-            container.className = 'flex flex-col gap-2.5 my-2 ml-12 max-w-[88%] md:max-w-[80%] animate-fade-in-up';
-            container.innerHTML = optionsHtml;
-            chatWindow.appendChild(container);
-            scrollToBottom();
-        }
-
-        // Deshabilitar opciones anteriores
-        function disableCurrentOptions() {
-            const currentContainer = document.getElementById(`options-step-${currentStep}`);
-            if (currentContainer) {
-                const buttons = currentContainer.querySelectorAll('button, input, label');
-                buttons.forEach(el => {
-                    el.classList.add('opacity-50', 'pointer-events-none');
-                });
-            }
-        }
-
-        // Actualizar barra de progreso
-        function updateProgress(percent) {
-            const container = document.getElementById('progress-container');
-            const bar = document.getElementById('progress-bar');
-            const text = document.getElementById('progress-text');
-
-            if (percent > 0) {
-                container.classList.remove('hidden');
-            }
-            bar.style.width = `${percent}%`;
-            text.innerText = `${percent}%`;
-        }
-
-        // -------------------------------------------------------------
-        // FLUJO DE INTERACCIÓN DEL CUESTIONARIO
-        // -------------------------------------------------------------
-
-        async function startChat() {
-            currentStep = 0;
-            updateProgress(0);
-
-            // Nombre del estudiante para personalizar
-            await addBotMessage("¡Hola! 👋 Te damos la bienvenida a nuestro espacio de acompañamiento escolar.", 400);
+    function enviarNombre() {
+        const input = document.getElementById('userNameInput');
+        const chatBody = document.getElementById('chatBody');
+        
+        if (input.value.trim() !== "") {
+            const userMsg = document.createElement('div');
+            userMsg.className = 'msg-bot';
+            userMsg.style.alignSelf = 'flex-end';
+            userMsg.style.backgroundColor = 'var(--primary-color)';
+            userMsg.style.color = '#ffffff';
+            userMsg.style.borderRadius = '18px 18px 4px 18px';
+            userMsg.innerText = input.value;
             
-            await addBotMessage(`
-                <p class="mb-3">Para empezar a conversar de forma personalizada, <strong>¿cuál es tu nombre o cómo te gusta que te llamen?</strong></p>
-            `, 500);
-
-            addOptionsContainer(`
-                <div class="flex gap-2">
-                    <input type="text" id="input-student-name" placeholder="Escribe tu nombre aquí..." class="flex-1 bg-white border border-sky-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400 shadow-sm" onkeypress="if(event.key==='Enter') submitStudentName()">
-                    <button onclick="submitStudentName()" class="bg-sky-500 hover:bg-sky-600 text-white font-semibold px-5 py-3 rounded-2xl text-sm transition shadow-md shadow-sky-200 active:scale-95">
-                        Enviar <i class="fa-solid fa-paper-plane ml-1"></i>
-                    </button>
-                </div>
-            `);
+            chatBody.appendChild(userMsg);
+            input.value = '';
+            chatBody.scrollTop = chatBody.scrollHeight;
         }
+    }
+</script>
 
-        async function submitStudentName() {
-            const input = document.getElementById('input-student-name');
-            const name = input ? input.value.trim() : '';
-
-            if (!name) return;
-
-            responses.studentName = name;
-            disableCurrentOptions();
-            addUserMessage(`Me llamo ${name}`);
-
-            // Avanza a Flujo 0
-            triggerFlow0();
-        }
-
-        // FLUJO 0: Autorización
-        async function triggerFlow0() {
-            currentStep = 1;
-            updateProgress(10);
-
-            await addBotMessage(`
-                <p class="mb-2">¡Un gusto conocerte, <strong>${responses.studentName}</strong>! 😊</p>
-                <p class="text-slate-600 text-xs md:text-sm bg-sky-50/80 p-3 rounded-2xl border border-sky-100 mb-2">
-                    🔒 <strong>Aviso importante:</strong> Antes de empezar, ten en cuenta que tus datos y respuestas serán protegidos y utilizados exclusivamente por el equipo de <strong>Orientación y Docencia</strong> del colegio para brindarte apoyo académico y emocional, conforme a la normativa de protección de datos personales.
-                </p>
-                <p class="font-medium">¿Autorizas el tratamiento de tus datos para este fin institucional?</p>
-            `, 700);
-
-            addOptionsContainer(`
-                <button onclick="handleFlow0(true)" class="bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-800 font-medium p-3.5 rounded-2xl text-left transition flex items-center gap-3 shadow-sm active:scale-98">
-                    <span class="text-lg">🔘</span>
-                    <span>Sí, autorizo y quiero continuar. ✅</span>
-                </button>
-                <button onclick="handleFlow0(false)" class="bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-800 font-medium p-3.5 rounded-2xl text-left transition flex items-center gap-3 shadow-sm active:scale-98">
-                    <span class="text-lg">🔘</span>
-                    <span>No autorizo. ❌</span>
-                </button>
-            `);
-        }
-
-        async function handleFlow0(authorized) {
-            disableCurrentOptions();
-            responses.authorized = authorized;
-
-            if (authorized) {
-                addUserMessage("Sí, autorizo y quiero continuar. ✅");
-                triggerFlow1_1();
-            } else {
-                addUserMessage("No autorizo. ❌");
-                updateProgress(100);
-                await addBotMessage(`
-                    <p class="text-slate-700 font-medium">Entendemos tu elección, ${responses.studentName}. El cuestionario se ha detenido. ¡Gracias!</p>
-                `, 500);
-            }
-        }
-
-        // FLUJO 1: Perfil Académico
-        async function triggerFlow1_1() {
-            currentStep = 2;
-            updateProgress(25);
-
-            await addBotMessage(`
-                <p>¡Excelente! Cuéntame, <strong>¿cómo aprendes mejor o cómo te identificas más?</strong></p>
-            `, 600);
-
-            addOptionsContainer(`
-                <button onclick="handleLearningStyle('Leyendo, viendo videos y esquemas visuales 👁️')" class="bg-white hover:bg-sky-50 border border-sky-200 text-slate-700 font-medium p-3.5 rounded-2xl text-left transition flex items-center gap-3 shadow-sm hover:border-sky-400">
-                    <span class="text-xl">👁️</span>
-                    <span>Leyendo, viendo videos y esquemas visuales</span>
-                </button>
-                <button onclick="handleLearningStyle('Escuchando explicaciones, debates y podcasts 🎧')" class="bg-white hover:bg-sky-50 border border-sky-200 text-slate-700 font-medium p-3.5 rounded-2xl text-left transition flex items-center gap-3 shadow-sm hover:border-sky-400">
-                    <span class="text-xl">🎧</span>
-                    <span>Escuchando explicaciones, debates y podcasts</span>
-                </button>
-                <button onclick="handleLearningStyle('Haciendo actividades prácticas, experimentos o proyectos 🛠️')" class="bg-white hover:bg-sky-50 border border-sky-200 text-slate-700 font-medium p-3.5 rounded-2xl text-left transition flex items-center gap-3 shadow-sm hover:border-sky-400">
-                    <span class="text-xl">🛠️</span>
-                    <span>Haciendo actividades prácticas, experimentos o proyectos</span>
-                </button>
-            `);
-        }
-
-        async function handleLearningStyle(optionText) {
-            disableCurrentOptions();
-            responses.learningStyle = optionText;
-            addUserMessage(optionText);
-
-            triggerFlow1_2();
-        }
-
-        async function triggerFlow1_2() {
-            currentStep = 3;
-            updateProgress(40);
-
-            await addBotMessage(`
-                <p>¡Anotado! 📝 <strong>¿Cómo te sientes con el ritmo habitual de las materias?</strong></p>
-            `, 600);
-
-            addOptionsContainer(`
-                <button onclick="handlePace('A veces necesito un poco más de tiempo o apoyo explicativo. ⏳')" class="bg-white hover:bg-sky-50 border border-sky-200 text-slate-700 font-medium p-3.5 rounded-2xl text-left transition flex items-center gap-3 shadow-sm hover:border-sky-400">
-                    <span class="text-xl">⏳</span>
-                    <span>A veces necesito un poco más de tiempo o apoyo explicativo.</span>
-                </button>
-                <button onclick="handlePace('Voy bien al ritmo general de la clase. 👍')" class="bg-white hover:bg-sky-50 border border-sky-200 text-slate-700 font-medium p-3.5 rounded-2xl text-left transition flex items-center gap-3 shadow-sm hover:border-sky-400">
-                    <span class="text-xl">👍</span>
-                    <span>Voy bien al ritmo general de la clase.</span>
-                </button>
-                <button onclick="handlePace('Termino rápido y me gusta explorar temas más avanzados o retos adicionales. 🚀')" class="bg-white hover:bg-sky-50 border border-sky-200 text-slate-700 font-medium p-3.5 rounded-2xl text-left transition flex items-center gap-3 shadow-sm hover:border-sky-400">
-                    <span class="text-xl">🚀</span>
-                    <span>Termino rápido y me gusta explorar temas más avanzados o retos adicionales.</span>
-                </button>
-            `);
-        }
-
-        async function handlePace(paceOption) {
-            disableCurrentOptions();
-            responses.pace = paceOption;
-            addUserMessage(paceOption);
-
-            triggerFlow1_3();
-        }
-
-        async function triggerFlow1_3() {
-            currentStep = 4;
-            updateProgress(55);
-
-            await addBotMessage(`
-                <p><strong>¿Hay alguna materia en la que sientas que necesitas un refuerzo especial o adaptación?</strong></p>
-                <p class="text-xs text-slate-500 mt-1">Puedes seleccionar varias opciones o escribir otra en el campo.</p>
-            `, 600);
-
-            addOptionsContainer(`
-                <div class="bg-white border border-sky-200 rounded-3xl p-4 shadow-sm space-y-3">
-                    <div class="grid grid-cols-2 gap-2 text-sm">
-                        <label class="flex items-center gap-2.5 p-2 rounded-xl border border-slate-100 hover:bg-sky-50 cursor-pointer">
-                            <input type="checkbox" value="Matemáticas 📐" class="subj-check w-4 h-4 accent-sky-500 rounded">
-                            <span>Matemáticas 📐</span>
-                        </label>
-                        <label class="flex items-center gap-2.5 p-2 rounded-xl border border-slate-100 hover:bg-sky-50 cursor-pointer">
-                            <input type="checkbox" value="Lenguaje 📚" class="subj-check w-4 h-4 accent-sky-500 rounded">
-                            <span>Lenguaje 📚</span>
-                        </label>
-                        <label class="flex items-center gap-2.5 p-2 rounded-xl border border-slate-100 hover:bg-sky-50 cursor-pointer">
-                            <input type="checkbox" value="Ciencias 🔬" class="subj-check w-4 h-4 accent-sky-500 rounded">
-                            <span>Ciencias 🔬</span>
-                        </label>
-                        <label class="flex items-center gap-2.5 p-2 rounded-xl border border-slate-100 hover:bg-sky-50 cursor-pointer">
-                            <input type="checkbox" value="Inglés 🗣️" class="subj-check w-4 h-4 accent-sky-500 rounded">
-                            <span>Inglés 🗣️</span>
-                        </label>
-                        <label class="flex items-center gap-2.5 p-2 rounded-xl border border-slate-100 hover:bg-sky-50 cursor-pointer col-span-2">
-                            <input type="checkbox" value="Ninguna por el momento ✨" class="subj-check w-4 h-4 accent-sky-500 rounded" onchange="toggleNoneSubjects(this)">
-                            <span>Ninguna por el momento ✨</span>
-                        </label>
-                    </div>
-                    <div class="pt-2 border-t border-slate-100">
-                        <input type="text" id="other-subject" placeholder="¿Otra materia? Escríbela aquí..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-sky-400">
-                    </div>
-                    <button onclick="submitSubjects()" class="w-full bg-sky-500 hover:bg-sky-600 text-white font-semibold py-2.5 rounded-xl text-xs transition shadow-md shadow-sky-100 active:scale-98">
-                        Confirmar Materias <i class="fa-solid fa-check ml-1"></i>
-                    </button>
-                </div>
-            `);
-        }
-
-        function toggleNoneSubjects(noneCheckbox) {
-            const checkboxes = document.querySelectorAll('.subj-check');
-            if (noneCheckbox.checked) {
-                checkboxes.forEach(cb => {
-                    if (cb !== noneCheckbox) cb.checked = false;
-                });
-            }
-        }
-
-        async function submitSubjects() {
-            const checkboxes = document.querySelectorAll('.subj-check:checked');
-            const otherVal = document.getElementById('other-subject')?.value.trim();
-            
-            let selected = Array.from(checkboxes).map(cb => cb.value);
-            if (otherVal) {
-                selected.push(`Otra: ${otherVal}`);
-            }
-
-            if (selected.length === 0) {
-                selected.push("Ninguna especificada");
-            }
-
-            disableCurrentOptions();
-            responses.subjects = selected;
-            addUserMessage(`Materias seleccionadas: ${selected.join(', ')}`);
-
-            // Transición a Flujo 2
-            triggerFlow2_1();
-        }
-
-        // FLUJO 2: Bienestar Emocional y Salud Mental Pospandemia
-        async function triggerFlow2_1() {
-            currentStep = 5;
-            updateProgress(70);
-
-            await addBotMessage(`
-                <p>Tu bienestar emocional es tan importante como tus notas. 🧠💚</p>
-                <p class="mt-2"><strong>¿Cómo te has sentido últimamente en el colegio o con tu grupo de amigos?</strong></p>
-            `, 600);
-
-            addOptionsContainer(`
-                <button onclick="handleEmotionalState('Me siento bien, tranquilo/a y conectado/a con mis compañeros. 😊')" class="bg-white hover:bg-teal-50 border border-teal-200 text-slate-700 font-medium p-3.5 rounded-2xl text-left transition flex items-center gap-3 shadow-sm hover:border-teal-400">
-                    <span class="text-xl">😊</span>
-                    <span>Me siento bien, tranquilo/a y conectado/a con mis compañeros.</span>
-                </button>
-                <button onclick="handleEmotionalState('A veces siento ansiedad, estrés o me cuesta concentrarme. 😰')" class="bg-white hover:bg-amber-50 border border-amber-200 text-slate-700 font-medium p-3.5 rounded-2xl text-left transition flex items-center gap-3 shadow-sm hover:border-amber-400">
-                    <span class="text-xl">😰</span>
-                    <span>A veces siento ansiedad, estrés o me cuesta concentrarme.</span>
-                </button>
-                <button onclick="handleEmotionalState('Me cuesta relacionarme, me siento solo/a o prefiero aislarme. 😔')" class="bg-white hover:bg-indigo-50 border border-indigo-200 text-slate-700 font-medium p-3.5 rounded-2xl text-left transition flex items-center gap-3 shadow-sm hover:border-indigo-400">
-                    <span class="text-xl">😔</span>
-                    <span>Me cuesta relacionarme, me siento solo/a o prefiero aislarme.</span>
-                </button>
-                <button onclick="handleEmotionalState('Siento frustración o desmotivación frecuente con mis estudios. 🔴')" class="bg-white hover:bg-rose-50 border border-rose-200 text-slate-700 font-medium p-3.5 rounded-2xl text-left transition flex items-center gap-3 shadow-sm hover:border-rose-400">
-                    <span class="text-xl">🔴</span>
-                    <span>Siento frustración o desmotivación frecuente con mis estudios.</span>
-                </button>
-            `);
-        }
-
-        async function handleEmotionalState(optionText) {
-            disableCurrentOptions();
-            responses.emotionalState = optionText;
-            addUserMessage(optionText);
-
-            triggerFlow2_2();
-        }
-
-        async function triggerFlow2_2() {
-            currentStep = 6;
-            updateProgress(85);
-
-            await addBotMessage(`
-                <p>Tras la época de pandemia y los cambios de los últimos años, <strong>¿has notado alguno de estos retos en tu día a día?</strong></p>
-                <p class="text-xs text-slate-500 mt-1">Selecciona todos los que correspondan:</p>
-            `, 600);
-
-            addOptionsContainer(`
-                <div class="bg-white border border-sky-200 rounded-3xl p-4 shadow-sm space-y-2 text-sm">
-                    <label class="flex items-center gap-3 p-2.5 rounded-xl border border-slate-100 hover:bg-sky-50 cursor-pointer">
-                        <input type="checkbox" value="Dificultad para dormir o cansancio constante 😴" class="challenge-check w-4 h-4 accent-sky-500 rounded">
-                        <span>Dificultad para dormir o cansancio constante 😴</span>
-                    </label>
-                    <label class="flex items-center gap-3 p-2.5 rounded-xl border border-slate-100 hover:bg-sky-50 cursor-pointer">
-                        <input type="checkbox" value="Ansiedad o nerviosismo al hablar en público / exponer 🎤" class="challenge-check w-4 h-4 accent-sky-500 rounded">
-                        <span>Ansiedad o nerviosismo al hablar en público / exponer 🎤</span>
-                    </label>
-                    <label class="flex items-center gap-3 p-2.5 rounded-xl border border-slate-100 hover:bg-sky-50 cursor-pointer">
-                        <input type="checkbox" value="Sentimiento de sobrecarga o presión académica 📚" class="challenge-check w-4 h-4 accent-sky-500 rounded">
-                        <span>Sentimiento de sobrecarga o presión académica 📚</span>
-                    </label>
-                    <label class="flex items-center gap-3 p-2.5 rounded-xl border border-slate-100 hover:bg-sky-50 cursor-pointer">
-                        <input type="checkbox" value="Sensación de aislamiento o dificultad para hacer amigos 🤝" class="challenge-check w-4 h-4 accent-sky-500 rounded">
-                        <span>Sensación de aislamiento o dificultad para hacer amigos 🤝</span>
-                    </label>
-                    <label class="flex items-center gap-3 p-2.5 rounded-xl border border-slate-100 hover:bg-sky-50 cursor-pointer">
-                        <input type="checkbox" value="Ninguno de los anteriores, me siento bien ✨" class="challenge-check w-4 h-4 accent-sky-500 rounded" onchange="toggleNoneChallenges(this)">
-                        <span>Ninguno de los anteriores, me siento bien ✨</span>
-                    </label>
-                    <button onclick="submitChallenges()" class="w-full mt-3 bg-sky-500 hover:bg-sky-600 text-white font-semibold py-2.5 rounded-xl text-xs transition shadow-md shadow-sky-100 active:scale-98">
-                        Guardar Selección <i class="fa-solid fa-check ml-1"></i>
-                    </button>
-                </div>
-            `);
-        }
-
-        function toggleNoneChallenges(noneCb) {
-            const checkboxes = document.querySelectorAll('.challenge-check');
-            if (noneCb.checked) {
-                checkboxes.forEach(cb => {
-                    if (cb !== noneCb) cb.checked = false;
-                });
-            }
-        }
-
-        async function submitChallenges() {
-            const checkboxes = document.querySelectorAll('.challenge-check:checked');
-            let selected = Array.from(checkboxes).map(cb => cb.value);
-
-            if (selected.length === 0) {
-                selected.push("Ninguno reportado");
-            }
-
-            disableCurrentOptions();
-            responses.postPandemicChallenges = selected;
-            addUserMessage(`Retos identificados: ${selected.join(' | ')}`);
-
-            triggerFlow2_3();
-        }
-
-        async function triggerFlow2_3() {
-            currentStep = 7;
-            updateProgress(95);
-
-            await addBotMessage(`
-                <p>Si en algún momento necesitas un espacio seguro, <strong>¿qué tipo de apoyo te gustaría recibir?</strong></p>
-            `, 600);
-
-            addOptionsContainer(`
-                <button onclick="handleSupportPreference('Hablar de manera confidencial con Orientación Escolar. 💬')" class="bg-white hover:bg-sky-50 border border-sky-200 text-slate-700 font-medium p-3 rounded-2xl text-left transition flex items-center gap-3 shadow-sm hover:border-sky-400">
-                    <span class="text-xl">💬</span>
-                    <span>Hablar de manera confidencial con Orientación Escolar.</span>
-                </button>
-                <button onclick="handleSupportPreference('Refuerzo académico o tutorías en asignaturas específicas. 📚')" class="bg-white hover:bg-sky-50 border border-sky-200 text-slate-700 font-medium p-3 rounded-2xl text-left transition flex items-center gap-3 shadow-sm hover:border-sky-400">
-                    <span class="text-xl">📚</span>
-                    <span>Refuerzo académico o tutorías en asignaturas específicas.</span>
-                </button>
-                <button onclick="handleSupportPreference('Talleres de gestión de emociones y habilidades sociales. 🤝')" class="bg-white hover:bg-sky-50 border border-sky-200 text-slate-700 font-medium p-3 rounded-2xl text-left transition flex items-center gap-3 shadow-sm hover:border-sky-400">
-                    <span class="text-xl">🤝</span>
-                    <span>Talleres de gestión de emociones y habilidades sociales.</span>
-                </button>
-                <button onclick="handleSupportPreference('Por el momento no requiero apoyo adicional. 👍')" class="bg-white hover:bg-sky-50 border border-sky-200 text-slate-700 font-medium p-3 rounded-2xl text-left transition flex items-center gap-3 shadow-sm hover:border-sky-400">
-                    <span class="text-xl">👍</span>
-                    <span>Por el momento no requiero apoyo adicional.</span>
-                </button>
-            `);
-        }
-
-        async function handleSupportPreference(optionText) {
-            disableCurrentOptions();
-            responses.supportPreference = optionText;
-            addUserMessage(optionText);
-
-            // Finalizar Cuestionario
-            finishSurvey();
-        }
-
-        async function finishSurvey() {
-            updateProgress(100);
-
-            // Guardar en memoria local
-            saveRecord(responses);
-
-            await addBotMessage(`
-                <div class="text-center py-2 space-y-2">
-                    <div class="inline-block p-3 bg-mint-100 text-mint-600 rounded-full text-2xl mb-1">
-                        🌟
-                    </div>
-                    <h3 class="font-display font-bold text-lg text-slate-800">¡Muchas gracias por responder, ${responses.studentName}!</h3>
-                    <p class="text-slate-600">He guardado tus respuestas de forma confidencial para ayudarte a tener un gran año escolar. 🏫✨</p>
-                    <p class="text-xs text-slate-500 pt-2 border-t border-slate-100">
-                        Su información nos permite construir un entorno de aprendizaje seguro y adaptado a las necesidades de cada estudiante.
-                    </p>
-                </div>
-            `, 700);
-
-            // Botón opcional para reiniciar
-            addOptionsContainer(`
-                <button onclick="location.reload()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-2 self-center">
-                    <i class="fa-solid fa-rotate-right"></i> Iniciar una nueva consulta
-                </button>
-            `);
-        }
-
-        // -------------------------------------------------------------
-        // GESTIÓN DE DATOS Y PANEL DOCENTE
-        // -------------------------------------------------------------
-
-        function saveRecord(data) {
-            const newRecord = {
-                id: 'EST-' + Math.floor(1000 + Math.random() * 9000),
-                timestamp: new Date().toLocaleString('es-CO'),
-                ...data
-            };
-            allRecords.push(newRecord);
-            localStorage.setItem('colebot_records', JSON.stringify(allRecords));
-            updateDashboardStats();
-        }
-
-        function toggleTeacherDashboard() {
-            const modal = document.getElementById('teacher-modal');
-            modal.classList.toggle('hidden');
-            if (!modal.classList.contains('hidden')) {
-                renderTableRecords();
-            }
-        }
-
-        function updateDashboardStats() {
-            const total = allRecords.length;
-            const academicNeed = allRecords.filter(r => 
-                (r.subjects && r.subjects.length > 0 && !r.subjects.includes("Ninguna por el momento ✨")) ||
-                (r.pace && r.pace.includes("necesito un poco más de tiempo"))
-            ).length;
-
-            const emotionalAlerts = allRecords.filter(r => 
-                (r.emotionalState && (r.emotionalState.includes("ansiedad") || r.emotionalState.includes("solo/a") || r.emotionalState.includes("frustración")))
-            ).length;
-
-            document.getElementById('stat-total').innerText = total;
-            document.getElementById('stat-academic').innerText = academicNeed;
-            document.getElementById('stat-emotional').innerText = emotionalAlerts;
-
-            const badge = document.getElementById('badge-count');
-            if (total > 0) {
-                badge.innerText = total;
-                badge.classList.remove('hidden');
-            }
-        }
-
-        function renderTableRecords() {
-            const tbody = document.getElementById('records-table-body');
-            const emptyState = document.getElementById('empty-state');
-            tbody.innerHTML = '';
-
-            if (allRecords.length === 0) {
-                emptyState.classList.remove('hidden');
-                return;
-            } else {
-                emptyState.classList.add('hidden');
-            }
-
-            allRecords.forEach(rec => {
-                const tr = document.createElement('tr');
-                tr.className = 'hover:bg-slate-50 transition border-b border-slate-100';
-
-                const isEmotionalAlert = rec.emotionalState && (rec.emotionalState.includes("ansiedad") || rec.emotionalState.includes("solo/a") || rec.emotionalState.includes("frustración"));
-                
-                tr.innerHTML = `
-                    <td class="p-3 font-mono text-[11px] text-slate-400">
-                        <div class="font-bold text-slate-700">${rec.id}</div>
-                        <div>${rec.timestamp}</div>
-                    </td>
-                    <td class="p-3 font-bold text-slate-800">${rec.studentName || 'Anónimo'}</td>
-                    <td class="p-3">${rec.learningStyle || 'N/A'}</td>
-                    <td class="p-3">${rec.pace || 'N/A'}</td>
-                    <td class="p-3">
-                        <span class="inline-block bg-sky-50 text-sky-700 border border-sky-200 px-2 py-0.5 rounded-md text-[11px]">
-                            ${Array.isArray(rec.subjects) ? rec.subjects.join(', ') : 'Ninguna'}
-                        </span>
-                    </td>
-                    <td class="p-3">
-                        <span class="inline-block px-2 py-0.5 rounded-md text-[11px] font-semibold ${isEmotionalAlert ? 'bg-rose-100 text-rose-700 border border-rose-200' : 'bg-emerald-50 text-emerald-700'}">
-                            ${rec.emotionalState || 'N/A'}
-                        </span>
-                    </td>
-                    <td class="p-3 text-[11px]">${Array.isArray(rec.postPandemicChallenges) ? rec.postPandemicChallenges.join('; ') : 'Ninguno'}</td>
-                    <td class="p-3 font-medium text-slate-700">${rec.supportPreference || 'N/A'}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function exportJSON() {
-            if (allRecords.length === 0) {
-                alert("No hay registros almacenados para exportar.");
-                return;
-            }
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(allRecords, null, 2));
-            const downloadAnchor = document.createElement('a');
-            downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", `diagnostico_estudiantes_${new Date().toISOString().slice(0,10)}.json`);
-            document.body.appendChild(downloadAnchor);
-            downloadAnchor.click();
-            downloadAnchor.remove();
-        }
-
-        function clearData() {
-            if (confirm("¿Estás seguro de que deseas eliminar todos los registros guardados? Esta acción no se puede deshacer.")) {
-                allRecords = [];
-                localStorage.removeItem('colebot_records');
-                updateDashboardStats();
-                renderTableRecords();
-            }
-        }
-    </script>
 </body>
 </html>
