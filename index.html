@@ -107,13 +107,38 @@
             right: 2px;
         }
 
+        .header-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .title-row {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
         .header-info h1 {
             font-size: 1rem;
             font-weight: 700;
         }
 
+        /* Insignia de verificación de calidad */
+        .verified-badge {
+            background-color: #10b981;
+            color: white;
+            font-size: 0.65rem;
+            padding: 1px 5px;
+            border-radius: 10px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+        }
+
         .header-info p {
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             opacity: 0.85;
         }
 
@@ -141,7 +166,6 @@
             background-size: 16px 16px;
         }
 
-        /* Estructura para los mensajes del bot con su mini avatar */
         .message-row-bot {
             display: flex;
             align-items: flex-end;
@@ -196,7 +220,7 @@
             flex-direction: column;
             gap: 8px;
             margin-top: 5px;
-            margin-left: 38px; /* Alinear con el texto del bot */
+            margin-left: 38px;
         }
 
         .btn-option {
@@ -217,12 +241,30 @@
             background-color: #f4f0f8;
         }
 
-        .chat-footer {
-            padding: 12px 16px;
+        .chat-footer-container {
             background-color: #ffffff;
             border-top: 1px solid var(--bot-bubble);
             display: flex;
+            flex-direction: column;
+        }
+
+        .chat-footer {
+            padding: 12px 16px 6px 16px;
+            display: flex;
             gap: 8px;
+        }
+
+        /* Sello de autenticidad y calidad en el pie de página */
+        .chat-program-footer {
+            text-align: center;
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            padding: 0 16px 10px 16px;
+            opacity: 0.8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
         }
 
         .chat-input {
@@ -366,8 +408,11 @@
                 <div class="status-dot"></div>
             </div>
             <div class="header-info">
-                <h1>Colebot</h1>
-                <p>Acompañamiento Escolar</p>
+                <div class="title-row">
+                    <h1>Colebot</h1>
+                    <span class="verified-badge">✓ Oficial</span>
+                </div>
+                <p>Acompañamiento Escolar Certificado</p>
             </div>
         </div>
         <button class="btn-teacher-access" onclick="abrirModalDocente()">🔒 ÁREA DOCENTE</button>
@@ -375,9 +420,14 @@
 
     <div class="chat-body" id="chatBody"></div>
 
-    <div class="chat-footer" id="chatFooter">
-        <input type="text" class="chat-input" placeholder="Escribe aquí..." id="userInput" autocomplete="off">
-        <button class="btn-send" id="btnSend">Enviar</button>
+    <div class="chat-footer-container" id="chatFooterContainer">
+        <div class="chat-footer" id="chatFooter">
+            <input type="text" class="chat-input" placeholder="Escribe tu respuesta aquí..." id="userInput" autocomplete="off">
+            <button class="btn-send" id="btnSend">Enviar</button>
+        </div>
+        <div class="chat-program-footer">
+            🔒 Programa Oficial de Orientación y Apoyo Estudiantil • Calidad Garantizada
+        </div>
     </div>
 
     <div class="modal-overlay" id="teacherModal">
@@ -404,68 +454,68 @@
     const pasosCuestionario = [
         {
             tipo: "texto",
-            pregunta: "Antes de empezar, dime: <strong>¿Cuál es tu nombre completo y grado?</strong> (Ej: Juan Pérez - 9°A)"
+            pregunta: "¡Hola de nuevo! 😊 Para empezar a conocerte mejor dentro de nuestro programa oficial, cuéntame: <strong>¿Cuál es tu nombre completo y tu grado?</strong> (Por ejemplo: Sofía Gómez - 10°A)"
         },
         {
             tipo: "opciones",
-            pregunta: "Ten en cuenta que tus datos y respuestas serán protegidos y utilizados exclusivamente por el equipo de Orientación y Docencia del colegio. ¿Autorizas el tratamiento de tus datos para este fin institucional?",
+            pregunta: "Antes de continuar, queremos confirmarte que este es un canal institucional seguro. Tus respuestas son privadas, protegidas por las normativas vigentes y utilizadas exclusivamente por el equipo de Orientación y Docencia para brindarte apoyo personalizado de la más alta calidad. 💙 ¿Autorizas el tratamiento de tus datos para este fin institucional?",
             opciones: [
-                "Sí, autorizo y quiero continuar. ✅",
-                "No autorizo. ❌"
+                "¡Sí, autorizo y confío plenamente! ✅",
+                "Prefiero no autorizar por ahora. ❌"
             ]
         },
         {
             tipo: "opciones",
-            pregunta: "¡Excelente! Cuéntame, <strong>¿cómo aprendes mejor o cómo te identificas más?</strong>",
+            pregunta: "¡Qué alegría avanzar en este espacio académico contigo! 🌟 Para ofrecerte una ruta adaptada a tu excelencia: <strong>¿Cómo sientes que aprendes mejor o qué estilo te describe mejor?</strong>",
             opciones: [
-                "Leyendo, viendo videos y esquemas visuales 👁️",
-                "Escuchando explicaciones, debates y podcasts 🎧",
-                "Haciendo actividades prácticas, experimentos o proyectos 🛠️"
+                "Leyendo, viendo videos explicativos e imágenes 👁️",
+                "Escuchando atentamente explicaciones, debates y audios 🎧",
+                "Haciendo manos a la obra, experimentos o proyectos prácticos 🛠️"
             ]
         },
         {
             tipo: "opciones",
-            pregunta: "¡Anotado! 📝 <strong>¿Cómo te sientes con el ritmo habitual de las materias?</strong>",
+            pregunta: "¡Excelente! 📝 Queremos optimizar tu experiencia de aprendizaje: <strong>¿Cómo te sientes con el ritmo habitual de las clases del programa?</strong>",
             opciones: [
-                "A veces necesito un poco más de tiempo o apoyo explicativo. ⏳",
-                "Voy bien al ritmo general de la clase. 👍",
-                "Termino rápido y me gusta explorar temas más avanzados o retos adicionales. 🚀"
+                "A veces me vendría bien un poquito más de tiempo o una guía extra. ⏳",
+                "Voy avanzando súper bien y al mismo ritmo de la clase. 👍",
+                "¡Voy volando! Termino rápido y me encantan los retos o proyectos avanzados. 🚀"
             ]
         },
         {
             tipo: "texto",
-            pregunta: "¿Hay alguna materia en la que sientas que necesitas un refuerzo especial o adaptación? (Ej: Matemáticas, Lenguaje, Inglés, Ninguna)"
+            pregunta: "Para garantizar tu éxito académico, cuéntanos: <strong>¿hay alguna asignatura en la que desees un refuerzo especial o tutoría de acompañamiento?</strong> (Escribe Matemáticas, Inglés, Ciencias, Ninguna... la que prefieras)"
         },
         {
             tipo: "opciones",
-            pregunta: "Tu bienestar emocional es tan importante como tus notas. 🧠💚 <strong>¿Cómo te has sentido últimamente en el colegio o con tu grupo de amigos?</strong>",
+            pregunta: "Tu bienestar emocional es un pilar fundamental en nuestra institución. 🧠💚 <strong>Cuéntame con total confianza, ¿cómo te has estado sintiendo últimamente en el colegio o con tus compañeros?</strong>",
             opciones: [
-                "Me siento bien, tranquilo/a y conectado/a con mis compañeros. 😊",
-                "A veces siento ansiedad, estrés o me cuesta concentrarme. 😰",
-                "Me cuesta relacionarme, me siento solo/a o prefiero aislarme. 😔",
-                "Siento frustración o desmotivación frecuente con mis estudios. 🔴"
+                "Me siento muy bien, tranquilo/a y motivado/a compartiendo con todos. 😊",
+                "A veces la ansiedad o el estrés académico me visitan y me cuesta concentrarme. 😰",
+                "A veces me siento un poquito solo/a o me cuesta integrarme con los demás. 😔",
+                "Siento que la frustración o la desmotivación aparecen seguido con mis estudios. 🔴"
             ]
         },
         {
             tipo: "opciones",
-            pregunta: "Tras la época de pandemia y los cambios de los últimos años, <strong>¿has notado alguno de estos retos en tu día a día?</strong>",
+            pregunta: "Comprendemos que los últimos años nos han traído nuevos retos a la comunidad estudiantil. Cuéntanos, <strong>¿has notado alguno de estos aspectos en tu día a día?</strong>",
             opciones: [
-                "Dificultad para dormir o cansancio constante 😴",
-                "Ansiedad o nerviosismo al hablar en público / exponer 🎤",
-                "Sentimiento de sobrecarga o presión académica 📚",
-                "Sensación de aislamiento o dificultad para hacer amigos 🤝",
-                "Ninguno de los anteriores, me siento bien ✨"
+                "Cansancio constante o dificultad para conciliar un sueño reparador 😴",
+                "Nervios o tensión al hablar en público, participar en clase o exponer 🎤",
+                "Sensación de sobrecarga o alta presión con las exigencias académicas 📚",
+                "A veces me siento un poco aislado/a o con barreras para hacer amigos 🤝",
+                "¡Ninguno de estos! Me siento muy bien y lleno/a de energía positiva ✨"
             ]
         },
         {
             tipo: "opciones",
-            pregunta: "Si en algún momento necesitas un espacio seguro, <strong>¿qué tipo de apoyo te gustaría recibir?</strong>",
+            pregunta: "Queremos recordarte que cuentas con un equipo profesional respaldo de la institución. 🏫 Si en algún momento requieres un espacio seguro, <strong>¿qué tipo de apoyo te gustaría recibir por parte del programa?</strong>",
             opciones: [
-                "Hablar de manera confidencial con Orientación Escolar. 💬",
-                "Participar en talleres de manejo de ansiedad o técnicas de estudio. 🧘‍♂️",
-                "Refuerzo académico o tutorías en asignaturas específicas. 📚",
-                "Talleres de gestión de emociones y habilidades sociales. 🤝",
-                "Por ahora estoy bien, pero es bueno saber que existe el apoyo. 👍"
+                "Tener un espacio de asesoría confidencial y directa con Orientación Escolar. 💬",
+                "Participar en talleres especializados de manejo de ansiedad y técnicas de estudio. 🧘‍♂️",
+                "Recibir tutorías de refuerzo académico en asignaturas específicas. 📚",
+                "Participar en talleres de desarrollo socioemocional y convivencia. 🤝",
+                "Por ahora estoy súper bien, ¡pero valoro mucho que este programa exista! 👍"
             ]
         }
     ];
@@ -479,14 +529,14 @@
         chatBody.innerHTML = "";
         
         if (localStorage.getItem('encuesta_completada') === 'true') {
-            agregarMensaje("¡Hola! 👋 Ya has registrado tu respuesta anteriormente en este dispositivo. Tus datos han sido guardados con éxito.", "bot");
-            document.getElementById('chatFooter').style.display = 'none';
+            agregarMensaje("¡Hola de nuevo! 👋 Tu participación oficial ya ha sido registrada exitosamente en este dispositivo. Agradecemos tu compromiso con la excelencia y el bienestar de nuestra comunidad escolar. 💙", "bot");
+            document.getElementById('chatFooterContainer').style.display = 'none';
             return;
         }
 
-        agregarMensaje("¡Hola! 👋 Te damos la bienvenida a nuestro espacio de acompañamiento escolar.", "bot");
+        agregarMensaje("¡Hola! 👋 Te damos una calurosa bienvenida al sistema oficial de acompañamiento y diagnóstico escolar.", "bot");
         agregarMensaje(pasosCuestionario[0].pregunta, "bot");
-        document.getElementById('chatFooter').style.display = 'flex';
+        document.getElementById('chatFooterContainer').style.display = 'flex';
     }
 
     function agregarMensaje(texto, tipo = "bot") {
@@ -527,7 +577,7 @@
         
         chatBody.appendChild(container);
         chatBody.scrollTop = chatBody.scrollHeight;
-        document.getElementById('chatFooter').style.display = 'none';
+        document.getElementById('chatFooterContainer').style.display = 'none';
     }
 
     function procesarEntrada() {
@@ -545,7 +595,7 @@
         containers.forEach(c => c.remove());
         
         agregarMensaje(valor, "user");
-        document.getElementById('chatFooter').style.display = 'flex';
+        document.getElementById('chatFooterContainer').style.display = 'flex';
         
         manejarFlujo(valor);
     }
@@ -557,10 +607,10 @@
             siguientePaso();
         } else if (pasoActual === 1) {
             datosEstudiante.autorizacion = respuesta;
-            if (respuesta.includes("No autorizo")) {
+            if (respuesta.includes("Prefiero no autorizar")) {
                 setTimeout(() => {
-                    agregarMensaje("Entendemos tu elección. El cuestionario se ha detenido. ¡Gracias!", "bot");
-                    document.getElementById('chatFooter').style.display = 'none';
+                    agregarMensaje("Comprendemos y respetamos totalmente tu decisión institucional. El cuestionario se ha detenido. ¡Te deseamos un excelente año escolar lleno de éxitos! ✨", "bot");
+                    document.getElementById('chatFooterContainer').style.display = 'none';
                 }, 400);
                 return;
             }
@@ -599,14 +649,14 @@
             if (actual.tipo === "opciones") {
                 mostrarOpciones(actual.opciones);
             } else {
-                document.getElementById('chatFooter').style.display = 'flex';
+                document.getElementById('chatFooterContainer').style.display = 'flex';
             }
         }, 400);
     }
 
     function finalizarCuestionario() {
         setTimeout(() => {
-            agregarMensaje("¡Muchas gracias por responder! 🌟 He guardado tus respuestas de forma confidencial para ayudarte a tener un gran año escolar. 🏫", "bot");
+            agregarMensaje("¡Muchísimas gracias por tu valiosa colaboración! 🌟 Tus respuestas han sido guardadas con absoluta confidencialidad en el sistema. Este registro nos permite fortalecer nuestro programa institucional para acompañarte a alcanzar tus metas con éxito. 🏫💙", "bot");
             
             let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
             registros.push({ ...datosEstudiante, fecha: new Date().toLocaleString() });
@@ -614,7 +664,7 @@
             
             localStorage.setItem('encuesta_completada', 'true');
             
-            document.getElementById('chatFooter').style.display = 'none';
+            document.getElementById('chatFooterContainer').style.display = 'none';
         }, 400);
     }
 
@@ -649,7 +699,7 @@
 
     function exportarCSV() {
         let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
-        if (registros.length === 0) return alert("No hay datos para exportar.");
+        if (registros.length === 0) return alert("Aún no hay datos registrados para exportar.");
 
         let csv = "Estudiante,Autorizacion,Estilo Aprendizaje,Ritmo,Refuerzo,Bienestar Emocional,Reto Postpandemia,Apoyo Deseado,Fecha\n";
         registros.forEach(r => {
@@ -668,14 +718,14 @@
 
     function mostrarPanelDocente() {
         let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
-        let htmlReporte = "<h3>📊 Panel Docente - Informes</h3><br>";
+        let htmlReporte = "<h3>📊 Panel Docente - Informes y Seguimiento</h3><br>";
         
         if (registros.length > 0) {
-            htmlReporte += `<button class="btn-export" onclick="exportarCSV()">📥 Descargar Excel (CSV)</button><br><br>`;
+            htmlReporte += `<button class="btn-export" onclick="exportarCSV()">📥 Descargar Reporte en Excel (CSV)</button><br><br>`;
         }
 
         if (registros.length === 0) {
-            htmlReporte += "<p>Aún no hay respuestas registradas.</p>";
+            htmlReporte += "<p>Aún no hay respuestas de estudiantes registradas por aquí.</p>";
         } else {
             registros.forEach((r, index) => {
                 htmlReporte += `<div style="background:#f4f0f8; padding:10px; margin-bottom:8px; border-radius:8px; font-size:0.82rem; border:1px solid #b2a4c9;">
@@ -694,7 +744,7 @@
 
         const chatBody = document.getElementById('chatBody');
         chatBody.innerHTML = `<div class="msg-bot" style="max-width:100%;">${htmlReporte}</div>`;
-        document.getElementById('chatFooter').style.display = 'none';
+        document.getElementById('chatFooterContainer').style.display = 'none';
     }
 </script>
 
