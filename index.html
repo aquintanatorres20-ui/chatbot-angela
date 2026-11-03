@@ -715,7 +715,7 @@
         .btn-modal-close {
             flex: 1;
             background-color: var(--input-border);
-            color: var(--primary-dark);
+            color: var(--text-main);
             border: none;
             padding: 12px;
             border-radius: 12px;
@@ -869,7 +869,7 @@
 
             <div class="config-group" style="border-color: #fecaca; background: #fff5f5;">
                 <label style="color: #dc2626;">🗑️ Zona de Peligro</label>
-                <button class="btn-save-config" style="background: #dc2626;" onclick="limpiarRegistros()">Eliminar Todos los Registros de Prueba</button>
+                <button class="btn-save-config" style="background: #dc2626;" onclick="limpiarRegistros()">Eliminar Todos los Registros</button>
             </div>
         </div>
 
@@ -977,19 +977,6 @@
         }
     ];
 
-    window.onload = function() {
-        if (localStorage.getItem('encuesta_completada') === 'true') {
-            document.getElementById('welcomeScreen').innerHTML = `
-                <div class="welcome-avatar">
-                    <img src="${avatarUrlGlobal}" alt="Avatar ChatBot Ángela" onerror="this.src='https://via.placeholder.com/150/45008b/ffffff?text=Bot'">
-                </div>
-                <h2>¡Gracias por participar! 🌟</h2>
-                <p>Tu participación oficial ya ha sido registrada exitosamente en este dispositivo. Agradecemos tu compromiso con la comunidad escolar.</p>
-            `;
-            document.getElementById('floatingBubble').style.display = 'none';
-        }
-    };
-
     function aplicarConfiguracionVisual() {
         const imgHeader = document.getElementById('headerAvatarImg');
         const imgWelcome = document.getElementById('welcomeAvatarImg');
@@ -1004,16 +991,17 @@
     }
 
     function iniciarChat() {
+        pasoActual = 0;
+        datosEstudiante = { nombre: "", autorizacion: "", estilo: "", ritmo: "", refuerzo: "", emocional: "", reto: "", apoyo: "" };
+        document.getElementById('chatBody').innerHTML = "";
+
         document.getElementById('welcomeScreen').style.display = 'none';
         document.getElementById('floatingBubble').style.display = 'none';
         document.getElementById('chatBody').style.display = 'flex';
         document.getElementById('chatFooterContainer').style.display = 'flex';
         
-        const chatBody = document.getElementById('chatBody');
-        if (chatBody.innerHTML.trim() === "") {
-            agregarMensaje("¡Hola! 👋 Te damos una calurosa bienvenida al sistema oficial de acompañamiento y diagnóstico escolar.", "bot");
-            agregarMensaje(pasosCuestionario[0].pregunta, "bot");
-        }
+        agregarMensaje("¡Hola! 👋 Te damos una calurosa bienvenida al sistema oficial de acompañamiento y diagnóstico escolar.", "bot");
+        agregarMensaje(pasosCuestionario[0].pregunta, "bot");
     }
 
     function agregarMensaje(texto, tipo = "bot") {
@@ -1088,8 +1076,8 @@
                 datosEstudiante.autorizacion = respuesta;
                 if (respuesta.includes("Prefiero no autorizar")) {
                     setTimeout(() => {
-                        agregarMensaje("Comprendemos y respetamos totalmente tu decisión institucional. El cuestionario se ha detenido. ¡Te deseamos un excelente año escolar lleno de éxitos! ✨", "bot");
-                        document.getElementById('chatFooterContainer').style.display = 'none';
+                        agregarMensaje("Comprendemos y respetamos totalmente tu decisión institucional. El cuestionario se ha detenido.", "bot");
+                        mostrarBotonReiniciar();
                     }, 400);
                     return;
                 }
@@ -1138,16 +1126,37 @@
 
     function finalizarCuestionario() {
         setTimeout(() => {
-            agregarMensaje("¡Muchísimas gracias por tu valiosa colaboración! 🌟 Tus respuestas han sido guardadas con absoluta confidencialidad en el sistema. Este registro nos permite fortalecer nuestro programa institucional para acompañarte a alcanzar tus metas con éxito. 🏫💙", "bot");
+            agregarMensaje("¡Muchísimas gracias por tu valiosa colaboración! 🌟 Tus respuestas han sido guardadas con absoluta confidencialidad en el sistema. 🏫💙", "bot");
             
             let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
             registros.push({ ...datosEstudiante, fecha: new Date().toLocaleString() });
             localStorage.setItem('registros_estudiantes', JSON.stringify(registros));
             
-            localStorage.setItem('encuesta_completada', 'true');
-            
             document.getElementById('chatFooterContainer').style.display = 'none';
+            mostrarBotonReiniciar();
         }, 400);
+    }
+
+    function mostrarBotonReiniciar() {
+        const chatBody = document.getElementById('chatBody');
+        const container = document.createElement('div');
+        container.className = "options-container";
+        container.style.margin = "10px 0";
+        
+        const btn = document.createElement('button');
+        btn.className = "btn-option";
+        btn.style.textAlign = "center";
+        btn.style.background = "linear-gradient(135deg, var(--primary-medium), var(--primary-color))";
+        btn.style.color = "#ffffff";
+        btn.style.fontWeight = "700";
+        btn.innerText = "🔄 Hacer otra encuesta";
+        btn.onclick = function() {
+            iniciarChat();
+        };
+        
+        container.appendChild(btn);
+        chatBody.appendChild(container);
+        chatBody.scrollTop = chatBody.scrollHeight;
     }
 
     document.getElementById('btnSend').onclick = procesarEntrada;
@@ -1325,11 +1334,10 @@
     }
 
     function limpiarRegistros() {
-        if (confirm("¿Estás seguro de que deseas eliminar todos los registros de prueba guardados?")) {
+        if (confirm("¿Estás seguro de que deseas eliminar todos los registros guardados?")) {
             localStorage.removeItem('registros_estudiantes');
-            localStorage.removeItem('encuesta_completada');
             mostrarPanelDocenteVentana();
-            alert("Registros eliminados correctamente. Ya puedes hacer una nueva prueba limpia.");
+            alert("Registros eliminados correctamente.");
         }
     }
 </script>
