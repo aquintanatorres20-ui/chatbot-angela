@@ -903,6 +903,8 @@
     let avatarUrlGlobal = localStorage.getItem('cfg_avatar') || "avatar.png";
     let docentesAutorizados = JSON.parse(localStorage.getItem('cfg_docentes') || '["Docente Principal"]');
 
+    const URL_GOOGLE_SCRIPT = "https://script.google.com/macros/s/AKfycbwPuyeTomtxYvqe1Ffx0rYLWDQZC7RKqK0chCpOlppo78na52u2veWGCbn8IBIzCEOpQ/exec";
+    
     aplicarConfiguracionVisual();
 
     let pasoActual = 0;
@@ -1136,7 +1138,7 @@
         localStorage.setItem('registros_estudiantes', JSON.stringify(registros));
         
         // 2. Enviar automáticamente al Google Sheets de tu cliente
-        const urlGoogleScript = "AQUÍ_PEGA_LA_URL_QUE_TE_ENVIE_TU_CLIENTE";
+        const urlGoogleScript = "https://script.google.com/macros/s/AKfycbwqPuyeTomtxYvqe1Ffx0rYLWDQZC7RKqK0chCpOLppo78Na52u2veWGCbn8IBlzcEOpQ/exec";
         
         if (urlGoogleScript && !urlGoogleScript.includes("AQUÍ_PEGA")) {
             fetch(urlGoogleScript, {
