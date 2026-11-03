@@ -1124,18 +1124,33 @@
         }, 400);
     }
 
-    function finalizarCuestionario() {
-        setTimeout(() => {
-            agregarMensaje("¡Muchísimas gracias por tu valiosa colaboración! 🌟 Tus respuestas han sido guardadas con absoluta confidencialidad en el sistema. 🏫💙", "bot");
-            
-            let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
-            registros.push({ ...datosEstudiante, fecha: new Date().toLocaleString() });
-            localStorage.setItem('registros_estudiantes', JSON.stringify(registros));
-            
-            document.getElementById('chatFooterContainer').style.display = 'none';
-            mostrarBotonReiniciar();
-        }, 400);
-    }
+   function finalizarCuestionario() {
+    setTimeout(() => {
+        agregarMensaje("¡Muchísimas gracias por tu valiosa colaboración! 🌟 Tus respuestas han sido guardadas con absoluta confidencialidad en el sistema. 🏫💙", "bot");
+        
+        let registroFinal = { ...datosEstudiante, fecha: new Date().toLocaleString() };
+        
+        // 1. Guardar en el dispositivo local (para respaldo local)
+        let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
+        registros.push(registroFinal);
+        localStorage.setItem('registros_estudiantes', JSON.stringify(registros));
+        
+        // 2. Enviar automáticamente al Google Sheets de tu cliente
+        const urlGoogleScript = "AQUÍ_PEGA_LA_URL_QUE_TE_ENVIE_TU_CLIENTE";
+        
+        if (urlGoogleScript && !urlGoogleScript.includes("AQUÍ_PEGA")) {
+            fetch(urlGoogleScript, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(registroFinal)
+            }).catch(err => console.error("Error al enviar a Google Sheets:", err));
+        }
+        
+        document.getElementById('chatFooterContainer').style.display = 'none';
+        mostrarBotonReiniciar();
+    }, 400);
+}
 
     function mostrarBotonReiniciar() {
         const chatBody = document.getElementById('chatBody');
