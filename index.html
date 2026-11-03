@@ -225,7 +225,7 @@
             transform: scale(1.1);
         }
 
-        /* ÁREA DE CHAT CON FONDO TEXTURIZADO */
+        /* ÁREA DE CHAT */
         .chat-body {
             flex: 1;
             padding: 16px;
@@ -364,7 +364,7 @@
             box-shadow: 0 2px 6px rgba(69, 0, 139, 0.2);
         }
 
-        /* VENTANA INDEPENDIENTE DEL PANEL DOCENTE */
+        /* PANEL DOCENTE */
         .teacher-panel-overlay {
             position: absolute;
             top: 0;
@@ -468,7 +468,6 @@
             display: flex;
         }
 
-        /* TARJETAS DE MÉTRICAS */
         .metric-card {
             background: white;
             border-radius: 16px;
@@ -510,7 +509,6 @@
             color: var(--text-main);
         }
 
-        /* TARJETAS DE ESTUDIANTES INDIVIDUALES */
         .student-card {
             background: white;
             border-radius: 14px;
@@ -531,42 +529,6 @@
             margin-bottom: 2px;
         }
 
-        .badge-alert {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 0.72rem;
-            font-weight: 700;
-            margin-top: 4px;
-        }
-
-        .badge-refuerzo {
-            background-color: #fef3c7;
-            color: #d97706;
-            border: 1px solid #fde68a;
-        }
-
-        .badge-emocional {
-            background-color: #fee2e2;
-            color: #dc2626;
-            border: 1px solid #fecaca;
-        }
-
-        .btn-export-single {
-            background: linear-gradient(135deg, var(--primary-medium), var(--primary-color));
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            cursor: pointer;
-            align-self: flex-start;
-            margin-top: 8px;
-            box-shadow: 0 2px 4px rgba(69, 0, 139, 0.2);
-        }
-
-        /* CONFIGURACIÓN */
         .config-group {
             background: white;
             border-radius: 14px;
@@ -918,7 +880,7 @@
         {
             tipo: "opciones",
             pregunta: "Antes de continuar, queremos confirmarte que este es un canal institucional seguro. Tus respuestas son privadas, protegidas por las normativas vigentes y utilizadas exclusivamente por el equipo de Orientación y Docencia para brindarte apoyo personalizado de la más alta calidad. 💙 ¿Autorizas el tratamiento de tus datos para este fin institucional?",
-            opciones: [
+            options: [
                 "¡Sí, autorizo y confío plenamente! ✅",
                 "Prefiero no autorizar por ahora. ❌"
             ]
@@ -926,7 +888,7 @@
         {
             tipo: "opciones",
             pregunta: "¡Qué alegría avanzar en este espacio académico contigo! 🌟 Para ofrecerte una ruta adaptada a tu excelencia: <strong>¿Cómo sientes que aprendes mejor o qué estilo te describe mejor?</strong>",
-            opciones: [
+            options: [
                 "Leyendo, viendo videos explicativos e imágenes 👁️",
                 "Escuchando atentamente explicaciones, debates y audios 🎧",
                 "Haciendo manos a la obra, experimentos o proyectos prácticos 🛠️"
@@ -935,7 +897,7 @@
         {
             tipo: "opciones",
             pregunta: "¡Excelente! 📝 Queremos optimizar tu experiencia de aprendizaje: <strong>¿Cómo te sientes con el ritmo habitual de las clases del programa?</strong>",
-            opciones: [
+            options: [
                 "A veces me vendría bien un poquito más de tiempo o una guía extra. ⏳",
                 "Voy avanzando súper bien y al mismo ritmo de la clase. 👍",
                 "¡Voy volando! Termino rápido y me encantan los retos o proyectos avanzados. 🚀"
@@ -948,7 +910,7 @@
         {
             tipo: "opciones",
             pregunta: "Tu bienestar emocional es un pilar fundamental en nuestra institución. 🧠💚 <strong>Cuéntame con total confianza, ¿cómo te has estado sintiendo últimamente en el colegio o con tus compañeros?</strong>",
-            opciones: [
+            options: [
                 "Me siento muy bien, tranquilo/a y motivado/a compartiendo con todos. 😊",
                 "A veces la ansiedad o el estrés académico me visitan y me cuesta concentrarme. 😰",
                 "A veces me siento un poquito solo/a o me cuesta integrarme con los demás. 😔",
@@ -958,158 +920,132 @@
         {
             tipo: "opciones",
             pregunta: "Comprendemos que los últimos años nos han traído nuevos retos a la comunidad estudiantil. Cuéntanos, <strong>¿has notado alguno de estos aspectos en tu día a día?</strong>",
-            opciones: [
+            options: [
                 "Cansancio constante o dificultad para conciliar un sueño reparador 😴",
-                "Nervios o tensión al hablar en público, participar en clase o exponer 🎤",
-                "Sensación de sobrecarga o alta presión con las exigencias académicas 📚",
-                "A veces me siento un poco aislado/a o con barreras para hacer amigos 🤝",
-                "¡Ninguno de estos! Me siento muy bien y lleno/a de energía positiva ✨"
+                "Nervios o tensión frecuente ante las evaluaciones 📈",
+                "Deseo de contar con un espacio seguro para conversar y ser escuchado/a 💬",
+                "Ninguno en particular, me siento muy equilibrado/a 👍"
             ]
         },
         {
-            tipo: "opciones",
-            pregunta: "Queremos recordarte que cuentas con un equipo profesional respaldo de la institución. 🏫 Si en algún momento requieres un espacio seguro, <strong>¿qué tipo de apoyo te gustaría recibir por parte del programa?</strong>",
-            opciones: [
-                "Tener un espacio de asesoría confidencial y directa con Orientación Escolar. 💬",
-                "Participar en talleres especializados de manejo de ansiedad y técnicas de estudio. 🧘‍♂️",
-                "Recibir tutorías de refuerzo académico en asignaturas específicas. 📚",
-                "Participar en talleres de desarrollo socioemocional y convivencia. 🤝",
-                "Por ahora estoy súper bien, ¡pero valoro mucho que este programa exista! 👍"
-            ]
+            tipo: "texto",
+            pregunta: "Finalmente, <strong>¿hay algo más que quieras compartir con Orientación Escolar o algún mensaje especial para Ángela?</strong> (Escribe 'Ninguno' si prefieres dejarlo así)"
         }
     ];
 
     function aplicarConfiguracionVisual() {
-        const imgHeader = document.getElementById('headerAvatarImg');
-        const imgWelcome = document.getElementById('welcomeAvatarImg');
-        if(imgHeader) imgHeader.src = avatarUrlGlobal;
-        if(imgWelcome) imgWelcome.src = avatarUrlGlobal;
-    }
-
-    function sanitizarTexto(texto) {
-        const div = document.createElement('div');
-        div.textContent = texto;
-        return div.innerHTML;
+        document.getElementById('headerAvatarImg').src = avatarUrlGlobal;
+        document.getElementById('welcomeAvatarImg').src = avatarUrlGlobal;
     }
 
     function iniciarChat() {
-        pasoActual = 0;
-        datosEstudiante = { nombre: "", autorizacion: "", estilo: "", ritmo: "", refuerzo: "", emocional: "", reto: "", apoyo: "" };
-        document.getElementById('chatBody').innerHTML = "";
-
         document.getElementById('welcomeScreen').style.display = 'none';
         document.getElementById('floatingBubble').style.display = 'none';
         document.getElementById('chatBody').style.display = 'flex';
         document.getElementById('chatFooterContainer').style.display = 'flex';
         
-        agregarMensaje("¡Hola! 👋 Te damos una calurosa bienvenida al sistema oficial de acompañamiento y diagnóstico escolar.", "bot");
-        agregarMensaje(pasosCuestionario[0].pregunta, "bot");
+        if (pasoActual === 0 && document.getElementById('chatBody').children.length === 0) {
+            siguientePaso();
+        }
     }
 
-    function agregarMensaje(texto, tipo = "bot") {
+    function agregarMensaje(texto, remitente) {
         const chatBody = document.getElementById('chatBody');
-        const div = document.createElement('div');
-
-        if (tipo === "bot") {
-            div.className = "message-row-bot";
-            div.innerHTML = `
+        const row = document.createElement('div');
+        
+        if (remitente === 'bot') {
+            row.className = 'message-row-bot';
+            row.innerHTML = `
                 <div class="mini-avatar">
-                    <img src="${avatarUrlGlobal}" alt="Avatar" onerror="this.src='https://via.placeholder.com/100/45008b/ffffff?text=Bot'">
+                    <img src="${avatarUrlGlobal}" alt="Bot" onerror="this.src='https://via.placeholder.com/50/45008b/ffffff?text=Bot'">
                 </div>
                 <div class="msg-bot">${texto}</div>
             `;
         } else {
-            div.className = "msg-user";
-            div.textContent = texto;
+            row.className = 'msg-user';
+            row.innerText = texto;
+            row.style.alignSelf = 'flex-end';
         }
-
-        chatBody.appendChild(div);
+        
+        chatBody.appendChild(row);
         chatBody.scrollTop = chatBody.scrollHeight;
     }
 
     function mostrarOpciones(opciones) {
         const chatBody = document.getElementById('chatBody');
         const container = document.createElement('div');
-        container.className = "options-container";
+        container.className = 'options-container';
         
         opciones.forEach(op => {
             const btn = document.createElement('button');
-            btn.className = "btn-option";
-            btn.innerText = op;
-            btn.onclick = function() {
-                container.querySelectorAll('button').forEach(b => b.disabled = true);
-                seleccionarOpcion(op);
-            };
+            btn.className = 'btn-option';
+            btn.innerHTML = op;
+            btn.onclick = () => seleccionarOpcion(op);
             container.appendChild(btn);
         });
         
         chatBody.appendChild(container);
         chatBody.scrollTop = chatBody.scrollHeight;
-        document.getElementById('chatFooter').style.display = 'none';
     }
 
-    function procesarEntrada() {
-        const input = document.getElementById('userInput');
-        const valor = sanitizarTexto(input.value.trim());
-        if (valor === "") return;
-
-        input.value = "";
-        agregarMensaje(valor, "user");
-        manejarFlujo(valor);
-    }
-
-    function seleccionarOpcion(valor) {
+    function seleccionarOpcion(texto) {
         const containers = document.querySelectorAll('.options-container');
         containers.forEach(c => c.remove());
         
-        agregarMensaje(valor, "user");
-        document.getElementById('chatFooter').style.display = 'flex';
-        
-        manejarFlujo(valor);
+        agregarMensaje(texto, 'user');
+        procesarRespuesta(texto);
     }
 
-    function manejarFlujo(respuesta) {
+    document.getElementById('btnSend').onclick = () => {
+        const input = document.getElementById('userInput');
+        const val = input.value.trim();
+        if(!val) return;
+        input.value = '';
+        agregarMensaje(val, 'user');
+        procesarRespuesta(val);
+    };
+
+    document.getElementById('userInput').onkeypress = (e) => {
+        if(e.key === 'Enter') {
+            document.getElementById('btnSend').click();
+        }
+    };
+
+    function procesarRespuesta(respuesta) {
         try {
-            if (pasoActual === 0) {
+            if(pasoActual === 0) {
                 datosEstudiante.nombre = respuesta;
                 pasoActual++;
                 siguientePaso();
-            } else if (pasoActual === 1) {
+            } else if(pasoActual === 1) {
                 datosEstudiante.autorizacion = respuesta;
-                if (respuesta.includes("Prefiero no autorizar")) {
-                    setTimeout(() => {
-                        agregarMensaje("Comprendemos y respetamos totalmente tu decisión institucional. El cuestionario se ha detenido.", "bot");
-                        mostrarBotonReiniciar();
-                    }, 400);
-                    return;
-                }
                 pasoActual++;
                 siguientePaso();
-            } else if (pasoActual === 2) {
+            } else if(pasoActual === 2) {
                 datosEstudiante.estilo = respuesta;
                 pasoActual++;
                 siguientePaso();
-            } else if (pasoActual === 3) {
+            } else if(pasoActual === 3) {
                 datosEstudiante.ritmo = respuesta;
                 pasoActual++;
                 siguientePaso();
-            } else if (pasoActual === 4) {
+            } else if(pasoActual === 4) {
                 datosEstudiante.refuerzo = respuesta;
                 pasoActual++;
                 siguientePaso();
-            } else if (pasoActual === 5) {
+            } else if(pasoActual === 5) {
                 datosEstudiante.emocional = respuesta;
                 pasoActual++;
                 siguientePaso();
-            } else if (pasoActual === 6) {
+            } else if(pasoActual === 6) {
                 datosEstudiante.reto = respuesta;
                 pasoActual++;
                 siguientePaso();
-            } else if (pasoActual === 7) {
+            } else if(pasoActual === 7) {
                 datosEstudiante.apoyo = respuesta;
                 finalizarCuestionario();
             }
-        } catch (e) {
+        } catch(e) {
             console.error("Error en el flujo del chat:", e);
         }
     }
@@ -1117,27 +1053,23 @@
     function siguientePaso() {
         const actual = pasosCuestionario[pasoActual];
         setTimeout(() => {
-            agregarMensaje(actual.pregunta, "bot");
-            if (actual.tipo === "opciones") {
-                mostrarOpciones(actual.opciones);
-            } else {
-                document.getElementById('chatFooter').style.display = 'flex';
+            agregarMensaje(actual.pregunta, 'bot');
+            if(actual.tipo === "opciones") {
+                mostrarOpciones(actual.options);
             }
         }, 400);
     }
 
-  function finalizarCuestionario() {
+    function finalizarCuestionario() {
         setTimeout(() => {
             agregarMensaje("¡Muchísimas gracias por tu valiosa colaboración! 🌟 Tus respuestas han sido guardadas con absoluta confidencialidad en el sistema. 🏫💙", "bot");
             
             let registroFinal = { ...datosEstudiante, fecha: new Date().toLocaleString() };
             
-            // 1. Guardar en el dispositivo local (para respaldo local)
             let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
             registros.push(registroFinal);
             localStorage.setItem('registros_estudiantes', JSON.stringify(registros));
             
-            // 2. Enviar automáticamente al Google Sheets de tu cliente
             if (URL_GOOGLE_SCRIPT) {
                 fetch(URL_GOOGLE_SCRIPT, {
                     method: "POST",
@@ -1151,4 +1083,174 @@
             mostrarBotonReiniciar();
         }, 400);
     }
-    
+
+    function mostrarBotonReiniciar() {
+        const chatBody = document.getElementById('chatBody');
+        const container = document.createElement('div');
+        container.className = 'options-container';
+        container.innerHTML = `<button class="btn-option" style="text-align:center; background: var(--primary-color); color: white;" onclick="location.reload()">🔄 Realizar otra encuesta</button>`;
+        chatBody.appendChild(container);
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    function abrirModalDocente() {
+        document.getElementById('teacherModal').style.display = 'flex';
+        document.getElementById('teacherPassword').value = '';
+        document.getElementById('authError').style.display = 'none';
+    }
+
+    function cerrarModalDocente() {
+        document.getElementById('teacherModal').style.display = 'none';
+    }
+
+    function verificarAccesoDocente() {
+        const pass = document.getElementById('teacherPassword').value;
+        if(pass === claveOrientacion) {
+            cerrarModalDocente();
+            document.getElementById('teacherPanelWindow').style.display = 'flex';
+            cargarReportesDocente();
+        } else {
+            document.getElementById('authError').style.display = 'block';
+        }
+    }
+
+    function cerrarPanelDocente() {
+        document.getElementById('teacherPanelWindow').style.display = 'none';
+    }
+
+    function cambiarTabDocente(tabId) {
+        document.querySelectorAll('.panel-tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.panel-tab-content').forEach(c => c.classList.remove('active'));
+        
+        if(tabId === 'resumen') {
+            document.querySelectorAll('.panel-tab-btn')[0].classList.add('active');
+            document.getElementById('tabResumen').classList.add('active');
+        } else if(tabId === 'individuales') {
+            document.querySelectorAll('.panel-tab-btn')[1].classList.add('active');
+            document.getElementById('tabIndividuales').classList.add('active');
+        } else if(tabId === 'config') {
+            document.querySelectorAll('.panel-tab-btn')[2].classList.add('active');
+            document.getElementById('tabConfig').classList.add('active');
+        }
+    }
+
+    async function cargarReportesDocente() {
+        let listaContainer = document.getElementById('listaRegistrosIndividuales');
+        if(listaContainer) {
+            listaContainer.innerHTML = `<p style="text-align:center; padding: 20px; color: var(--text-muted);">Cargando encuestas desde la nube... 🔄</p>`;
+        }
+
+        try {
+            let respuesta = await fetch(URL_GOOGLE_SCRIPT);
+            let registros = await respuesta.json();
+
+            let total = registros.length;
+            let refuerzoCount = 0;
+            let alertasCount = 0;
+
+            registros.forEach(reg => {
+                if(reg.refuerzo && reg.refuerzo.toLowerCase() !== "ninguna") refuerzoCount++;
+                if(reg.emocional && (reg.emocional.includes("ansiedad") || reg.emocional.includes("solo/a") || reg.emocional.includes("frustración"))) {
+                    alertasCount++;
+                }
+            });
+
+            document.getElementById('statTotal').innerText = total;
+            document.getElementById('statRefuerzo').innerText = refuerzoCount;
+            document.getElementById('statAlertas').innerText = alertasCount;
+
+            if(!listaContainer) return;
+            listaContainer.innerHTML = '';
+
+            if(registros.length === 0) {
+                listaContainer.innerHTML = `<p style="text-align:center; padding: 20px; color: var(--text-muted);">No hay encuestas registradas todavía.</p>`;
+                return;
+            }
+
+            registros.reverse().forEach((reg) => {
+                let card = document.createElement('div');
+                card.className = 'student-card';
+                card.innerHTML = `
+                    <h4>${reg.nombre || 'Estudiante Anónimo'}</h4>
+                    <p><strong>📅 Fecha:</strong> ${reg.fecha || 'N/A'}</p>
+                    <p><strong>👁️ Estilo:</strong> ${reg.estilo || 'N/A'}</p>
+                    <p><strong>⏳ Ritmo:</strong> ${reg.ritmo || 'N/A'}</p>
+                    <p><strong>📚 Refuerzo:</strong> ${reg.refuerzo || 'N/A'}</p>
+                    <p><strong>🧠 Emocional:</strong> ${reg.emocional || 'N/A'}</p>
+                    <p><strong>💡 Reto/Sueño:</strong> ${reg.reto || 'N/A'}</p>
+                    <p><strong>💬 Apoyo extra:</strong> ${reg.apoyo || 'N/A'}</p>
+                `;
+                listaContainer.appendChild(card);
+            });
+
+        } catch (error) {
+            console.error("Error al cargar desde la nube:", error);
+            let registrosLocales = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
+            document.getElementById('statTotal').innerText = registrosLocales.length;
+            if(listaContainer) {
+                listaContainer.innerHTML = `<p style="text-align:center; color: #dc2626; padding: 10px;">Error de conexión con la nube. Mostrando respaldo local.</p>`;
+            }
+        }
+    }
+
+    function exportarCSV() {
+        let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
+        if(registros.length === 0) {
+            alert("No hay registros para exportar.");
+            return;
+        }
+        let csvContent = "data:text/csv;charset=utf-8,Fecha,Nombre,Autorizacion,Estilo,Ritmo,Refuerzo,Emocional,Reto,Apoyo\r\n";
+        registros.forEach(r => {
+            let row = [r.fecha, r.nombre, r.autorizacion, r.estilo, r.ritmo, r.refuerzo, r.emocional, r.reto, r.apoyo].map(val => `"${(val || '').replace(/"/g, '""')}"`).join(",");
+            csvContent += row + "\r\n";
+        });
+        let encodedUri = encodeURI(csvContent);
+        let link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "consolidado_chat_angela.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function guardarNuevaClave() {
+        const nueva = document.getElementById('cfgNuevaClave').value.trim();
+        if(!nueva) {
+            alert("Por favor ingresa una contraseña válida.");
+            return;
+        }
+        claveOrientacion = nueva;
+        localStorage.setItem('cfg_clave', nueva);
+        document.getElementById('cfgNuevaClave').value = '';
+        alert("¡Contraseña actualizada con éxito!");
+    }
+
+    function agregarDocenteAutorizado() {
+        const docente = document.getElementById('cfgNuevoDocente').value.trim();
+        if(!docente) return;
+        docentesAutorizados.push(docente);
+        localStorage.setItem('cfg_docentes', JSON.stringify(docentesAutorizados));
+        document.getElementById('cfgNuevoDocente').value = '';
+        alert("¡Docente registrado con éxito!");
+    }
+
+    function actualizarAvatar() {
+        const url = document.getElementById('cfgUrlAvatar').value.trim();
+        if(!url) return;
+        avatarUrlGlobal = url;
+        localStorage.setItem('cfg_avatar', url);
+        aplicarConfiguracionVisual();
+        document.getElementById('cfgUrlAvatar').value = '';
+        alert("¡Imagen de perfil actualizada con éxito!");
+    }
+
+    function limpiarRegistros() {
+        if(confirm("¿Estás seguro de eliminar todos los registros locales? Esta acción no se puede deshacer.")) {
+            localStorage.removeItem('registros_estudiantes');
+            cargarReportesDocente();
+            alert("Registros eliminados.");
+        }
+    }
+</script>
+</body>
+</html>
