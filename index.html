@@ -1126,238 +1126,29 @@
         }, 400);
     }
 
-   function finalizarCuestionario() {
-    setTimeout(() => {
-        agregarMensaje("¡Muchísimas gracias por tu valiosa colaboración! 🌟 Tus respuestas han sido guardadas con absoluta confidencialidad en el sistema. 🏫💙", "bot");
-        
-        let registroFinal = { ...datosEstudiante, fecha: new Date().toLocaleString() };
-        
-        // 1. Guardar en el dispositivo local (para respaldo local)
-        let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
-        registros.push(registroFinal);
-        localStorage.setItem('registros_estudiantes', JSON.stringify(registros));
-        
-        // 2. Enviar automáticamente al Google Sheets de tu cliente
-        const urlGoogleScript = "https://script.google.com/macros/s/AKfycbwqPuyeTomtxYvqe1Ffx0rYLWDQZC7RKqK0chCpOLppo78Na52u2veWGCbn8IBlzcEOpQ/exec";
-        
-        if (urlGoogleScript && !urlGoogleScript.includes("AQUÍ_PEGA")) {
-            fetch(urlGoogleScript, {
-                method: "POST",
-                mode: "no-cors",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(registroFinal)
-            }).catch(err => console.error("Error al enviar a Google Sheets:", err));
-        }
-        
-        document.getElementById('chatFooterContainer').style.display = 'none';
-        mostrarBotonReiniciar();
-    }, 400);
-}
-
-    function mostrarBotonReiniciar() {
-        const chatBody = document.getElementById('chatBody');
-        const container = document.createElement('div');
-        container.className = "options-container";
-        container.style.margin = "10px 0";
-        
-        const btn = document.createElement('button');
-        btn.className = "btn-option";
-        btn.style.textAlign = "center";
-        btn.style.background = "linear-gradient(135deg, var(--primary-medium), var(--primary-color))";
-        btn.style.color = "#ffffff";
-        btn.style.fontWeight = "700";
-        btn.innerText = "🔄 Hacer otra encuesta";
-        btn.onclick = function() {
-            iniciarChat();
-        };
-        
-        container.appendChild(btn);
-        chatBody.appendChild(container);
-        chatBody.scrollTop = chatBody.scrollHeight;
-    }
-
-    document.getElementById('btnSend').onclick = procesarEntrada;
-    document.getElementById('userInput').onkeypress = function(e) {
-        if (e.key === 'Enter') {
-            procesarEntrada();
-        }
-    };
-
-    function abrirModalDocente() {
-        document.getElementById('teacherModal').style.display = 'flex';
-        document.getElementById('teacherPassword').value = '';
-        document.getElementById('authError').style.display = 'none';
-    }
-
-    function cerrarModalDocente() {
-        document.getElementById('teacherModal').style.display = 'none';
-    }
-
-    function verificarAccesoDocente() {
-        const inputPass = document.getElementById('teacherPassword').value;
-        const errorDiv = document.getElementById('authError');
-
-        if (inputPass === claveOrientacion) {
-            cerrarModalDocente();
-            mostrarPanelDocenteVentana();
-        } else {
-            errorDiv.style.display = 'block';
-        }
-    }
-
-    function cambiarTabDocente(tabId) {
-        document.querySelectorAll('.panel-tab-btn').forEach(btn => btn.classList.remove('active'));
-        document.querySelectorAll('.panel-tab-content').forEach(content => content.classList.remove('active'));
-
-        if(tabId === 'resumen') {
-            document.querySelectorAll('.panel-tab-btn')[0].classList.add('active');
-            document.getElementById('tabResumen').classList.add('active');
-        } else if(tabId === 'individuales') {
-            document.querySelectorAll('.panel-tab-btn')[1].classList.add('active');
-            document.getElementById('tabIndividuales').classList.add('active');
-            cargarRegistrosIndividuales();
-        } else if(tabId === 'config') {
-            document.querySelectorAll('.panel-tab-btn')[2].classList.add('active');
-            document.getElementById('tabConfig').classList.add('active');
-        }
-    }
-
-    function mostrarPanelDocenteVentana() {
-        let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
-        
-        let totalEncuestas = registros.length;
-        let requierenRefuerzo = registros.filter(r => r.refuerzo && r.refuerzo.toLowerCase() !== "ninguna" && r.refuerzo.toLowerCase() !== "ninguno").length;
-        let alertasEmocionales = registros.filter(r => 
-            (r.emocional && !r.emocional.includes("tranquilo")) || 
-            (r.reto && !r.reto.includes("Ninguno"))
-        ).length;
-
-        document.getElementById('statTotal').innerText = totalEncuestas;
-        document.getElementById('statRefuerzo').innerText = requierenRefuerzo;
-        document.getElementById('statAlertas').innerText = alertasEmocionales;
-
-        cambiarTabDocente('resumen');
-        document.getElementById('teacherPanelWindow').style.display = 'flex';
-    }
-
-    function cerrarPanelDocente() {
-        document.getElementById('teacherPanelWindow').style.display = 'none';
-    }
-
-    function cargarRegistrosIndividuales() {
-        let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
-        let contenedor = document.getElementById('listaRegistrosIndividuales');
-        contenedor.innerHTML = "";
-
-        if(registros.length === 0) {
-            contenedor.innerHTML = `<p style="font-size:0.85rem; color:var(--text-muted); text-align:center;">No hay registros individuales todavía.</p>`;
-            return;
-        }
-
-        registros.forEach((r, index) => {
-            let necesitaRefuerzo = r.refuerzo && r.refuerzo.toLowerCase() !== "ninguna" && r.refuerzo.toLowerCase() !== "ninguno";
-            let alertaEmocional = (r.emocional && !r.emocional.includes("tranquilo")) || (r.reto && !r.reto.includes("Ninguno"));
-
-            let badgesHtml = "";
-            if (necesitaRefuerzo) {
-                badgesHtml += `<span class="badge-alert badge-refuerzo">📚 Requiere Refuerzo Académico (${r.refuerzo})</span><br>`;
+  function finalizarCuestionario() {
+        setTimeout(() => {
+            agregarMensaje("¡Muchísimas gracias por tu valiosa colaboración! 🌟 Tus respuestas han sido guardadas con absoluta confidencialidad en el sistema. 🏫💙", "bot");
+            
+            let registroFinal = { ...datosEstudiante, fecha: new Date().toLocaleString() };
+            
+            // 1. Guardar en el dispositivo local (para respaldo local)
+            let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
+            registros.push(registroFinal);
+            localStorage.setItem('registros_estudiantes', JSON.stringify(registros));
+            
+            // 2. Enviar automáticamente al Google Sheets de tu cliente
+            if (URL_GOOGLE_SCRIPT) {
+                fetch(URL_GOOGLE_SCRIPT, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(registroFinal)
+                }).catch(err => console.error("Error al enviar a Google Sheets:", err));
             }
-            if (alertaEmocional) {
-                badgesHtml += `<span class="badge-alert badge-emocional">❤️ Alerta Emocional Activa</span><br>`;
-            }
-            if (!necesitaRefuerzo && !alertaEmocional) {
-                badgesHtml += `<span class="badge-alert" style="background:#f0fdf4; color:#16a34a; border:1px solid #bbf7d0;">✨ Sin Alertas Registradas</span><br>`;
-            }
-
-            let card = document.createElement('div');
-            card.className = "student-card";
-            card.innerHTML = `
-                <h4>#${index+1} - ${r.nombre || "Estudiante"}</h4>
-                <div>${badgesHtml}</div>
-                <span style="margin-top:4px;">🛡️ Autorización: ${r.autorizacion || "No especificada"}</span>
-                <span>👁️ Estilo: ${r.estilo || "No especificado"}</span>
-                <span>⏱️ Ritmo: ${r.ritmo || "No especificado"}</span>
-                <span>📚 Refuerzo: ${r.refuerzo || "Ninguno"}</span>
-                <span>🧠 Emocional: ${r.emocional || "No especificado"}</span>
-                <span>⚠️ Reto: ${r.reto || "No especificado"}</span>
-                <span>💬 Apoyo: ${r.apoyo || "No especificado"}</span>
-                <small style="color:var(--text-muted);">📅 ${r.fecha || "Fecha no registrada"}</small>
-                <button class="btn-export-single" onclick="exportarRegistroIndividual(${index})">📥 Descargar Excel de este registro</button>
-            `;
-            contenedor.appendChild(card);
-        });
+            
+            document.getElementById('chatFooterContainer').style.display = 'none';
+            mostrarBotonReiniciar();
+        }, 400);
     }
-
-    function exportarRegistroIndividual(index) {
-        let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
-        let r = registros[index];
-        if (!r) return;
-
-        let csv = "Estudiante,Autorizacion,Estilo Aprendizaje,Ritmo,Refuerzo,Bienestar Emocional,Reto Postpandemia,Apoyo Deseado,Fecha\n";
-        csv += `"${r.nombre || ""}","${r.autorizacion || ""}","${r.estilo || ""}","${r.ritmo || ""}","${r.refuerzo || ""}","${r.emocional || ""}","${r.reto || ""}","${r.apoyo || ""}","${r.fecha || ""}"\n`;
-
-        descargarArchivoCSV(csv, `Registro_${(r.nombre || "Estudiante").replace(/[^a-zA-Z0-9]/g, "_")}.csv`);
-    }
-
-    function exportarCSV() {
-        let registros = JSON.parse(localStorage.getItem('registros_estudiantes') || '[]');
-        if (registros.length === 0) return alert("Aún no hay datos registrados para exportar.");
-
-        let csv = "Estudiante,Autorizacion,Estilo Aprendizaje,Ritmo,Refuerzo,Bienestar Emocional,Reto Postpandemia,Apoyo Deseado,Fecha\n";
-        registros.forEach(r => {
-            csv += `"${r.nombre || ""}","${r.autorizacion || ""}","${r.estilo || ""}","${r.ritmo || ""}","${r.refuerzo || ""}","${r.emocional || ""}","${r.reto || ""}","${r.apoyo || ""}","${r.fecha || ""}"\n`;
-        });
-
-        descargarArchivoCSV(csv, `Reporte_Consolidado_${new Date().toISOString().slice(0,10)}.csv`);
-    }
-
-    function descargarArchivoCSV(contenidoCSV, nombreArchivo) {
-        let blob = new Blob([contenidoCSV], { type: 'text/csv;charset=utf-8;' });
-        let url = URL.createObjectURL(blob);
-        let link = document.createElement("a");
-        link.setAttribute("href", url);
-        link.setAttribute("download", nombreArchivo);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-
-    function guardarNuevaClave() {
-        let nueva = document.getElementById('cfgNuevaClave').value.trim();
-        if(nueva.length < 4) return alert("La contraseña debe tener al menos 4 caracteres.");
-        claveOrientacion = nueva;
-        localStorage.setItem('cfg_clave', nueva);
-        document.getElementById('cfgNuevaClave').value = "";
-        alert("¡Contraseña actualizada con éxito!");
-    }
-
-    function agregarDocenteAutorizado() {
-        let nuevoDoc = document.getElementById('cfgNuevoDocente').value.trim();
-        if(!nuevoDoc) return alert("Ingresa un nombre o correo válido.");
-        docentesAutorizados.push(nuevoDoc);
-        localStorage.setItem('cfg_docentes', JSON.stringify(docentesAutorizados));
-        document.getElementById('cfgNuevoDocente').value = "";
-        alert("¡Docente agregado a la lista oficial!");
-    }
-
-    function actualizarAvatar() {
-        let url = document.getElementById('cfgUrlAvatar').value.trim();
-        if(!url) return alert("Ingresa un enlace válido.");
-        avatarUrlGlobal = url;
-        localStorage.setItem('cfg_avatar', url);
-        aplicarConfiguracionVisual();
-        document.getElementById('cfgUrlAvatar').value = "";
-        alert("¡Foto de perfil actualizada con éxito!");
-    }
-
-    function limpiarRegistros() {
-        if (confirm("¿Estás seguro de que deseas eliminar todos los registros guardados?")) {
-            localStorage.removeItem('registros_estudiantes');
-            mostrarPanelDocenteVentana();
-            alert("Registros eliminados correctamente.");
-        }
-    }
-</script>
-
-</body>
-</html>
+    
